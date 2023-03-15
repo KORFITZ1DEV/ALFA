@@ -6,13 +6,14 @@ program: stmt+;
 
 stmt: TYPE varDcl ';' | funcCall ';' | animDcl | loopStmt | playStmt;
 funcCall: (ID '(' (arg (',' arg)*)? ')') 
-        | BUILTINFUNC '(' (arg (',' arg)*)? ')';
+        | builtInFuncCall;
+builtInFuncCall: BUILTINFUNC '(' (arg (',' arg)*)? ')';
 animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' '{' blockStmt* '}';
 param: TYPE ID;
 arg: COLOR | expr;
 playStmt: 'play' '{' blockStmt* '}';
 varDcl: '[]' ID '=' '{' arrayElem (',' arrayElem)* '}'
-        | ID '=' (BUILTINFUNC | expr) ;
+        | ID '=' (builtInFuncCall | expr) ;
 arrayElem: ID; //in the future maybe also NUM
 expr: term (op expr)?;
 term: NUM | ID ('['POSNUM']')?;
