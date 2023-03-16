@@ -1,36 +1,58 @@
 grammar ALFA;
 
-start : program EOF;
+prog: stmt* playStmt EOF;
 
-program: stmt+;
+stmt: TYPE varDcl ';' | funcCall ';' | animDcl | loopStmt;
 
-stmt: TYPE varDcl ';' | funcCall ';' | animDcl | loopStmt | playStmt;
-funcCall: (ID '(' (arg (',' arg)*)? ')') 
+varDcl: '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')?
+        | ID '=' (createFuncCall | expr) ;
+
+createFuncCall: CREATEFUNC '(' args ')'; 
+
+funcCall: ID '(' args ')' 
         | builtInFuncCall;
-builtInFuncCall: BUILTINFUNC '(' (arg (',' arg)*)? ')';
-animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' '{' blockStmt* '}';
+        
+args: (arg (',' arg)*)?;
+
+builtInFuncCall: BUILTINFUNC '(' args ')' 
+        | SEQFUNC '(' args ')';
+
+animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block;
+
 param: TYPE ID;
+
 arg: COLOR | expr;
-playStmt: 'play' '{' blockStmt* '}';
-varDcl: '[]' ID '=' '{' arrayElem (',' arrayElem)* '}'
-        | ID '=' (builtInFuncCall | expr) ;
-arrayElem: ID; //in the future maybe also NUM
-expr: term (op expr)?;
+
+arrayElem: ID | NUM; 
+
+expr: term (OP expr)*;
+
 term: NUM | ID ('['POSNUM']')?;
-blockStmt: ifStmt | ifElseStmt | paralStmt | loopStmt | playStmt;
-ifStmt: 'if' '(' condition ')' '{' blockStmt* '}' 'else' '{' blockStmt* '}';
-ifElseStmt: 'if' '(' condition ')' '{' blockStmt* '}' ('else if' '{' blockStmt* '}')* 'else' '{' blockStmt* '}';
-condition: arg ( boolOp arg )*;
-paralStmt: 'paral' '{' funcCall* '}';
-loopStmt: 'loop' '(' 'int' ID 'from' NUM '..' NUM ')' '{' blockStmt* '}';
 
+blockStmt: varDcl ';' | ifStmt | paralStmt | loopStmt;
 
-boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
-op: '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
-TYPE: 'int' | 'canvas' | 'square' | 'circle' | 'shape';
+ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
+
+condition: ('!')? arg ( BOOLOP ('!')? arg )*;
+
+block: '{' blockStmt* '}';
+
+paralStmt: 'paral' '{' BUILTINFUNC* '}';
+
+loopStmt: 'loop' '(' 'int' ID 'from' NUM '..' NUM ')' block;
+
+playStmt: 'play' '{' playBlockStmt* '}';
+
+playBlockStmt: paralStmt | loopStmt | funcCall ';' ;
+
+BOOLOP: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
+OP: '+' | '-' | '*' | '/' | '%' | BOOLOP;
+TYPE: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '0'|'-'?[1-9][0-9]*;
+NUM: '-'[1-9][0-9]* | POSNUM;
 POSNUM: '0'|[1-9][0-9]*;
-BUILTINFUNC: 'add' | 'color' | 'print' | 'createSquare' | 'createCircle' | 'createCanvas' | 'move' | 'moveTo' | 'wait' | 'resetCanvas'; 
+BUILTINFUNC: 'add' | 'color' | 'print' | 'moveTo' | 'move';
+SEQFUNC: 'resetCanvas' | 'wait' ;
+CREATEFUNC: 'createSquare' | 'createCircle' | 'createCanvas';
 COLOR: 'white' | 'black' | 'red' | 'green' | 'blue';
 WS: [ \t\r\n]+ -> skip;
