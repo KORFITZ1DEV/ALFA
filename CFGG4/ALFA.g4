@@ -51,7 +51,7 @@ boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
 op: '+' | '-' | '*' | '/' | '%' | boolOp;
 type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '-'?[1-9][0-9]* | '0' ;
+NUM: '0'| '-'?[1-9][0-9]* ;
 builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
 SEQFUNC: 'resetCanvas' | 'wait' ;
 createFunc: 'createSquare' | 'createCircle' | 'createCanvas';
