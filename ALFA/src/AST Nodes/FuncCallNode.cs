@@ -10,4 +10,9 @@ public class FuncCallNode : Node
         this.BuiltIns = builtIns;
         this.Args = args;
     }
+    
+    public override string ToString()
+    {
+        return "\t\tFuncCallNode";
+    }
 }

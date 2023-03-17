@@ -9,4 +9,8 @@ public class ProgramNode : Node
         this.stmts = stmts;
     }
     
+    public override string ToString()
+    {
+        return "ProgramNode";
+    }
 }

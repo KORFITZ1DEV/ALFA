@@ -14,4 +14,9 @@ public class StmtNode : Node
     {
         this.FuncCall = funcCall;
     }
+    
+    public override string ToString()
+    {
+        return "\tStmtNode";
+    }
 }

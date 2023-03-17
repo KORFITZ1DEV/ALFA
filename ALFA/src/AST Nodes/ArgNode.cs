@@ -13,6 +13,11 @@ public class ArgNode : Node
     {
         this.Id = id;
     }
+    
+    public override string ToString()
+    {
+        return "\t\t\t\tArgNode";
+    }
 }
     
     

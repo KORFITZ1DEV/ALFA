@@ -16,10 +16,9 @@ void MyParseMethod()
       ALFAParser parser = new ALFAParser(tokens);
       parser.BuildParseTree = true;
       IParseTree tree = parser.program();
-      ASTVisitor visitor = new ASTVisitor();
-      Node AST = visitor.Visit(tree);
-      PrintVisitor.PrintTree(tree);
-      
-
+      BuildASTVisitor visitor = new BuildASTVisitor();
+      Node ast = visitor.Visit(tree);
+      ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
+      astPrintVisitor.Visit(ast);
 }
 
