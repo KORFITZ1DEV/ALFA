@@ -2,42 +2,44 @@ grammar ALFA;
 
 prog: stmt* playStmt EOF;
 
-stmt: TYPE varDcl ';' | funcCall ';' | animDcl | loopStmt;
+stmt: type varDcl ';' | funcCall ';' | animDcl | loopStmt;
 
 varDcl: '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')?
         | ID '=' (createFuncCall | expr) ;
 
-createFuncCall: CREATEFUNC '(' args ')'; 
+createFuncCall: createFunc '(' args ')'; 
 
 funcCall: ID '(' args ')' 
         | builtInFuncCall;
         
 args: (arg (',' arg)*)?;
 
-builtInFuncCall: BUILTINFUNC '(' args ')' 
+builtInFuncCall: builtInFunc '(' args ')' 
         | SEQFUNC '(' args ')';
 
 animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block;
 
-param: TYPE ID;
+param: type ID;
 
 arg: COLOR | expr;
 
 arrayElem: ID | NUM; 
 
-expr: term (OP expr)*;
+expr: term (op expr)*;
 
-term: NUM | ID ('['POSNUM']')?;
+term: NUM | ID ('[' NUM ']')?;
 
-blockStmt: varDcl ';' | ifStmt | paralStmt | loopStmt;
+blockStmt: varDcl ';' | ifStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
 
 ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
 
-condition: ('!')? arg ( BOOLOP ('!')? arg )*;
+condition: ('!')? arg ( boolOp ('!')? arg )*;
 
 block: '{' blockStmt* '}';
 
-paralStmt: 'paral' '{' BUILTINFUNC* '}';
+paralStmt: 'paral' '{' (paralBlockStmt)* '}';
+
+paralBlockStmt: builtInFuncCall ';' | funcCall ';';
 
 loopStmt: 'loop' '(' 'int' ID 'from' NUM '..' NUM ')' block;
 
@@ -45,14 +47,13 @@ playStmt: 'play' '{' playBlockStmt* '}';
 
 playBlockStmt: paralStmt | loopStmt | funcCall ';' ;
 
-BOOLOP: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
-OP: '+' | '-' | '*' | '/' | '%' | BOOLOP;
-TYPE: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
+boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
+op: '+' | '-' | '*' | '/' | '%' | boolOp;
+type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '-'[1-9][0-9]* | POSNUM;
-POSNUM: '0'|[1-9][0-9]*;
-BUILTINFUNC: 'add' | 'color' | 'print' | 'moveTo' | 'move';
+NUM: [-][1-9][0-9]* | [0] | [0-9]*;
+builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
 SEQFUNC: 'resetCanvas' | 'wait' ;
-CREATEFUNC: 'createSquare' | 'createCircle' | 'createCanvas';
+createFunc: 'createSquare' | 'createCircle' | 'createCanvas';
 COLOR: 'white' | 'black' | 'red' | 'green' | 'blue';
 WS: [ \t\r\n]+ -> skip;
