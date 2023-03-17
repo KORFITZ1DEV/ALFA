@@ -2,6 +2,8 @@
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.Diagnostics;
+using ALFA;
+using ALFA.AST_Nodes;
 
 MyParseMethod();
 
@@ -14,6 +16,10 @@ void MyParseMethod()
       ALFAParser parser = new ALFAParser(tokens);
       parser.BuildParseTree = true;
       IParseTree tree = parser.program();
+      ASTVisitor visitor = new ASTVisitor();
+      Node AST = visitor.Visit(tree);
+      PrintVisitor.PrintTree(tree);
       
+
 }
 

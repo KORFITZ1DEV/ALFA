@@ -6,16 +6,27 @@ public class ASTVisitor : ALFABaseVisitor<Node>
 {
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
     {
-      var childList = context.children.Select(child => Visit(child) as StmtNode).ToList();
-      
+        List<StmtNode> childList = new List<StmtNode>();
+        
+        foreach (var stmt in context.statement())
+        {
+            childList.Add(Visit(stmt) as StmtNode);
+        }
+        
         return new ProgramNode(childList!);
     }
     
     public override StmtNode VisitStatement(ALFAParser.StatementContext context)
     {
-        var varDcl = Visit(context.varDcl()) as VarDclNode;
+        var varDcl = context.varDcl();
         
-        return new StmtNode(varDcl!);
+        if (varDcl != null)
+        {
+            var visitedVarDcl = Visit(varDcl) as VarDclNode;
+            return new StmtNode(visitedVarDcl!);
+        }
+        
+        return new StmtNode(Visit(context.funcCall()) as FuncCallNode);
     }
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
@@ -29,7 +40,7 @@ public class ASTVisitor : ALFABaseVisitor<Node>
     public override FuncCallNode VisitFuncCall(ALFAParser.FuncCallContext context)
     {
         var builtIns = Visit(context.builtIns()) as BuiltInsNode;
-        var args = context.args().children.Select(child => Visit(child) as ArgNode).ToList();
+        var args = context.args().arg().Select(child => Visit(child) as ArgNode).ToList();
 
         return new FuncCallNode(builtIns!, args!);
     }
@@ -59,14 +70,14 @@ public class ASTVisitor : ALFABaseVisitor<Node>
     
     public override ArgNode VisitArg(ALFAParser.ArgContext context)
     {
-        var id = context.ID().GetText();
-        var num = context.INT().GetText();
+        var id = context.ID();
+        var num = context.INT();
 
         if (id != null)
         {
-        return new ArgNode(id);
+        return new ArgNode(id.GetText());
         }
-        return new ArgNode(int.Parse(num));
+        return new ArgNode(int.Parse(num.GetText()));
     }
     
 }
