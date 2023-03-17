@@ -1,16 +1,18 @@
 grammar ALFA;
 
-start : program EOF;
+program : statement+ EOF;
 
-program: statement+;
+statement: varDcl ';' | funcCall';';
 
-statement: createStmt | moveStmt | waitStmt;
+varDcl: ID '=' funcCall;
 
-createStmt: ID '=' 'createSquare' '(' INT ',' INT ',' INT ',' INT ')' ';';
+funcCall: builtIns '(' args ')';
 
-moveStmt: 'move' '(' ID ',' INT ',' INT ')' ';';
+builtIns: 'createSquare' | 'move' | 'wait';
 
-waitStmt: 'wait' '(' INT ')' ';';
+args: arg (',' arg)*;
+
+arg: INT | ID;
 
 ID: [a-zA-Z]+;
 INT: '0' |('-'?([1-9][0-9]*));

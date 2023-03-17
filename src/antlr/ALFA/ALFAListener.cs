@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from ALFA.g4 by ANTLR 4.12.0
+// Generated from ALFA/ALFA.g4 by ANTLR 4.12.0
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -31,6 +31,16 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IALFAListener : IParseTreeListener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.start"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterStart([NotNull] ALFAParser.StartContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.start"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitStart([NotNull] ALFAParser.StartContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.program"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -51,53 +61,33 @@ public interface IALFAListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitStatement([NotNull] ALFAParser.StatementContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.varDcl"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.createStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterVarDcl([NotNull] ALFAParser.VarDclContext context);
+	void EnterCreateStmt([NotNull] ALFAParser.CreateStmtContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.varDcl"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.createStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitVarDcl([NotNull] ALFAParser.VarDclContext context);
+	void ExitCreateStmt([NotNull] ALFAParser.CreateStmtContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.funcCall"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.moveStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterFuncCall([NotNull] ALFAParser.FuncCallContext context);
+	void EnterMoveStmt([NotNull] ALFAParser.MoveStmtContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.funcCall"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.moveStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitFuncCall([NotNull] ALFAParser.FuncCallContext context);
+	void ExitMoveStmt([NotNull] ALFAParser.MoveStmtContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.builtIns"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.waitStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterBuiltIns([NotNull] ALFAParser.BuiltInsContext context);
+	void EnterWaitStmt([NotNull] ALFAParser.WaitStmtContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.builtIns"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.waitStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitBuiltIns([NotNull] ALFAParser.BuiltInsContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.args"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterArgs([NotNull] ALFAParser.ArgsContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.args"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitArgs([NotNull] ALFAParser.ArgsContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.arg"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterArg([NotNull] ALFAParser.ArgContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.arg"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitArg([NotNull] ALFAParser.ArgContext context);
+	void ExitWaitStmt([NotNull] ALFAParser.WaitStmtContext context);
 }
