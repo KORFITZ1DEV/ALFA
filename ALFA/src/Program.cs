@@ -12,8 +12,6 @@ void MyParseMethod()
       ITokenStream tokens = new CommonTokenStream(lexer);
       ALFAParser parser = new ALFAParser(tokens);
       parser.BuildParseTree = true;
-      CustomListener listener = new CustomListener();
-      parser.AddParseListener(listener);
-      IParseTree tree = parser.start();
+      IParseTree tree = parser.prog();
 }
 

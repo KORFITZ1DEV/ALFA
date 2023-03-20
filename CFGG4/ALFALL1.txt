@@ -1,0 +1,61 @@
+ALFA -> Stmts
+Stmts -> Stmt StmtsTail
+Stmt -> Type VarDcl ; 
+    | FuncCall ;
+    | AnimDcl
+    | BuiltInFuncCall ;
+    | PlayStmt
+FuncCall ->  Id ( Args ) 
+AnimDcl -> animation Id ( Params ) { BlockStmts }
+Params -> Param ParamsTail | EPSILON
+Param -> Type Id
+BuiltInFuncCall -> BuiltIns ( Args )
+Arg -> Expr
+     | Color
+     | EPSILON
+PlayStmt -> play { BlockStmts }
+Type -> int | canvas | square | circle | shape
+VarDcl -> [ ] Id = { ArrayElems } | Id = VarDclTail
+ArrayElem -> Id
+
+Expr -> Term ExprTail
+ExprTail -> Operand Expr
+
+Term -> Id TermOptional | Num
+TermOptional -> [ Idx ] | EPSILON
+BlockStmt -> IfStmt | ParalStmt | RunStmt | FuncCall ; | BuiltInFuncCall ; 
+IfStmt -> if ( Condi ) { BlockStmts } else { BlockStmts }
+     | if ( Condi ) { BlockStmts } IfStmt
+Condi -> Arg BoolOperator Arg
+ParalStmt -> paral { FuncCalls }
+| BuiltInFuncCall ; FuncCallsTail
+RunStmt -> loop ( int Id from Num .. Num ) { BlockStmts }
+
+Args -> Arg ArgsTail 
+BlockStmts -> BlockStmt BlockStmtsTail 
+FuncCalls -> FuncCall ; FuncCallsTail 
+BuiltInFuncCalls -> BuiltInFuncCall ; FuncCallsTail
+
+ArgsTail -> , Args 
+VarDclTail -> BuiltInFuncCall | Expr
+ParamsTail -> , Params 
+    | EPSILON 
+FuncCallsTail -> FuncCalls 
+    | EPSILON
+BlockStmtsTail -> BlockStmts
+    | EPSILON 
+StmtsTail -> EPSILON
+    | Stmts
+
+ArrayElems -> ArrayElem ArrayElemTail
+ArrayElemTail -> , ArrayElems
+    | EPSILON
+
+BoolOperator -> < | > | && | != | >= | <= | == 
+Operand -> + | - | * | /
+Idx -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+Id -> animationDuration | canvasWidth | canvasHeight | myCanvas | mySquare | myCircle | mySmallCircle 
+| myShapes | moveRightLeft | colorMove | colorFlickr | i | sqr | circ | elem | four | canvasManipulation
+Num -> 4000 | 400 | 0 | 20 | 30 | 15 | 50 | 5 | 200 | 10 | -200 | 150 | 2 | 4 | 1 | 5000 | 3000 
+Color -> white | black | red | green | blue
+BuiltIns -> add | color | print | createSquare | createCircle | createCanvas | move | moveTo | wait | resetCanvas
