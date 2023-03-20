@@ -45,9 +45,9 @@ loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt*
 
 loopBlockStmt:  varDcl ';' | loopIfStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
 
-loopIfStmt: 'if' '(' condition ')' '{' (blockStmt | 'break;' | 'continue;')* '}' ('else if' '(' condition ')' '{' (blockStmt | 'break;' | 'continue;')* '}')* ('else' '{' (blockStmt | 'break;' | 'continue;')* '}')?;
+loopIfStmt: 'if' '(' condition ')' loopBlock ('else if' '(' condition ')' loopBlock)* ('else' loopBlock)?;
 
-
+loopBlock: '{' (blockStmt | 'break;' | 'continue;')* '}';
 
 playStmt: 'play' '{' playBlockStmt* '}';
 
