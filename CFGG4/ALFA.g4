@@ -59,8 +59,6 @@ type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUM: '0'| [1-9][0-9]* ;
 builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
-BREAKSTMT: 'break';
-CONTINUESTMT: 'continue';
 SEQFUNC: 'resetCanvas' | 'wait' ;
 createFunc: 'createSquare' | 'createCircle' | 'createCanvas';
 COLOR: 'white' | 'black' | 'red' | 'green' | 'blue';
