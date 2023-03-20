@@ -2,22 +2,17 @@ namespace ALFA.AST_Nodes;
 
 public class BuiltInsNode : Node
 {
-    public enum TypeEnum
+    public enum BuiltInTypeEnum
     {
-        create,
-        move,
-        wait
+        Create,
+        Move,
+        Wait
     }
 
-    public TypeEnum Type;
+    public BuiltInTypeEnum BuiltInType;
 
-    public BuiltInsNode(TypeEnum type)
+    public BuiltInsNode(BuiltInTypeEnum builtInType)
     {
-        this.Type = type;
-    }
-    
-    public override string ToString()
-    {
-        return "\t\t\tBuiltInsNode";
+        this.BuiltInType = builtInType;
     }
 }

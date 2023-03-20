@@ -2,9 +2,10 @@ grammar ALFA;
 
 program : statement+ EOF;
 
-statement: varDcl ';' | funcCall';';
+statement: type varDcl ';' | funcCall ';';
 
-varDcl: ID '=' funcCall;
+varDcl: ID '=' funcCall
+| ID '=' NUM;
 
 funcCall: builtIns '(' args ')';
 
@@ -12,8 +13,10 @@ builtIns: 'createSquare' | 'move' | 'wait';
 
 args: arg (',' arg)*;
 
-arg: INT | ID;
+arg: NUM | ID;
 
-ID: [a-zA-Z]+;
-INT: '0' |('-'?([1-9][0-9]*));
+type: 'int' | 'square' ;
+
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
+NUM: '0'| '-'?[1-9][0-9]* ;
 WS: [ \t\r\n]+ -> skip;

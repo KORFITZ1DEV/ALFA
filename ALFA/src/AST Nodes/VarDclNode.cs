@@ -2,15 +2,18 @@ namespace ALFA.AST_Nodes;
 
 public class VarDclNode : Node
 {
-    public FuncCallNode FuncCall;
+    public FuncCallNode? FuncCall;
     public string Id;
-    public VarDclNode(FuncCallNode funcCall, string id)
+    public int? Num;
+    
+    public VarDclNode(FuncCallNode funcCall, string id )
     {
         this.FuncCall = funcCall;
         this.Id = id;
     }
-    public override string ToString()
+    public VarDclNode(int num, string id)
     {
-        return "\t\tVarDclNode";
+        this.Num = num;
+        this.Id = id;
     }
 }

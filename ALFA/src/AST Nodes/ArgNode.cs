@@ -2,8 +2,8 @@ namespace ALFA.AST_Nodes;
 
 public class ArgNode : Node
 {
-    public string Id;
-    public int Num;
+    public string? Id;
+    public int? Num;
 
     public ArgNode(int num)
     {
@@ -14,10 +14,6 @@ public class ArgNode : Node
         this.Id = id;
     }
     
-    public override string ToString()
-    {
-        return "\t\t\t\tArgNode";
-    }
 }
     
     

@@ -19,14 +19,17 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     public override Node Visit(StmtNode node)
     {
         Console.WriteLine("\tStmtNode");
-        
+        if (node.Type != null)
+        {
+            Console.WriteLine("\t\tType: " + node.Type);
+        }
         if (node.VarDcl != null)
         {
             Visit(node.VarDcl);
         }
         else
         {
-            Visit(node.FuncCall);
+            Visit(node.FuncCall!);
         }
 
         return node;
@@ -35,8 +38,14 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     {  
         Console.WriteLine("\t\tVarDcl: " + node.Id);
         Console.Write("\t");
-        Visit(node.FuncCall);
-        
+        if (node.FuncCall != null)
+        {
+            Visit(node.FuncCall);
+        }
+        else
+        {
+            Console.WriteLine("\t\tNum: " + node.Num);
+        }
         return node;
     }
     public override Node Visit(FuncCallNode node)
@@ -56,15 +65,15 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     {
         Console.Write("\t\t\tBuiltIns: ");
         
-        switch (node.Type)
+        switch (node.BuiltInType)
         {
-            case BuiltInsNode.TypeEnum.create:
+            case BuiltInsNode.BuiltInTypeEnum.Create:
                 Console.WriteLine("createSquare");
                 break;
-            case BuiltInsNode.TypeEnum.move:
+            case BuiltInsNode.BuiltInTypeEnum.Move:
                 Console.WriteLine("move");
                 break;
-            case BuiltInsNode.TypeEnum.wait:
+            case BuiltInsNode.BuiltInTypeEnum.Wait:
                 Console.WriteLine("wait");
                 break;
         }

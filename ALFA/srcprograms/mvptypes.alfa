@@ -1,0 +1,11 @@
+int x = 0;
+int y = 0;
+
+int length = 20;
+int animDuration = 4000;
+int delay = 2000;
+square mySquare = createSquare(z, 0, length, length);
+
+move(mySquare , 200, animDuration);
+wait(delay);
+move(mySquare , -200, animDuration);

@@ -9,7 +9,7 @@ MyParseMethod();
 
 void MyParseMethod()
 {
-      String input = File.ReadAllText("../../../srcprograms/mvp.txt");
+      String input = File.ReadAllText("../../../srcprograms/mvptypes.alfa");
       ICharStream stream = CharStreams.fromString(input);
       ITokenSource lexer = new ALFALexer(stream);
       ITokenStream tokens = new CommonTokenStream(lexer);
