@@ -23,27 +23,31 @@ param: type ID;
 
 arg: COLOR | expr;
 
-arrayElem: ID | NUM; 
+arrayElem: ID | '-'?NUM; 
 
 expr: term (op expr)*;
 
-term: NUM | ID ('[' NUM ']')?;
+term: '-'?NUM | ID ('[' NUM ']')?;
 
 blockStmt: varDcl ';' | ifStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
 
-ifStmt: 'if' '(' condition ')' '{' jumpBlock* '}' ('else if' '{' jumpBlock* '}')* ( 'else' '{' jumpBlock* '}')?;
+ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
 
 condition: ('!')? arg ( boolOp ('!')? arg )*;
 
 block: '{' blockStmt* '}';
 
-jumpBlock: blockStmt | 'break;' | 'continue;' ;
-
 paralStmt: 'paral' '{' (paralBlockStmt)* '}';
 
 paralBlockStmt: builtInFuncCall ';' | funcCall ';';
 
-loopStmt: 'loop' '(' 'int' ID 'from' NUM '..' NUM ')' '{' jumpBlock* '}';
+loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt* '}';
+
+loopBlockStmt:  varDcl ';' | loopIfStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
+
+loopIfStmt: 'if' '(' condition ')' '{' (blockStmt | 'break;' | 'continue;')* '}' ('else if' '(' condition ')' '{' (blockStmt | 'break;' | 'continue;')* '}')* ('else' '{' (blockStmt | 'break;' | 'continue;')* '}')?;
+
+
 
 playStmt: 'play' '{' playBlockStmt* '}';
 
@@ -53,7 +57,7 @@ boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
 op: '+' | '-' | '*' | '/' | '%' | boolOp;
 type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '0'| '-'?[1-9][0-9]* ;
+NUM: '0'| [1-9][0-9]* ;
 builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
 BREAKSTMT: 'break';
 CONTINUESTMT: 'continue';
