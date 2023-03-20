@@ -2,35 +2,35 @@ grammar ALFA;
 
 prog: stmt* playStmt EOF;
 
-stmt: (type varDcl | funcCall) ';' | animDcl | loopStmt;
+stmt: (type varDcl | funcCall) ';' | animDcl | loopStmt;    //statement can either be vardcl, funcCall, animDcl, loopStmt
 
-varDcl: <assoc=right> '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')?
-        | <assoc=right> ID '=' (createFuncCall | expr) ;
+varDcl:   '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')? //array declaration 
+        | <assoc=right> ID '=' (createFuncCall | expr) ;    //Right associative varaible declaration
 
-createFuncCall: createFunc '(' args ')'; 
+createFuncCall: createFunc '(' args ')';                    //builtin function call that returns square/canvas/circle
 
-funcCall: ID '(' args ')' 
-        | builtInFuncCall;
+funcCall: ID '(' args ')'                                   //user defined animation call 
+        | builtInFuncCall;                                  
         
-args: (arg (',' arg)*)?;
+args: (arg (',' arg)*)?;                                    //arguments passed to a function
 
-builtInFuncCall:  (seqFunc | builtInFunc) '(' args ')';
+builtInFuncCall:  (seqFunc | builtInFunc) '(' args ')';     
 
-animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block;
+animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block; //'add' | 'color' | 'print' | 'moveTo' | 'move'; 'resetCanvas' | 'wait' ;
 
-param: type ID;
+param: type ID;                                             
 
-arg: color | expr;
+arg: color | expr;                                          
 
-arrayElem: ID | '-'?NUM; 
+arrayElem: ID | '-'?NUM;                    //Id or (-)num should probably be type instead.
 
-expr: '(' expr ')'
+expr: '(' expr ')'                          //parenthesis
     | unaryOp expr                          //Unary negative or negation maybe tvinge parentes
     | ID ('[' NUM ']')? rhsExpr             //Id or array expression
-    | NUM rhsExpr
-    | bool rhsExpr;
+    | NUM rhsExpr                           //pos or negative integer via unaryOp expr
+    | bool rhsExpr;                         //boolean
 
-rhsExpr: (( multiOp | op | boolOp) expr)*;
+rhsExpr: (( multiOp | op | boolOp) expr)*;  // *,/,%, +,- or bool operations. unaryOp can only be placed at lhs
 unaryOp: '!' | '-';
 multiOp: '*' | '/' | '%'; 
 op: '+' | '-';
@@ -42,13 +42,13 @@ ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
 
 condition: ('!')? arg ( boolOp ('!')? arg )*;
 
-block: '{' blockStmt* '}';
+block: '{' blockStmt* '}';                     //(varDcl | builtInFuncCall | funcCall) ';' | ifStmt | paralStmt | loopStmt
 
 paralStmt: 'paral' '{' (paralBlockStmt)* '}';
 
 paralBlockStmt: (builtInFuncCall | funcCall) ';';
 
-loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt* '}';
+loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt* '}'; 
 
 loopBlockStmt:  varDcl ';' | loopIfStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
 
