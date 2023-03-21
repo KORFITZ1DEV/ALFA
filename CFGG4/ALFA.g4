@@ -24,13 +24,22 @@ arg: color | expr;
 
 arrayElem: ID | '-'?NUM;                    //Id or (-)num should probably be type instead.
 
-expr: '(' expr ')'                          //parenthesis
-    | unaryOp expr                          //Unary negative or negation maybe tvinge parentes
-    | ID ('[' NUM ']')? rhsExpr             //Id or array expression
-    | NUM rhsExpr                           //pos or negative integer via unaryOp expr
-    | bool rhsExpr;                         //boolean
+//https://stackoverflow.com/questions/26471876/how-to-tell-the-precedence-of-operators-in-a-context-free-grammar
+//exp    --> exp MINUS exp | term
+//term   --> term DIVIDE term | factor
+//factor --> INTLITERAL | LPAREN exp RPAREN
+//Might try this approach instead to avoid left recursion and attain ll(1).
 
-rhsExpr: (( multiOp | op | boolOp) expr)*;  // *,/,%, +,- or bool operations. unaryOp can only be placed at lhs
+expr: term addTail*;
+term: factor multiOp
+
+
+//Thiss works
+/*expr: boolExpr;
+boolExpr: boolExpr boolOp addExpr | addExpr ;
+addExpr: addExpr op multExpr | addExpr '-' multExpr | multExpr;
+multExpr: multExpr multiOp terminalExpr | terminalExpr;
+terminalExpr: NUM | ID ('[' NUM ']')? | '(' expr ')' | unaryOp (NUM|ID ('[' NUM ']')?) ;*/
 unaryOp: '!' | '-';
 multiOp: '*' | '/' | '%'; 
 op: '+' | '-';
