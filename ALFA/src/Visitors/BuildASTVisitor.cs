@@ -4,7 +4,12 @@ namespace ALFA;
 
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
-    private SymbolTable _symbolTable = new();
+    private SymbolTable _symbolTable;
+
+    public BuildASTVisitor(SymbolTable symbolTable)
+    {
+        _symbolTable = symbolTable;
+    }
     
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
     {
@@ -76,23 +81,30 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         var type = context.GetText();
         BuiltInsNode.BuiltInTypeEnum builtInTypeEnum;
+        List<StmtNode.TypeEnum> formalParams = new List<StmtNode.TypeEnum>();
         
         switch (type)
         {
             case "createSquare":
+                StmtNode.TypeEnum[] formalCSParamsArray = {StmtNode.TypeEnum.Int, StmtNode.TypeEnum.Int, StmtNode.TypeEnum.Int, StmtNode.TypeEnum.Int};
+                formalParams.AddRange(formalCSParamsArray);
                 builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.CreateSquare;
                 break;
             case "move":
+                StmtNode.TypeEnum[] formalMovParamsArray = {StmtNode.TypeEnum.Square, StmtNode.TypeEnum.Int, StmtNode.TypeEnum.Int};
+                formalParams.AddRange(formalMovParamsArray);
                 builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.Move;
                 break;
             case "wait":
                 builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.Wait;
+                StmtNode.TypeEnum[] formalWaitParamsArray = {StmtNode.TypeEnum.Int};
+                formalParams.AddRange(formalWaitParamsArray);
                 break;
             default:
                 throw new Exception("Invalid built-in function");
         }
         
-        return new BuiltInsNode(builtInTypeEnum, context.Start.Line, context.Start.Column);
+        return new BuiltInsNode(builtInTypeEnum, formalParams,  context.Start.Line, context.Start.Column);
     }
     
     public override ArgNode VisitArg(ALFAParser.ArgContext context)

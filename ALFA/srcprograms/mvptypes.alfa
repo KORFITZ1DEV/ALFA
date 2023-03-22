@@ -5,8 +5,9 @@ int y = 0;
 int length = 20;
 int animDuration = 4000;
 int delay = 2000;
-square mySquare = createSquare(0, 0, length, length);
+square mySquare1 = createSquare(0, 0, length, length);
+square mySquare2 = createSquare(0, 0, length, length);
 
-move(mySquare , 200, animDuration);
+move(mySquare2 , 200, animDuration);
 wait(delay);
-move(mySquare , -200, animDuration);
+move(mySquare2 , -200, animDuration);
