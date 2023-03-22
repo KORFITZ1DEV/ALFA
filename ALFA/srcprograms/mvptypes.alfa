@@ -1,6 +1,7 @@
 int x = 0;
 int y = 0;
 
+
 int length = 20;
 int animDuration = 4000;
 int delay = 2000;

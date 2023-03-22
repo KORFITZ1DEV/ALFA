@@ -41,6 +41,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             }
             
             var visitedVarDclNode = Visit(varDcl) as VarDclNode;
+            
+            
+            
             return new StmtNode(visitedVarDclNode!, type);
         }
         return new StmtNode(Visit(context.funcCall()) as FuncCallNode);
@@ -56,7 +59,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         }
 
         int value = int.Parse(context.NUM().GetText());
-        _symbolTable.EnterSymbol(id, value);
+        _symbolTable.EnterSymbol(new Symbol(id, value, context.Start.Line, context.Start.Column));
         return new VarDclNode(value, id);
     }
     
@@ -99,7 +102,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (id != null)
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
-            if (sym == null) throw new Exception($"Variable {id.GetText()} not declared");
+            if (sym == null) throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             return new ArgNode(id.GetText());
         }
         

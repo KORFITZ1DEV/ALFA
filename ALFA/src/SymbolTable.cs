@@ -1,10 +1,10 @@
 namespace ALFA;
-
+// Fischer Crafting a Compiler page 292 figure 8.7
 public class SymbolTable
 {
     private int _depth = 0;
-    private Dictionary<string, Symbol> _symbols = new();
-    private List<Symbol?>_scopeDisplay = new();
+    private Dictionary<string, Symbol> _symbols = new(); 
+    private List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
 
     public void OpenScope()
     {
@@ -29,26 +29,26 @@ public class SymbolTable
         _depth--;
     }
     
-    public void EnterSymbol(string name, int value)
+    public void EnterSymbol(Symbol symbol)
     {
-        Symbol? oldSymbol = RetrieveSymbol(name);
+        Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
         if (oldSymbol != null && oldSymbol.Depth == _depth)
         {
-            throw new Exception($"Symbol {name} already declared");
+            throw new Exception($"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
-
-        Symbol newSymbol = new(name, value);
+        
+        Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.LineNumber, symbol.ColumnNumber);
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
 
         if (oldSymbol == null)
         {
-            _symbols.Add(name, newSymbol);
+            _symbols.Add(symbol.Name, newSymbol);
         }
         else
         {
             _symbols.Remove(oldSymbol.Name);
-            _symbols.Add(name, newSymbol);
+            _symbols.Add(symbol.Name, newSymbol);
         }
 
         newSymbol.PrevSymbol = oldSymbol!;
