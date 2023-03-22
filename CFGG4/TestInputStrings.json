@@ -5,12 +5,20 @@
       "assert": "false"
     },
     {
-      
-    },
-    {
       "string": "int four = -400*200+200 < 200+400;",
       "assert": "true"
     },
-    "int four = -400*200*!200;\n\nplay {\n}"
+    {
+      "string" : "int four = -400*200+200 < 200*(400);\n\nplay {\n}",
+      "assert": "true"
+    },
+    {
+      "string": "int four = -400*200*!200;\n\nplay {\n}",
+      "assert": "false"
+    },
+    {
+      "string" : "int four = -400*200+200 < 200*(-400);\n\nplay {\n}",
+      "assert": "true"
+    }
   ]
 }

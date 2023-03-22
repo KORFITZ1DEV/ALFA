@@ -26,11 +26,11 @@ arrayElem: ID | '-'?NUM;                    //Id or (-)num should probably be ty
 
 //This works
 expr: boolExpr;
-boolExpr: boolExpr boolOp addExpr | addExpr ;                   //Lowest precedence
+boolExpr: boolExpr boolOp addExpr | addExpr ;   //Lowest precedence
 addExpr: addExpr op multExpr | addExpr '-' multExpr | multExpr; //Second lowest precedence
-multExpr: multExpr multiOp terminalExpr | terminalExpr;         //Second highest precedence
+multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;         //Second highest precedence
 terminalExpr: NUM | ID ('[' NUM ']')?                   
-            | '(' expr ')' | unaryOp (NUM|ID ('[' NUM ']')?) ; //Highest precedence
+            | '(' expr ')' | (NUM|ID ('[' NUM ']')?) ;          //Highest precedence
 
 unaryOp: '!' | '-';
 multiOp: '*' | '/' | '%'; 
