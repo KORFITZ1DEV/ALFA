@@ -29,7 +29,7 @@ boolExpr: boolExpr boolOp addExpr | addExpr ;   //Lowest precedence
 addExpr: addExpr op multExpr | multExpr; //Second lowest precedence
 multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;         //Second highest precedence
 terminalExpr: NUM | ID ('[' NUM ']')?                   
-            | '(' expr ')' | (NUM|ID ('[' NUM ']')?) ;          //Highest precedence
+            | '(' expr ')' ;          //Highest precedence
 
 unaryOp: 'not' | '-' | '!';
 multiOp: '*' | '/' | '%'; 
