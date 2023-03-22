@@ -24,7 +24,6 @@ arg: color | expr;
 
 arrayElem: ID | '-'?NUM;                    //Id or (-)num should probably be type instead.
 
-//This works
 expr: boolExpr;
 boolExpr: boolExpr boolOp addExpr | addExpr ;   //Lowest precedence
 addExpr: addExpr op multExpr | addExpr '-' multExpr | multExpr; //Second lowest precedence
@@ -32,10 +31,10 @@ multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;         //Secon
 terminalExpr: NUM | ID ('[' NUM ']')?                   
             | '(' expr ')' | (NUM|ID ('[' NUM ']')?) ;          //Highest precedence
 
-unaryOp: '!' | '-';
+unaryOp: 'not' | '-' | '!';
 multiOp: '*' | '/' | '%'; 
 op: '+' | '-';
-boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
+boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | 'and' | 'or' | '&&' | '||';
 
 blockStmt: (varDcl | builtInFuncCall | funcCall) ';' | ifStmt | paralStmt | loopStmt ;
 

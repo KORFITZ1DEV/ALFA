@@ -2,23 +2,29 @@
   "allInputs": [
     {
       "string": "int four = -400*200*-200;\n\nplay {\n}\n\n",
-      "assert": "false"
+      "assert": false,
+      "comment": "Tests that a unary op is illegal after 200*-200"
+    },
+    {
+      "string": "int four = -400*200+200 < 200+400;\n\nplay {\n}\n\n",
+      "assert": true,
+      "comment": "Tests that the whole left expression is evaluated first and that the right expression is evaluated whereafter the boolean < is applied",
+      
     },
     {
       "string": "int four = -400*200+200 < 200+400;",
-      "assert": "true"
+      "assert": false,
+      "comment": "Tests that the string is illegal as it contains no play"
     },
     {
       "string" : "int four = -400*200+200 < 200*(400);\n\nplay {\n}",
-      "assert": "true"
-    },
-    {
-      "string": "int four = -400*200*!200;\n\nplay {\n}",
-      "assert": "false"
+      "assert": true,
+      "comment": "Tests that there can be a parenthesis after an operator."
     },
     {
       "string" : "int four = -400*200+200 < 200*(-400);\n\nplay {\n}",
-      "assert": "true"
+      "assert": true,
+      "comment": "Tests that a unary operator after"
     }
   ]
 }
