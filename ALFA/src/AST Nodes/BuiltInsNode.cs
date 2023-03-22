@@ -4,14 +4,14 @@ public class BuiltInsNode : Node
 {
     public enum BuiltInTypeEnum
     {
-        Create,
+        CreateSquare,
         Move,
         Wait
     }
 
     public BuiltInTypeEnum BuiltInType;
 
-    public BuiltInsNode(BuiltInTypeEnum builtInType)
+    public BuiltInsNode(BuiltInTypeEnum builtInType, int line, int col) : base(line, col)
     {
         this.BuiltInType = builtInType;
     }

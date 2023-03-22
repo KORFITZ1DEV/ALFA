@@ -67,7 +67,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         
         switch (node.BuiltInType)
         {
-            case BuiltInsNode.BuiltInTypeEnum.Create:
+            case BuiltInsNode.BuiltInTypeEnum.CreateSquare:
                 Console.WriteLine("createSquare");
                 break;
             case BuiltInsNode.BuiltInTypeEnum.Move:

@@ -11,13 +11,13 @@ public class StmtNode : Node
     }
 
     public TypeEnum? Type;
-    public StmtNode(VarDclNode varDcl, TypeEnum type)
+    public StmtNode(VarDclNode varDcl, TypeEnum type, int line, int col) : base(line, col)
     {
         this.VarDcl = varDcl;
         this.Type = type;
     }
     
-    public StmtNode(FuncCallNode funcCall)
+    public StmtNode(FuncCallNode funcCall, int line, int col) : base(line, col)
     {
         this.FuncCall = funcCall;
     }

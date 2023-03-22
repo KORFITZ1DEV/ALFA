@@ -18,6 +18,8 @@ void MyParseMethod()
       IParseTree tree = parser.program();
       BuildASTVisitor visitor = new BuildASTVisitor();
       Node ast = visitor.Visit(tree);
+      TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor();
+      typeCheckVisitor.Visit(ast);
       ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
       astPrintVisitor.Visit(ast);
 }
