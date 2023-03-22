@@ -1,8 +1,3 @@
-using Antlr4.Runtime.Tree;
-
 namespace ALFA.AST_Nodes;
 
-public abstract class Node
-{
-    
-}
+public abstract class Node {}

@@ -2,15 +2,10 @@ namespace ALFA.AST_Nodes;
 
 public class ProgramNode : Node
 {
-    public List<StmtNode> stmts;
-    
-    public ProgramNode(List<StmtNode> stmts)
+    public List<StatementNode> Statements { get; set; }
+
+    public ProgramNode(List<StatementNode> statements)
     {
-        this.stmts = stmts;
-    }
-    
-    public override string ToString()
-    {
-        return "ProgramNode";
+        Statements = statements;
     }
 }

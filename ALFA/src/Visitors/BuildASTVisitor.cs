@@ -8,90 +8,63 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
     {
-        List<StmtNode> childList = new List<StmtNode>();
+        List<StatementNode> childList = new List<StatementNode>();
         
         foreach (var stmt in context.statement())
         {
-            childList.Add(Visit(stmt) as StmtNode);
+            childList.Add((StatementNode)Visit(stmt));
         }
         
         return new ProgramNode(childList!);
     }
     
-    public override StmtNode VisitStatement(ALFAParser.StatementContext context)
+    public override StatementNode VisitStatement(ALFAParser.StatementContext context)
     {
-        var varDcl = context.varDcl();
-        
-        
-        if (varDcl != null)
+        if (context.varDcl() != null)
         {
-            var stmtType = context.type().GetText();
-            StmtNode.TypeEnum type;
-        
-            switch (stmtType)
-            {
-                case "int":
-                    type = StmtNode.TypeEnum.Int;
-                    break;
-                case "square":
-                    type = StmtNode.TypeEnum.Square;
-                    break;
-                default:
-                    throw new Exception($"Invalid type {stmtType} on line {context.Start.Line}:{context.Start.Column}");
-            }
-            
-            var visitedVarDclNode = Visit(varDcl) as VarDclNode;
-            
-            
-            
-            return new StmtNode(visitedVarDclNode!, type);
+            return VisitVarDcl(context.varDcl());
         }
-        return new StmtNode(Visit(context.funcCall()) as FuncCallNode);
+        
+        return VisitFuncCall(context.funcCall());
     }
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
+        var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
         if (context.funcCall() != null)
         {
-        var funcCall = Visit(context.funcCall()) as FuncCallNode;
-            return new VarDclNode(funcCall!, id);
+            var funcCall = (FuncCallNode)Visit(context.funcCall());
+            return new VarDclNode(parent.type().GetText(), id, funcCall);
         }
 
-        int value = int.Parse(context.NUM().GetText());
-        _symbolTable.EnterSymbol(new Symbol(id, value, context.Start.Line, context.Start.Column));
-        return new VarDclNode(value, id);
+        NumNode num = new NumNode(int.Parse(context.NUM().GetText()));
+        _symbolTable.EnterSymbol(new Symbol(id, num.Value, context.Start.Line, context.Start.Column));
+        return new VarDclNode(parent.type().GetText(),id, num);
     }
     
     public override FuncCallNode VisitFuncCall(ALFAParser.FuncCallContext context)
     {
-        var builtIns = Visit(context.builtIns()) as BuiltInsNode;
-        var args = context.args().arg().Select(child => Visit(child) as ArgNode).ToList();
+        FuncCallNode funcCallNode = new FuncCallNode(
+            context.builtIns().GetText(),
+            new List<Node>()
+        );
 
-        return new FuncCallNode(builtIns!, args!);
+        if (context.args() != null)
+        {
+            foreach (var argCtx in context.args().arg())
+            {
+                ArgNode argNode = (ArgNode)Visit(argCtx);
+                funcCallNode.Arguments.Add(argNode);
+            }
+        }
+
+        return funcCallNode;
     }
     
     public override BuiltInsNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
     {
-        var type = context.GetText();
-        BuiltInsNode.BuiltInTypeEnum builtInTypeEnum;
-        
-        switch (type)
-        {
-            case "createSquare":
-                builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.Create;
-                break;
-            case "move":
-                builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.Move;
-                break;
-            case "wait":
-                builtInTypeEnum = BuiltInsNode.BuiltInTypeEnum.Wait;
-                break;
-            default:
-                throw new Exception("Invalid built-in function");
-        }
-        
-        return new BuiltInsNode(builtInTypeEnum);
+        return new BuiltInsNode(context.GetText());
     }
     
     public override ArgNode VisitArg(ALFAParser.ArgContext context)
@@ -103,9 +76,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
             if (sym == null) throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
-            return new ArgNode(id.GetText());
+            IdNode idNode = new IdNode(id.GetText());
+            return new ArgNode(idNode);
         }
-        
-        return new ArgNode(int.Parse(num.GetText()));
+
+        NumNode numNode = new NumNode(int.Parse(num.GetText()));
+        return new ArgNode(numNode);
     }
 }

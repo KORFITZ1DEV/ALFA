@@ -1,18 +1,13 @@
 namespace ALFA.AST_Nodes;
 
-public class FuncCallNode : Node
+public class FuncCallNode : StatementNode
 {
-    public BuiltInsNode BuiltIns;
-    public List<ArgNode> Args;
-    
-    public FuncCallNode(BuiltInsNode builtIns, List<ArgNode> args)
+    public string FunctionName { get; set; } // 'createSquare', 'move', or 'wait'
+    public List<Node> Arguments { get; set; } // a list of ArgNode objects
+
+    public FuncCallNode(string functionName, List<Node> arguments)
     {
-        this.BuiltIns = builtIns;
-        this.Args = args;
-    }
-    
-    public override string ToString()
-    {
-        return "\t\tFuncCallNode";
+        FunctionName = functionName;
+        Arguments = arguments;
     }
 }

@@ -1,19 +1,16 @@
 namespace ALFA.AST_Nodes;
 
-public class VarDclNode : Node
+public class VarDclNode : StatementNode
 {
-    public FuncCallNode? FuncCall;
-    public string Id;
-    public int? Num;
+    public string Type { get; set; }
     
-    public VarDclNode(FuncCallNode funcCall, string id )
+    public string Identifier { get; set; }
+    public Node Value { get; set; } // either a FuncCallNode or a NumNode
+
+    public VarDclNode(string type, string identifier, Node value)
     {
-        this.FuncCall = funcCall;
-        this.Id = id;
-    }
-    public VarDclNode(int num, string id)
-    {
-        this.Num = num;
-        this.Id = id;
+        Type = type;
+        Identifier = identifier;
+        Value = value;
     }
 }
