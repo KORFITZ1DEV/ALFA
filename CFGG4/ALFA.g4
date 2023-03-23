@@ -1,5 +1,6 @@
 grammar ALFA;
 //https://stackoverflow.com/questions/26471876/how-to-tell-the-precedence-of-operators-in-a-context-free-grammar
+//page 144 sebesta
 
 prog: stmt* playStmt EOF;
 

@@ -51,11 +51,9 @@ animation canvasManipulation() {
                 colorFlickr(mySquare);
                 colorMove(myCircle);
             }
-            break;
-            resetCanvas(myCanvas);
+            continue;
         } 
         else if (i < 4) {
-            
         }
         else {
             moveRightLeft(mySquare);
