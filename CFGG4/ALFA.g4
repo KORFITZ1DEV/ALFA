@@ -36,7 +36,8 @@ multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;    //priority (
 terminalExpr: NUM | ID ('[' NUM ']')?                   
             | '(' expr ')' | bool ;                                 //priority (1)
 
-unaryOp: 'not' | '-' | '!';
+unaryOp: '-'| notOp;
+notOp: 'not' | '!';
 multiOp: '*' | '/' | '%'; 
 op: '+' | '-';
 and: 'and' | '&&';
