@@ -1,19 +1,18 @@
+using ALFA.Types;
+
 namespace ALFA.AST_Nodes;
 
-public class VarDclNode : Node
+public class VarDclNode : StatementNode
 {
-    public FuncCallNode? FuncCall;
-    public string Id;
-    public int? Num;
+    public ALFATypes.TypeEnum Type { get; set; }
+    
+    public string Identifier { get; set; }
+    public Node Value { get; set; } // either a FuncCallNode or a NumNode
 
-    public VarDclNode(FuncCallNode funcCall, string id, int line, int col) : base(line, col)
+    public VarDclNode(ALFATypes.TypeEnum type, string identifier, Node value, int line, int col) : base(line, col)
     {
-        this.FuncCall = funcCall;
-        this.Id = id;
-    }
-    public VarDclNode(int num, string id, int line, int col) : base(line, col)
-    {
-        this.Num = num;
-        this.Id = id;
+        Type = type;
+        Identifier = identifier;
+        Value = value;
     }
 }

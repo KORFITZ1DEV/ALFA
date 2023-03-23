@@ -9,52 +9,35 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     {
         Console.WriteLine("ProgramNode");
 
-        foreach (var stmt in node.stmts)
+        foreach (var stmt in node.Statements)
         {
             Visit(stmt);
         }
         
         return node;
     }
-    public override Node Visit(StmtNode node)
+    public override Node Visit(StatementNode node)
     {
         Console.WriteLine("\tStmtNode");
-        if (node.Type != null)
-        {
-            Console.WriteLine("\t\tType: " + node.Type);
-        }
-        if (node.VarDcl != null)
-        {
-            Visit(node.VarDcl);
-        }
-        else
-        {
-            Visit(node.FuncCall!);
-        }
-
+        
+        Visit((dynamic)node);
         return node;
     }
     public override Node Visit(VarDclNode node)
-    {  
-        Console.WriteLine("\t\tVarDcl: " + node.Id);
-        Console.Write("\t");
-        if (node.FuncCall != null)
-        {
-            Visit(node.FuncCall);
-        }
-        else
-        {
-            Console.WriteLine("\t\tNum: " + node.Num);
-        }
+    {
+        Console.WriteLine("\t\tVarDcl: ");
+        Console.Write($"\t\t\tType {node.Type}\n\t\t\tid {node.Identifier}\n\t\t\t");
+        Visit((dynamic)node.Value);
         return node;
     }
+
     public override Node Visit(FuncCallNode node)
     {
-        Console.WriteLine("\t\tFuncCall");
+        Console.WriteLine("\n\t\tFuncCall:");
         Visit(node.BuiltIns);
-        
-        Console.WriteLine("\t\t\tArgs");
-        foreach (var arg in node.Args)
+
+        Console.WriteLine("\t\t\t\tArgs:");
+        foreach (var arg in node.Arguments)
         {
             Visit(arg);
         }
@@ -64,34 +47,34 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     public override Node Visit(BuiltInsNode node)
     {
         Console.Write("\t\t\tBuiltIns: ");
-        
-        switch (node.BuiltInType)
-        {
-            case BuiltInsNode.BuiltInTypeEnum.CreateSquare:
-                Console.WriteLine("createSquare");
-                break;
-            case BuiltInsNode.BuiltInTypeEnum.Move:
-                Console.WriteLine("move");
-                break;
-            case BuiltInsNode.BuiltInTypeEnum.Wait:
-                Console.WriteLine("wait");
-                break;
-        }
+        Console.WriteLine(node.BuiltInType.ToString());
         
         return node;
     }
 
     public override Node Visit(ArgNode node)
     {
-        if (node.Id != null)
-        {
-            Console.WriteLine("\t\t\t\tArg: " + node.Id);
-        }
-        else
-        {
-            Console.WriteLine("\t\t\t\tArg: " + node.Num);
-        }
-        
+        Console.Write("\t\t\t\t\tArg: ");
+
+        Visit((dynamic)node.Value);
+        return node;
+    }
+    
+    public override Node Visit(IdNode node)
+    {
+        Console.WriteLine(node.Identifier);
+        return node;
+    }
+
+    public override Node Visit(NumNode node)
+    {
+        Console.WriteLine("value " + node.Value);
+        return node;
+    }
+
+    public override Node Visit(TypeNode node)
+    {
+        Console.WriteLine(node.Type);
         return node;
     }
 }

@@ -2,18 +2,10 @@ namespace ALFA.AST_Nodes;
 
 public class ArgNode : Node
 {
-    public string? Id;
-    public int? Num;
+    public Node Value { get; set; } // either a NumNode or an IdNode
 
-    public ArgNode(int num, int line, int col) : base(line, col)
+    public ArgNode(Node value, int line, int col) : base(line, col)
     {
-        this.Num = num;
+        Value = value;
     }
-    public ArgNode(string id, int line, int col) : base(line, col)
-    {
-        this.Id = id;
-    }
-    
 }
-    
-    

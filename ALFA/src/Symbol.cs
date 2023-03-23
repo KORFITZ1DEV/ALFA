@@ -1,10 +1,11 @@
 using ALFA.AST_Nodes;
+using ALFA.Types;
 
 namespace ALFA;
 
 public class Symbol
 {
-    public StmtNode.TypeEnum Type;
+    public ALFATypes.TypeEnum Type;
     
     public string Name;
     public int Value;
@@ -15,7 +16,7 @@ public class Symbol
 
     public Symbol? PrevSymbol;
 
-    public Symbol(string name, int value, StmtNode.TypeEnum type, int line, int column)
+    public Symbol(string name, int value, ALFATypes.TypeEnum type, int line, int column)
     {
         Name = name;
         Value = value;

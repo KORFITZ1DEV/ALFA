@@ -1,13 +1,13 @@
 namespace ALFA.AST_Nodes;
 
-public class FuncCallNode : Node
+public class FuncCallNode : StatementNode
 {
-    public BuiltInsNode BuiltIns;
-    public List<ArgNode> Args;
-    
-    public FuncCallNode(BuiltInsNode builtIns, List<ArgNode> args, int line, int col) : base(line, col)
+    public BuiltInsNode BuiltIns { get; set; } // 'createSquare', 'move', or 'wait'
+    public List<ArgNode> Arguments { get; set; } // a list of ArgNode objects
+
+    public FuncCallNode(BuiltInsNode builtIns, List<ArgNode> arguments, int line, int col) : base(line, col)
     {
-        this.BuiltIns = builtIns;
-        this.Args = args;
+        BuiltIns = builtIns;
+        Arguments = arguments;
     }
 }
