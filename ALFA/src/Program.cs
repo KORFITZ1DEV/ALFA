@@ -20,8 +20,8 @@ void MyParseMethod()
       SymbolTable symbolTable = new();
       BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
       Node ast = visitor.Visit(tree);
-      //TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
-      //typeCheckVisitor.Visit(ast);
+      TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
+      typeCheckVisitor.Visit(ast);
       ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
       astPrintVisitor.Visit(ast);
 }

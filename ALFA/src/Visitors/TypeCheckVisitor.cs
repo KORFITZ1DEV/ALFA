@@ -1,5 +1,5 @@
-/*
 using ALFA.AST_Nodes;
+using ALFA.Types;
 
 namespace ALFA;
 
@@ -23,82 +23,69 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override Node Visit(StatementNode node)
     {
-        if (node.Type == ALFATypes.TypeEnum.Int)
-        {
-            if (node.VarDcl != null)
-            {
-                if (node.VarDcl.Num == null)
-                {
-                    throw new Exception("Invalid type on line " + node.Line + " column " + node.Col + " expected int but got" + node.VarDcl.FuncCall.BuiltIns);
-                }
-          
-            }
-        }
-        else if (node.Type == ALFATypes.TypeEnum.Square)
-        {
-            if (node.VarDcl != null)
-            {
-                if (node.VarDcl.FuncCall == null)
-                {
-                    throw new Exception("Invalid type expected createSquare but got " + node.VarDcl.Num + " on line " + node.Line + " column " + node.Col);
-                }
-                
-                Visit(node.VarDcl.FuncCall);
-            }
-        }
-
-        if (node.FuncCall != null)
-        {
-            Visit(node.FuncCall);
-        }
+        Visit((dynamic)node);
         return node;
-    }
-    public override Node Visit(BuiltInsNode node)
-    {
-        throw new NotImplementedException();
     }
 
     public override Node Visit(FuncCallNode node)
     {
-        if (node.Args.Count != node.BuiltIns.FormalParams.Count)
+        if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
         {
-            throw new Exception("Invalid number of arguments on line " + node.Line + " column " + node.Col + " expected " + node.BuiltIns.FormalParams.Count + " but got " + node.Args.Count);
+            throw new Exception($"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
         }
+        
         int i = 0;
-        foreach (var actualParam in node.Args)
+        foreach (var actualParam in node.Arguments)
         {
-            if (actualParam.Id != null)
+            if (actualParam.Value is IdNode idNode)
             {
-                Symbol idParam = _symbolTable.RetrieveSymbol(actualParam.Id);
-                if (idParam != null)
+                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                if (idSymbol != null)
                 {
-                    if (idParam.Type != node.BuiltIns.FormalParams[i])
+                    if (idSymbol.Type != node.BuiltIns.FormalParams[i])
                     {
-                        throw new Exception("Invalid type on line " + node.Line + " column " + node.Col + " expected " +
-                                            node.BuiltIns.FormalParams[i] + " but got " + idParam.Type);
+                        throw new Exception($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                     }
                 }
             }
-            else
+            else if (actualParam.Value is NumNode numNode)
             {
                 if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.Int)
                 {
-                    throw new Exception("Invalid type on line " + node.Line + " column " + node.Col + " expected " +
-                                        node.BuiltIns.FormalParams[i] + " but got int");
+                    throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got int on line {numNode.Line}:{numNode.Col}");
                 }
-                i++;
             }
+            i++;
         }
         return node;
     }
-    public override Node Visit(ArgNode node)
-    {
-          throw new NotImplementedException();
-    }
+    
     public override Node Visit(VarDclNode node)
     {
-        throw new NotImplementedException();
+        var visitedNode = Visit((dynamic)node.Value);
+
+        if (visitedNode is FuncCallNode)
+        {
+            if (node.Type != ALFATypes.TypeEnum.Square)
+            {
+                throw new Exception($"Invalid type {node.Type.ToString()}, expected type square on line {node.Line}:{node.Col}");
+            }
+        }
+        else if (visitedNode is NumNode)
+        {
+            if (node.Type != ALFATypes.TypeEnum.Int)
+            {
+                throw new Exception($"Invalid type {node.Type.ToString()}, expected type int on line {node.Line}:{node.Col}");
+            }
+        }
+
+        return node;
     }
+
+    public override Node Visit(BuiltInsNode node) => node;
+    public override Node Visit(ArgNode node) => node;
+    public override Node Visit(IdNode node) => node;
+    public override Node Visit(NumNode node) => node;
+    public override Node Visit(TypeNode node) => node;
 } 
-*/
     

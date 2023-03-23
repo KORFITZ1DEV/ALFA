@@ -34,7 +34,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     public override Node Visit(FuncCallNode node)
     {
         Console.WriteLine("\n\t\tFuncCall:");
-        Visit(node.FunctionName);
+        Visit(node.BuiltIns);
 
         Console.WriteLine("\t\t\t\tArgs:");
         foreach (var arg in node.Arguments)

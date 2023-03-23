@@ -38,16 +38,31 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
+        ALFATypes.TypeEnum typeEnum;
+
+        switch (parent.type().GetText())
+        {
+            case "int":
+                typeEnum = ALFATypes.TypeEnum.Int;
+                break;
+            case "square":
+                typeEnum = ALFATypes.TypeEnum.Square;
+                break;
+            default:
+                throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
+        }
+        
+        
         if (context.funcCall() != null)
         {
             var funcCall = (FuncCallNode)Visit(context.funcCall());
             _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.Square, context.Start.Line, context.Start.Column));
-            return new VarDclNode(parent.type().GetText(), id, funcCall);
+            return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
 
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
         _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.Int, context.Start.Line, context.Start.Column));
-        return new VarDclNode(parent.type().GetText(),id, num);
+        return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
     public override FuncCallNode VisitFuncCall(ALFAParser.FuncCallContext context)
@@ -79,7 +94,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         
         FuncCallNode funcCallNode = new FuncCallNode(
             new BuiltInsNode(builtInTypeEnum, formalParams, context.Start.Line, context.Start.Column),
-            new List<Node>()
+            new List<ArgNode>(),
+            context.Start.Line,
+            context.Start.Column
         );
 
         if (context.args() != null)
