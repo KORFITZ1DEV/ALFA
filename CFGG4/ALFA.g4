@@ -1,4 +1,5 @@
 grammar ALFA;
+//https://stackoverflow.com/questions/26471876/how-to-tell-the-precedence-of-operators-in-a-context-free-grammar
 
 prog: stmt* playStmt EOF;
 
@@ -22,19 +23,25 @@ param: type ID;
 
 arg: color | expr;                                          
 
-arrayElem: ID | '-'?NUM;                    //Id or (-)num should probably be type instead.
+arrayElem: ID | '-'?NUM;                        //Id or (-)num should probably be type instead.
 
-expr: boolExpr;
-boolExpr: boolExpr boolOp addExpr | addExpr ;   //Lowest precedence
-addExpr: addExpr op multExpr | multExpr; //Second lowest precedence
-multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;         //Second highest precedence
+expr: orExpr;
+orExpr: orExpr or andExpr | andExpr;                                //priority (7)
+andExpr: andExpr and equalityExpr | equalityExpr;                   //priority (6)
+equalityExpr: equalityExpr equalityOp boolExpr | boolExpr;          //priority (5)
+boolExpr: boolExpr boolOp addExpr | addExpr ;                       //priority (4)
+addExpr: addExpr op multExpr | multExpr;                            //priority (3)
+multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;    //priority (2)
 terminalExpr: NUM | ID ('[' NUM ']')?                   
-            | '(' expr ')' ;          //Highest precedence
+            | '(' expr ')' | bool ;                                 //priority (1)
 
 unaryOp: 'not' | '-' | '!';
 multiOp: '*' | '/' | '%'; 
 op: '+' | '-';
-boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | 'and' | 'or' | '&&' | '||';
+and: 'and' | '&&';
+or: 'or' | '||';
+boolOp: '<' | '>' | '<=' | '>=';
+equalityOp: '==' | '!=';
 
 blockStmt: (varDcl | builtInFuncCall | funcCall) ';' | ifStmt | paralStmt | loopStmt ;
 
