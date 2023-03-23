@@ -1,17 +1,22 @@
 grammar ALFA;
 
-start : program EOF;
+program : statement+ EOF;
 
-program: statement+;
+statement: type varDcl ';' | funcCall ';';
 
-statement: createStmt | moveStmt | waitStmt;
+varDcl: ID '=' funcCall
+| ID '=' NUM;
 
-createStmt: ID '=' 'createSquare' '(' INT ',' INT ',' INT ',' INT ')' ';';
+funcCall: builtIns '(' args ')';
 
-moveStmt: 'move' '(' ID ',' INT ',' INT ')' ';';
+builtIns: 'createSquare' | 'move' | 'wait';
 
-waitStmt: 'wait' '(' INT ')' ';';
+args: arg (',' arg)*;
 
-ID: [a-zA-Z]+;
-INT: '0' |('-'?([1-9][0-9]*));
+arg: NUM | ID;
+
+type: 'int' | 'square' ;
+
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
+NUM: '0'| '-'?[1-9][0-9]* ;
 WS: [ \t\r\n]+ -> skip;
