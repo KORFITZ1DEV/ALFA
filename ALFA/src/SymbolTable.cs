@@ -37,7 +37,7 @@ public class SymbolTable
             throw new Exception($"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
         
-        Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.LineNumber, symbol.ColumnNumber);
+        Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.Type, symbol.LineNumber, symbol.ColumnNumber);
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
 

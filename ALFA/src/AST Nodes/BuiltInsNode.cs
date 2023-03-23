@@ -1,11 +1,16 @@
+using ALFA.Types;
+
 namespace ALFA.AST_Nodes;
 
 public class BuiltInsNode : Node
 {
-    public string Name { get; set; } // 'createSquare', 'move', or 'wait'
+    public List<ALFATypes.TypeEnum> FormalParams;
+    
+    public ALFATypes.BuiltInTypeEnum BuiltInType;
 
-    public BuiltInsNode(string name)
+    public BuiltInsNode(ALFATypes.BuiltInTypeEnum builtInType, List<ALFATypes.TypeEnum> formalParams, int line, int col) : base(line, col)
     {
-        Name = name;
+        this.BuiltInType = builtInType;
+        this.FormalParams = formalParams;
     }
 }
