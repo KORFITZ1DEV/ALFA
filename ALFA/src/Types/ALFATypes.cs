@@ -4,15 +4,15 @@ public class ALFATypes
 {
     public enum TypeEnum
     {
-        Int,
-        Square
+        @int,
+        square
     }
     
     public enum BuiltInTypeEnum
     {
-        CreateSquare,
-        Move,
-        Wait
+        createSquare,
+        move,
+        wait
     }
 
 }

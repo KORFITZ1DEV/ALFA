@@ -50,7 +50,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             }
             else if (actualParam.Value is NumNode numNode)
             {
-                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.Int)
+                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
                 {
                     throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got int on line {numNode.Line}:{numNode.Col}");
                 }
@@ -66,14 +66,14 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (visitedNode is FuncCallNode)
         {
-            if (node.Type != ALFATypes.TypeEnum.Square)
+            if (node.Type != ALFATypes.TypeEnum.square)
             {
                 throw new Exception($"Invalid type {node.Type.ToString()}, expected type square on line {node.Line}:{node.Col}");
             }
         }
         else if (visitedNode is NumNode)
         {
-            if (node.Type != ALFATypes.TypeEnum.Int)
+            if (node.Type != ALFATypes.TypeEnum.@int)
             {
                 throw new Exception($"Invalid type {node.Type.ToString()}, expected type int on line {node.Line}:{node.Col}");
             }

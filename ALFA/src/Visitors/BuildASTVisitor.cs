@@ -43,10 +43,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         switch (parent.type().GetText())
         {
             case "int":
-                typeEnum = ALFATypes.TypeEnum.Int;
+                typeEnum = ALFATypes.TypeEnum.@int;
                 break;
             case "square":
-                typeEnum = ALFATypes.TypeEnum.Square;
+                typeEnum = ALFATypes.TypeEnum.square;
                 break;
             default:
                 throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
@@ -56,12 +56,12 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (context.funcCall() != null)
         {
             var funcCall = (FuncCallNode)Visit(context.funcCall());
-            _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.Square, context.Start.Line, context.Start.Column));
+            _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.square, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
 
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
-        _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.Int, context.Start.Line, context.Start.Column));
+        _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
@@ -74,19 +74,19 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         switch (type)
         {
             case "createSquare":
-                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.CreateSquare;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
                 break;
             case "move":
-                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.Square, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMovParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Move;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
                 break;
             case "wait":
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Wait;
-                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.Int};
-                formalParams.AddRange(formalWaitParamsArray);
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
+                ALFATypes.TypeEnum[] formalwaitParamsArray = {ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalwaitParamsArray);
                 break;
             default:
                 throw new Exception("Invalid built-in function");
@@ -120,19 +120,19 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         switch (type)
         {
             case "createSquare":
-                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.CreateSquare;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
                 break;
             case "move":
-                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.Square, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMovParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Move;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
                 break;
             case "wait":
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Wait;
-                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.Int};
-                formalParams.AddRange(formalWaitParamsArray);
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
+                ALFATypes.TypeEnum[] formalwaitParamsArray = {ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalwaitParamsArray);
                 break;
             default:
                 throw new Exception("Invalid built-in function");
