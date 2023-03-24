@@ -267,31 +267,32 @@ public partial class ALFAParser : Parser {
 		VarDclContext _localctx = new VarDclContext(Context, State);
 		EnterRule(_localctx, 4, RULE_varDcl);
 		try {
-			State = 38;
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 32;
+			Match(ID);
+			State = 33;
+			Match(T__1);
+			State = 36;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
-			case 1:
-				EnterOuterAlt(_localctx, 1);
+			switch (TokenStream.LA(1)) {
+			case T__4:
+			case T__5:
+			case T__6:
 				{
-				State = 32;
-				Match(ID);
-				State = 33;
-				Match(T__1);
 				State = 34;
 				funcCall();
 				}
 				break;
-			case 2:
-				EnterOuterAlt(_localctx, 2);
+			case NUM:
 				{
 				State = 35;
-				Match(ID);
-				State = 36;
-				Match(T__1);
-				State = 37;
 				Match(NUM);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -342,13 +343,13 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 40;
+			State = 38;
 			builtIns();
-			State = 41;
+			State = 39;
 			Match(T__2);
-			State = 42;
+			State = 40;
 			args();
-			State = 43;
+			State = 41;
 			Match(T__3);
 			}
 		}
@@ -395,7 +396,7 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 45;
+			State = 43;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 224L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -455,21 +456,21 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 47;
+			State = 45;
 			arg();
-			State = 52;
+			State = 50;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==T__7) {
 				{
 				{
-				State = 48;
+				State = 46;
 				Match(T__7);
-				State = 49;
+				State = 47;
 				arg();
 				}
 				}
-				State = 54;
+				State = 52;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -520,7 +521,7 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 55;
+			State = 53;
 			_la = TokenStream.LA(1);
 			if ( !(_la==ID || _la==NUM) ) {
 			ErrorHandler.RecoverInline(this);
@@ -574,7 +575,7 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 57;
+			State = 55;
 			_la = TokenStream.LA(1);
 			if ( !(_la==T__8 || _la==T__9) ) {
 			ErrorHandler.RecoverInline(this);
@@ -597,22 +598,22 @@ public partial class ALFAParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,13,60,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,13,58,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,1,0,4,0,18,8,0,11,0,12,0,19,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
-		1,31,8,1,1,2,1,2,1,2,1,2,1,2,1,2,3,2,39,8,2,1,3,1,3,1,3,1,3,1,3,1,4,1,
-		4,1,5,1,5,1,5,5,5,51,8,5,10,5,12,5,54,9,5,1,6,1,6,1,7,1,7,1,7,0,0,8,0,
-		2,4,6,8,10,12,14,0,3,1,0,5,7,1,0,11,12,1,0,9,10,55,0,17,1,0,0,0,2,30,1,
-		0,0,0,4,38,1,0,0,0,6,40,1,0,0,0,8,45,1,0,0,0,10,47,1,0,0,0,12,55,1,0,0,
-		0,14,57,1,0,0,0,16,18,3,2,1,0,17,16,1,0,0,0,18,19,1,0,0,0,19,17,1,0,0,
-		0,19,20,1,0,0,0,20,21,1,0,0,0,21,22,5,0,0,1,22,1,1,0,0,0,23,24,3,14,7,
-		0,24,25,3,4,2,0,25,26,5,1,0,0,26,31,1,0,0,0,27,28,3,6,3,0,28,29,5,1,0,
-		0,29,31,1,0,0,0,30,23,1,0,0,0,30,27,1,0,0,0,31,3,1,0,0,0,32,33,5,11,0,
-		0,33,34,5,2,0,0,34,39,3,6,3,0,35,36,5,11,0,0,36,37,5,2,0,0,37,39,5,12,
-		0,0,38,32,1,0,0,0,38,35,1,0,0,0,39,5,1,0,0,0,40,41,3,8,4,0,41,42,5,3,0,
-		0,42,43,3,10,5,0,43,44,5,4,0,0,44,7,1,0,0,0,45,46,7,0,0,0,46,9,1,0,0,0,
-		47,52,3,12,6,0,48,49,5,8,0,0,49,51,3,12,6,0,50,48,1,0,0,0,51,54,1,0,0,
-		0,52,50,1,0,0,0,52,53,1,0,0,0,53,11,1,0,0,0,54,52,1,0,0,0,55,56,7,1,0,
-		0,56,13,1,0,0,0,57,58,7,2,0,0,58,15,1,0,0,0,4,19,30,38,52
+		1,31,8,1,1,2,1,2,1,2,1,2,3,2,37,8,2,1,3,1,3,1,3,1,3,1,3,1,4,1,4,1,5,1,
+		5,1,5,5,5,49,8,5,10,5,12,5,52,9,5,1,6,1,6,1,7,1,7,1,7,0,0,8,0,2,4,6,8,
+		10,12,14,0,3,1,0,5,7,1,0,11,12,1,0,9,10,53,0,17,1,0,0,0,2,30,1,0,0,0,4,
+		32,1,0,0,0,6,38,1,0,0,0,8,43,1,0,0,0,10,45,1,0,0,0,12,53,1,0,0,0,14,55,
+		1,0,0,0,16,18,3,2,1,0,17,16,1,0,0,0,18,19,1,0,0,0,19,17,1,0,0,0,19,20,
+		1,0,0,0,20,21,1,0,0,0,21,22,5,0,0,1,22,1,1,0,0,0,23,24,3,14,7,0,24,25,
+		3,4,2,0,25,26,5,1,0,0,26,31,1,0,0,0,27,28,3,6,3,0,28,29,5,1,0,0,29,31,
+		1,0,0,0,30,23,1,0,0,0,30,27,1,0,0,0,31,3,1,0,0,0,32,33,5,11,0,0,33,36,
+		5,2,0,0,34,37,3,6,3,0,35,37,5,12,0,0,36,34,1,0,0,0,36,35,1,0,0,0,37,5,
+		1,0,0,0,38,39,3,8,4,0,39,40,5,3,0,0,40,41,3,10,5,0,41,42,5,4,0,0,42,7,
+		1,0,0,0,43,44,7,0,0,0,44,9,1,0,0,0,45,50,3,12,6,0,46,47,5,8,0,0,47,49,
+		3,12,6,0,48,46,1,0,0,0,49,52,1,0,0,0,50,48,1,0,0,0,50,51,1,0,0,0,51,11,
+		1,0,0,0,52,50,1,0,0,0,53,54,7,1,0,0,54,13,1,0,0,0,55,56,7,2,0,0,56,15,
+		1,0,0,0,4,19,30,36,50
 	};
 
 	public static readonly ATN _ATN =
