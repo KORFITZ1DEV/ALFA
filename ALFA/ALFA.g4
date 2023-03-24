@@ -4,8 +4,7 @@ program : statement+ EOF;
 
 statement: type varDcl ';' | funcCall ';';
 
-varDcl: ID '=' funcCall
-| ID '=' NUM;
+varDcl: ID '=' (funcCall | NUM);
 
 funcCall: builtIns '(' args ')';
 
