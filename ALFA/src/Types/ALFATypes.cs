@@ -14,5 +14,13 @@ public class ALFATypes
         move,
         wait
     }
+    public enum OutputEnum
+    {
+        VarOutput,
+        SetupOutput,
+        DrawOutput,
+        Output
+    }
+    
 
 }
