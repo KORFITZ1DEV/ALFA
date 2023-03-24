@@ -1,7 +1,7 @@
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
-namespace ALFA;
+namespace ALFA.Visitors;
 
 public class TypeCheckVisitor : ASTVisitor<Node>
 {
@@ -20,13 +20,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         }
         return node;
     }
-
+    
     public override Node Visit(StatementNode node)
     {
         Visit((dynamic)node);
         return node;
     }
-
+    
     public override Node Visit(FuncCallNode node)
     {
         if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
@@ -43,17 +43,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 if (idSymbol != null)
                 {
                     if (idSymbol.Type != node.BuiltIns.FormalParams[i])
-                    {
                         throw new Exception($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
-                    }
                 }
             }
             else if (actualParam.Value is NumNode numNode)
             {
-                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.Int)
-                {
-                    throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got int on line {numNode.Line}:{numNode.Col}");
-                }
+                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
+                    throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
             }
             i++;
         }
@@ -66,22 +62,18 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (visitedNode is FuncCallNode)
         {
-            if (node.Type != ALFATypes.TypeEnum.Square)
-            {
-                throw new Exception($"Invalid type {node.Type.ToString()}, expected type square on line {node.Line}:{node.Col}");
-            }
+            if (node.Type != ALFATypes.TypeEnum.square)
+                throw new Exception($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.square} on line {node.Line}:{node.Col}");
         }
         else if (visitedNode is NumNode)
         {
-            if (node.Type != ALFATypes.TypeEnum.Int)
-            {
-                throw new Exception($"Invalid type {node.Type.ToString()}, expected type int on line {node.Line}:{node.Col}");
-            }
+            if (node.Type != ALFATypes.TypeEnum.@int)
+                throw new Exception($"Invalid type {node.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {node.Line}:{node.Col}");
         }
 
         return node;
     }
-
+    
     public override Node Visit(BuiltInsNode node) => node;
     public override Node Visit(ArgNode node) => node;
     public override Node Visit(IdNode node) => node;

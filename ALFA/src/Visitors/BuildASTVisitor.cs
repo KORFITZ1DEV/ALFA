@@ -1,7 +1,7 @@
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
-namespace ALFA;
+namespace ALFA.Visitors;
 
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
@@ -27,9 +27,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override StatementNode VisitStatement(ALFAParser.StatementContext context)
     {
         if (context.varDcl() != null)
-        {
             return VisitVarDcl(context.varDcl());
-        }
         
         return VisitFuncCall(context.funcCall());
     }
@@ -39,29 +37,28 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
         ALFATypes.TypeEnum typeEnum;
-
+        
         switch (parent.type().GetText())
         {
             case "int":
-                typeEnum = ALFATypes.TypeEnum.Int;
+                typeEnum = ALFATypes.TypeEnum.@int;
                 break;
             case "square":
-                typeEnum = ALFATypes.TypeEnum.Square;
+                typeEnum = ALFATypes.TypeEnum.square;
                 break;
             default:
                 throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
         
-        
         if (context.funcCall() != null)
         {
             var funcCall = (FuncCallNode)Visit(context.funcCall());
-            _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.Square, context.Start.Line, context.Start.Column));
+            _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.square, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
 
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
-        _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.Int, context.Start.Line, context.Start.Column));
+        _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
@@ -74,18 +71,18 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         switch (type)
         {
             case "createSquare":
-                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.CreateSquare;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
                 break;
             case "move":
-                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.Square, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
-                formalParams.AddRange(formalMovParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Move;
+                ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalMoveParamsArray);
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
                 break;
             case "wait":
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Wait;
-                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.Int};
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
+                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalWaitParamsArray);
                 break;
             default:
@@ -120,19 +117,19 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         switch (type)
         {
             case "createSquare":
-                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.CreateSquare;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
                 break;
             case "move":
-                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.Square, ALFATypes.TypeEnum.Int, ALFATypes.TypeEnum.Int};
+                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMovParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Move;
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
                 break;
             case "wait":
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.Wait;
-                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.Int};
-                formalParams.AddRange(formalWaitParamsArray);
+                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
+                ALFATypes.TypeEnum[] formalwaitParamsArray = {ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalwaitParamsArray);
                 break;
             default:
                 throw new Exception("Invalid built-in function");
@@ -149,7 +146,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (id != null)
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
-            if (sym == null) throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+            if (sym == null) 
+                throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+            
             IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
             return new ArgNode(idNode, context.Start.Line, context.Start.Column);
         }

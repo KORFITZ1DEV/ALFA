@@ -24,5 +24,4 @@ public class Symbol
         ColumnNumber = column;
         Type = type;
     }
-
 }
