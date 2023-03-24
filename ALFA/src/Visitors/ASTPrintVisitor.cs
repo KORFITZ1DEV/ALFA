@@ -1,7 +1,6 @@
 using ALFA.AST_Nodes;
-using Antlr4.Runtime.Tree;
 
-namespace ALFA;
+namespace ALFA.Visitors;
 
 public class ASTPrintVisitor : ASTVisitor<Node>
 {

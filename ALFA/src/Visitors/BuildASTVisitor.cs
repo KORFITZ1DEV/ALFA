@@ -1,7 +1,7 @@
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
-namespace ALFA;
+namespace ALFA.Visitors;
 
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
@@ -27,9 +27,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override StatementNode VisitStatement(ALFAParser.StatementContext context)
     {
         if (context.varDcl() != null)
-        {
             return VisitVarDcl(context.varDcl());
-        }
         
         return VisitFuncCall(context.funcCall());
     }
@@ -39,7 +37,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
         ALFATypes.TypeEnum typeEnum;
-
+        
         switch (parent.type().GetText())
         {
             case "int":
@@ -51,7 +49,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             default:
                 throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
-        
         
         if (context.funcCall() != null)
         {
@@ -79,14 +76,14 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
                 break;
             case "move":
-                ALFATypes.TypeEnum[] formalMovParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
-                formalParams.AddRange(formalMovParamsArray);
+                ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
                 break;
             case "wait":
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
-                ALFATypes.TypeEnum[] formalwaitParamsArray = {ALFATypes.TypeEnum.@int};
-                formalParams.AddRange(formalwaitParamsArray);
+                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.@int};
+                formalParams.AddRange(formalWaitParamsArray);
                 break;
             default:
                 throw new Exception("Invalid built-in function");
@@ -149,7 +146,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (id != null)
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
-            if (sym == null) throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+            if (sym == null) 
+                throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+            
             IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
             return new ArgNode(idNode, context.Start.Line, context.Start.Column);
         }
