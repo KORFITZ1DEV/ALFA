@@ -1,6 +1,7 @@
 ﻿using ALFA.AST_Nodes;
 
-namespace ALFA;
+namespace ALFA.Visitors;
+// https://stackoverflow.com/questions/29971097/how-to-create-ast-with-antlr4
 
 public abstract class ASTVisitor<T>
 {

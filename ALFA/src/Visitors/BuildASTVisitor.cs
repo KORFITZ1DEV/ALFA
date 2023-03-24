@@ -2,6 +2,7 @@ using ALFA.AST_Nodes;
 using ALFA.Types;
 
 namespace ALFA.Visitors;
+// https://stackoverflow.com/questions/29971097/how-to-create-ast-with-antlr4
 
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
@@ -26,6 +27,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     
     public override StatementNode VisitStatement(ALFAParser.StatementContext context)
     {
+        // write explicitly - assert this expectation
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
         

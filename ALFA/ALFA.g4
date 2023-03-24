@@ -5,7 +5,7 @@ program : statement+ EOF;
 statement: type varDcl ';' | funcCall ';';
 
 varDcl: ID '=' funcCall
-| ID '=' NUM;
+    | ID '=' NUM;
 
 funcCall: builtIns '(' args ')';
 
