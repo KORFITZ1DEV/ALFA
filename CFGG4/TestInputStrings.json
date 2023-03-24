@@ -9,7 +9,6 @@
       "string": "int four = -400*200+200 < 200+400;play {}",
       "assert": true,
       "comment": "Tests that the whole left expression is evaluated first and that the right expression is evaluated whereafter the boolean < is applied",
-      
     },
     {
       "string": "int four = -400*200+200 < 200+400;",
@@ -24,7 +23,35 @@
     {
       "string" : "int four = -400*200+200 < 200*(-400); play {}",
       "assert": true,
-      "comment": "Tests that a unary operator after"
+      "comment": "Tests that there can be a parenthesis after an operator."
+    },
+    {
+      "string" : "int four = true and false; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator and"
+    },{
+      "string" : "int four = true and true; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator and"
+    },
+    {
+      "string" : "int four = true or false; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator or"
+    },{
+      "string" : "int four = false or false; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator or"
+    },
+    {
+      "string" : "int four = -400*200+200 < 200*(-400) and 200 < 400; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator and"
+    },
+    {
+      "string" : "int four = -400*200+200 < 200*(-400) or 200 < 400; play {}",
+      "assert": true,
+      "comment": "Tests the Boolean operator or"
     }
   ]
 }
