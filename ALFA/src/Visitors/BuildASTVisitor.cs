@@ -66,6 +66,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     
     public override FuncCallNode VisitFuncCall(ALFAParser.FuncCallContext context)
     {
+        string? identifier = null;
         var type = context.builtIns().GetText();
         ALFATypes.BuiltInTypeEnum builtInTypeEnum;
         List<ALFATypes.TypeEnum> formalParams = new List<ALFATypes.TypeEnum>();
@@ -76,11 +77,15 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createSquare;
+                
+                var parent = (ALFAParser.VarDclContext)context.Parent;
+                identifier = parent.ID().GetText();
                 break;
             case "move":
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
+                identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
@@ -97,6 +102,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             context.Start.Line,
             context.Start.Column
         );
+
+        funcCallNode.Identifier = identifier;
 
         if (context.args() != null)
         {
