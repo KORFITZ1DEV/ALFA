@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using System.Diagnostics;
 using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Visitors;
+using System.Diagnostics;
 
 MyParseMethod();
 
@@ -25,7 +25,7 @@ void MyParseMethod()
       typeCheckVisitor.Visit(ast);
       //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
       //astPrintVisitor.Visit(ast);
-      CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable);
+      CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../Output/sketch.js");
       codeGenVisitor.Visit(ast);
 }
 

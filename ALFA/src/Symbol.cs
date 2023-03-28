@@ -8,7 +8,7 @@ public class Symbol
     public ALFATypes.TypeEnum Type;
     
     public string Name;
-    public int Value;
+    public Node Value;
     public int Depth; 
     
     public int LineNumber;
@@ -16,7 +16,7 @@ public class Symbol
 
     public Symbol? PrevSymbol;
 
-    public Symbol(string name, int value, ALFATypes.TypeEnum type, int line, int column)
+    public Symbol(string name, Node value, ALFATypes.TypeEnum type, int line, int column)
     {
         Name = name;
         Value = value;

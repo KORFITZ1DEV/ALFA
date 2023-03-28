@@ -15,10 +15,13 @@ public class CodeGenVisitor : ASTVisitor<Node>
     private Dictionary<string, string> _squares = new();
     private int _squareNum = 0;
     private SymbolTable _symbolTable;
+    private string _path;
 
-    public CodeGenVisitor(SymbolTable st)
+    public CodeGenVisitor(SymbolTable st, string path)
     {
         _symbolTable = st;
+        _path = path;
+
     }
     void Emit(string nodeContent, ALFATypes.OutputEnum type)
     {
@@ -41,9 +44,9 @@ public class CodeGenVisitor : ASTVisitor<Node>
     
     public override ProgramNode Visit(ProgramNode node)
     {
-        Emit("let startTime = 0\nlet state = 0\nlet progress = 0\n\n", ALFATypes.OutputEnum.VarOutput);
+        Emit("let startTime = 0\nlet state = 0\nlet progress = 0\n", ALFATypes.OutputEnum.VarOutput);
         Emit("\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
-        Emit("function draw() {", ALFATypes.OutputEnum.DrawOutput);
+        Emit("function draw() {\n\tbackground(255)\n", ALFATypes.OutputEnum.DrawOutput);
         
         foreach (var stmt in node.Statements)
         {
@@ -51,7 +54,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
         }
         Emit("}", ALFATypes.OutputEnum.DrawOutput);
         Emit(_varOutput + _setupOutput + _drawOutput, ALFATypes.OutputEnum.Output);
-        Console.WriteLine(_output);
+        File.WriteAllText(_path, _output);
         return node;
     }
     public override StatementNode Visit(StatementNode node)
@@ -74,39 +77,46 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 string squareX = "x" + _squareNum;
                 _squareNum++;
                 _squares.Add(node.Identifier!, squareX);
-
-                Emit($"let {squareX} = {ExtractArgValue(node.Arguments[0].Value)}\n" +
-                     $"rect({squareX}", ALFATypes.OutputEnum.VarOutput);
+                Emit($"let {squareX} = {ExtractArgValue(node.Arguments[0].Value)}\n", ALFATypes.OutputEnum.VarOutput);
+                Emit($"\trect({squareX}", ALFATypes.OutputEnum.DrawOutput);
                 
                 foreach (var argNode in node.Arguments.Skip(1))
                 {
-                    Emit($",{ExtractArgValue(argNode.Value)}", ALFATypes.OutputEnum.VarOutput);
+                    Emit($",{ExtractArgValue(argNode.Value)}", ALFATypes.OutputEnum.DrawOutput);
                 }
                 
-                Emit(")\n", ALFATypes.OutputEnum.VarOutput);
+                Emit(")\n", ALFATypes.OutputEnum.DrawOutput);
                 break;
             case ALFATypes.BuiltInTypeEnum.move:
                 string moveDirection;
                 string moveOperand;
+                FuncCallNode createSquare = (FuncCallNode)_symbolTable.RetrieveSymbol(node.Identifier!).Value;
+                int startX = ExtractArgValue(createSquare.Arguments[0].Value);
+                int targetX = ExtractArgValue(node.Arguments[1].Value) + startX;
+                int endX = startX + targetX;
                 if (ExtractArgValue(node.Arguments[1].Value) > 0)
                 {
-                    moveDirection = "moveRight();";
+                    moveDirection = $"{_squares[node.Identifier!]} = {startX} + ({targetX} - {startX}) * progress";
                     moveOperand = "<";
                 }
                 else
                 {
-                    moveDirection = "moveLeft();";
+                    targetX = startX+1;
+                    moveDirection = $"{_squares[node.Identifier!]} = {Math.Abs(endX)} + ({endX} + {targetX}) * progress";
                     moveOperand = ">";
                 }
 
                 Emit("\n\tif (state == " + _state + ") {\n\t\t" +
-                     "if ("+ _squares[node.Identifier!] + " " + moveOperand + " " + ExtractArgValue(node.Arguments[1].Value) + ") {" + moveDirection + " }\n\t\t" +
-                     "else { resetTimer(); state = " + (_state + 1) + ";}\n\t}\n", ALFATypes.OutputEnum.DrawOutput);
+                     "if (" + _squares[node.Identifier!] + " " + moveOperand + " " + targetX + ") {"
+                     + "progress = (millis() - startTime) / " + ExtractArgValue(node.Arguments[2].Value) + ";"
+                     + moveDirection +
+                     " }\n\t\t" +
+                     "else { startTime = millis(); state = " + (_state + 1) + ";}\n\t}\n", ALFATypes.OutputEnum.DrawOutput);
                 _state++;
                 break;
             case ALFATypes.BuiltInTypeEnum.wait:
                 Emit("\n\tif (state == " + _state + ") {\n\t\t" + 
-                     "if (millis() - startTime >= " + ExtractArgValue(node.Arguments[0].Value) + ") { resetTimer(); state = " + (_state + 1) + " }\n\t}\n", ALFATypes.OutputEnum.DrawOutput);
+                     "if (millis() - startTime >= " + ExtractArgValue(node.Arguments[0].Value) + ") { startTime = millis(); state = " + (_state + 1) + " }\n\t}\n", ALFATypes.OutputEnum.DrawOutput);
                 _state++;
                 break;
         }
@@ -151,13 +161,14 @@ public class CodeGenVisitor : ASTVisitor<Node>
         int value = 0;
         if (argValue is IdNode idNode)
         {
-            value = _symbolTable.RetrieveSymbol(idNode.Identifier)!.Value;
+            NumNode numNode = (NumNode)_symbolTable.RetrieveSymbol(idNode.Identifier)!.Value;
+            value = numNode.Value;
         }
         else if (argValue is NumNode numNode)
         {
-            value = numNode.Value;
+           value = numNode.Value;
         }
-
+        
         return value;
     }
 }

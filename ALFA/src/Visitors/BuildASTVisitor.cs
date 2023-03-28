@@ -55,12 +55,12 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (context.funcCall() != null)
         {
             var funcCall = (FuncCallNode)Visit(context.funcCall());
-            _symbolTable.EnterSymbol(new Symbol(id, 0, ALFATypes.TypeEnum.square, context.Start.Line, context.Start.Column));
+            _symbolTable.EnterSymbol(new Symbol(id, funcCall, ALFATypes.TypeEnum.square, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
 
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
-        _symbolTable.EnterSymbol(new Symbol(id, num.Value, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
+        _symbolTable.EnterSymbol(new Symbol(id, num, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
