@@ -1,35 +1,44 @@
 grammar ALFA;
+//https://stackoverflow.com/questions/26471876/how-to-tell-the-precedence-of-operators-in-a-context-free-grammar
+//page 144 sebesta
 
 prog: stmt* playStmt EOF;
 
-stmt: type varDcl ';' | funcCall ';' | animDcl | loopStmt;
+stmt: (type varDcl | funcCall) ';' | animDcl | loopStmt;    //statement can either be vardcl, funcCall, animDcl, loopStmt
 
-varDcl: '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')?
-        | ID '=' (createFuncCall | expr) ;
+varDcl:   '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')? //array declaration 
+        | <assoc=right> ID '=' (createFuncCall | expr) ;    //Right associative variable declaration
 
-createFuncCall: createFunc '(' args ')'; 
+createFuncCall: createFunc '(' args ')';                    //built-in function call that returns square/canvas/circle
 
-funcCall: ID '(' args ')' 
-        | builtInFuncCall;
+funcCall: ID '(' args ')'                                   //user defined animation call 
+        | builtInFuncCall;                                  
         
-args: (arg (',' arg)*)?;
+args: (arg (',' arg)*)?;                                    //arguments passed to a function
 
-builtInFuncCall: builtInFunc '(' args ')' 
-        | SEQFUNC '(' args ')';
+builtInFuncCall:  (seqFunc | builtInFunc) '(' args ')';    
 
-animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block;
+animDcl: 'animation' ID '(' (param (' ,' param)*)? ')' block; 
 
-param: type ID;
+param: type ID;                                             
 
-arg: COLOR | expr;
+arg: color | expr;                                          
 
-arrayElem: ID | NUM; 
+arrayElem: ID | '-'?NUM;                                    //Id or (-)num should probably be type instead.
 
-expr: term (op expr)*;
+expr: orExpr;
+orExpr: orExpr 'or' andExpr | andExpr;                              //priority (7)
+andExpr: andExpr 'and' equalityExpr | equalityExpr;                 //priority (6)
+equalityExpr: equalityExpr equalityOp boolExpr | boolExpr;          //priority (5)
+boolExpr: boolExpr boolOp addExpr | addExpr ;                       //priority (4)
+addExpr: addExpr addSubOp multExpr | multExpr;                      //priority (3)
+multExpr: multExpr multiOp terminalExpr | unaryOp? terminalExpr;    //priority (2)
+terminalExpr: NUM                                                   //priority (1)
+            | ID ('[' NUM ']')?                                     //priority (1)
+            | '(' expr ')'                                          //priority (1)
+            | bool ;                                                //priority (1)
 
-term: NUM | ID ('[' NUM ']')?;
-
-blockStmt: varDcl ';' | ifStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
+blockStmt: (varDcl | builtInFuncCall | funcCall) ';' | ifStmt | paralStmt | loopStmt ;
 
 ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
 
@@ -39,21 +48,28 @@ block: '{' blockStmt* '}';
 
 paralStmt: 'paral' '{' (paralBlockStmt)* '}';
 
-paralBlockStmt: builtInFuncCall ';' | funcCall ';';
+paralBlockStmt: (builtInFuncCall | funcCall) ';';
 
-loopStmt: 'loop' '(' 'int' ID 'from' NUM '..' NUM ')' block;
+loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt* '}';
+
+loopBlockStmt:  varDcl ';' | ifStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
 
 playStmt: 'play' '{' playBlockStmt* '}';
 
 playBlockStmt: paralStmt | loopStmt | funcCall ';' ;
 
-boolOp: '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||';
-op: '+' | '-' | '*' | '/' | '%' | boolOp;
+
 type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
+bool: 'true' | 'false';
+unaryOp: '-'| 'not';
+multiOp: '*' | '/' | '%'; 
+addSubOp: '+' | '-';
+boolOp: '<' | '>' | '<=' | '>=';
+equalityOp: '==' | '!=';
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '0'| '-'?[1-9][0-9]* ;
+NUM: '0'| [1-9][0-9]* ;
 builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
-SEQFUNC: 'resetCanvas' | 'wait' ;
+seqFunc: 'resetCanvas' | 'wait' ;
 createFunc: 'createSquare' | 'createCircle' | 'createCanvas';
-COLOR: 'white' | 'black' | 'red' | 'green' | 'blue';
+color: 'white' | 'black' | 'red' | 'green' | 'blue';
 WS: [ \t\r\n]+ -> skip;
