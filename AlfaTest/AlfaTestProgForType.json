@@ -1,11 +1,10 @@
-{
-  "allProg": [
+[
     {
-      "Prog": "mySquare = createSquare(0, 0, 20, 20);\nmove(mySquare, 200, 4);\nwait(2);\nmove(mySquare, -200, 4);",
-      "Comment": "This is should pass"
+      "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\n\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+      "Comment": "This is a comment"
     }
-  ]
-}
+]
+
    
    
     

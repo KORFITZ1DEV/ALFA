@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <Folder Include="src\antlr" />
+      <Folder Include="src\antlr\ALFA" />
     </ItemGroup>
 
 </Project>
