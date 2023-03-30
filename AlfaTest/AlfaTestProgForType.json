@@ -1,0 +1,11 @@
+{
+  "allProg": [
+    {
+      "Prog": "mySquare = createSquare(0, 0, 20, 20);\nmove(mySquare, 200, 4);\nwait(2);\nmove(mySquare, -200, 4);",
+      "Comment": "This is should pass"
+    }
+  ]
+}
+   
+   
+    
