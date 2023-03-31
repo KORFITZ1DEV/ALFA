@@ -5,12 +5,12 @@ public class ALFATypes
     public enum TypeEnum
     {
         @int,
-        square
+        rect
     }
     
     public enum BuiltInTypeEnum
     {
-        createSquare,
+        createRect,
         move,
         wait
     }

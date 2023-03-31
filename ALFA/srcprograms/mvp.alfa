@@ -1,4 +1,4 @@
-mySquare = createSquare(0, 0, 20, 20);
-move(mySquare, 200, 4);
+myrect = createRect(0, 0, 20, 20);
+move(myrect, 200, 4);
 wait(2);
-move(mySquare, -200, 4);
+move(myrect, -200, 4);
