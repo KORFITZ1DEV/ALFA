@@ -10,7 +10,7 @@ public class TypeVisitorTest
     [ClassData(typeof(TypeTestData))]
     public void TypeTestThrowException(string prog, string comment)
     {
-        Assert.ThrowsAny<Exception>(() => Prog.MyParseMethodTest(prog));
+        Assert.ThrowsAny<Exception>(() => Prog.MyParseMethod(prog: prog, output: "../../../../ALFA/Output/sketch.js"));
     }
 }
 

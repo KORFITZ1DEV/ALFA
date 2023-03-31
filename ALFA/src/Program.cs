@@ -13,9 +13,12 @@ namespace ALFA
 
     public static class Prog
     {
-        public static void MyParseMethod(string path = "../../../srcprograms/mvptypes.alfa")
+        public static void MyParseMethod(string path = "../../../srcprograms/mvptypes.alfa",string prog = "",string output = "")
         {
-            String input = File.ReadAllText(path);
+            string _output = output == "" ? "../../../Output/sketch.js" : "../../../../ALFA/Output/sketch.js";
+            
+            String input = prog == "" ? File.ReadAllText(path) : prog;
+            
             ICharStream stream = CharStreams.fromString(input);
             ITokenSource lexer = new ALFALexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
@@ -30,32 +33,8 @@ namespace ALFA
             typeCheckVisitor.Visit(ast);
             ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
             astPrintVisitor.Visit(ast);
-            CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../Output/sketch.js");
+            CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
-        }
-        public static void MyParseMethodTest(string prog)
-        {
-            String input = prog;
-            ICharStream stream = CharStreams.fromString(input);
-            ITokenSource lexer = new ALFALexer(stream);
-            ITokenStream tokens = new CommonTokenStream(lexer);
-            ALFAParser parser = new ALFAParser(tokens);
-            parser.BuildParseTree = true;
-            IParseTree tree = parser.program();
-
-            SymbolTable symbolTable = new();
-            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
-            Node ast = visitor.Visit(tree);
-            TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
-            typeCheckVisitor.Visit(ast);
-            ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
-            astPrintVisitor.Visit(ast);
-            //CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../Output/sketch.js");
-            //codeGenVisitor.Visit(ast);
-            //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
-            //astPrintVisitor.Visit(ast);
-            //CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../Output/sketch.js");
-            //codeGenVisitor.Visit(ast);
         }
     }
 }

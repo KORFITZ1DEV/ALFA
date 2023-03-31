@@ -5,7 +5,6 @@ int length = 20;
 int animDuration = 4000;
 int delay = 2000;
 square mySquare1 = createSquare(0, 0, length, length);
-
 move(mySquare1 , 200, animDuration);
 wait(delay);
 move(mySquare1 , -200, animDuration);
