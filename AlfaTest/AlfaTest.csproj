@@ -25,4 +25,8 @@
       <ProjectReference Include="..\ALFA\ALFA.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="TypeChecking" />
+    </ItemGroup>
+
 </Project>

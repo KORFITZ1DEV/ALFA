@@ -1,0 +1,27 @@
+[
+{
+  "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test1fuvk = createSquare(0, length, length);\n\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+  "Comment": "Invalid number of arguments create square",
+  "ExceptionType": "NumArgumentException"
+}, 
+  {
+  "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nsquare test2fuck = createSquare(0, 0, length, length);\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(mySquare2, 0, length, length);\n\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+  "Comment": "Invalid type in create square", 
+    "ExceptionType": "ArgumentTypeException"
+},
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare fuck3test = createSquare(0, 0, length, length);\n\nmove(mySquare1, animDuration);\nwait(delay);",
+    "Comment": "Invalid number of arguments in move",
+    "ExceptionType": "NumArgumentException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test4fuck = createSquare(0, 0, length, length);\n\nmove(x, 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type in move, square should be first argument",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test6fuck = createSquare(0, 0, length, length);\n\nmove(mySquare1 , 200, animDuration);\nwait(mySquare1);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type in wait, should be int",
+    "ExceptionType": "ArgumentTypeException"
+  }
+]

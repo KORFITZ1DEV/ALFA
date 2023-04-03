@@ -49,7 +49,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 typeEnum = ALFATypes.TypeEnum.square;
                 break;
             default:
-                throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
+                throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
         
         if (context.funcCall() != null)
@@ -85,6 +85,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
+                if (context.args().arg()[0].ID() == null) throw new Exception("You are trying to move something that isnt a square");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
@@ -93,7 +94,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 formalParams.AddRange(formalWaitParamsArray);
                 break;
             default:
-                throw new Exception("Invalid built-in function");
+                throw new UnknownBuiltinException("Invalid built-in function");
         }
         
         FuncCallNode funcCallNode = new FuncCallNode(
@@ -141,7 +142,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 formalParams.AddRange(formalwaitParamsArray);
                 break;
             default:
-                throw new Exception("Invalid built-in function");
+                throw new UnknownBuiltinException("Invalid built-in function");
         }
         
         return new BuiltInsNode(builtInTypeEnum, formalParams,  context.Start.Line, context.Start.Column);
@@ -156,7 +157,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
             if (sym == null) 
-                throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+                throw new UndeclaredVariable($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             
             IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
             return new ArgNode(idNode, context.Start.Line, context.Start.Column);

@@ -1,0 +1,8 @@
+
+[
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5fuck = createSquare(0, 0, length, length);\n\nmove(200 , mySquare1, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type in move, should be int",
+    "ExceptionType": "ArgumentTypeException"
+  }
+]
