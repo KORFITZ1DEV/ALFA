@@ -51,7 +51,7 @@ namespace AlfaTest;
     }
 public class TrueTypeTestData : TypeTestData
 {
-    private string truePath = "../../../TestProgTrue.json";
+    private string truePath = "../../../TypeChecking/TestProgTrue.json";
     public override Item[] LoadJson()
     {
         return JsonConvert.DeserializeObject<Item[]>(File.ReadAllText(truePath));
@@ -59,7 +59,7 @@ public class TrueTypeTestData : TypeTestData
 }
 public class FalseTypeTestData : TypeTestData
 {
-    private string falsePath = "../../../TestProgException.json";
+    private string falsePath = "../../../TypeChecking/TestProgException.json";
      public override Item[] LoadJson()
     {
         return JsonConvert.DeserializeObject<Item[]>(File.ReadAllText(falsePath));
