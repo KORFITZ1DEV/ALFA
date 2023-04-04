@@ -58,24 +58,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override VarDclNode Visit(VarDclNode node)
-    {
-        var visitedNode = Visit((dynamic)node.Value);
-
-        if (visitedNode is FuncCallNode)
-        {
-            if (node.Type != ALFATypes.TypeEnum.square)
-                throw new TypeException($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.square} on line {node.Line}:{node.Col}");
-        }
-        else if (visitedNode is NumNode)
-        {
-            if (node.Type != ALFATypes.TypeEnum.@int)
-                throw new TypeException($"Invalid type {node.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {node.Line}:{node.Col}");
-        }
-
-        return node;
-    }
-    
+    //Typecheck not needed for VarDcl as they are covered in the BuildASTVisitor
+    public override VarDclNode Visit(VarDclNode node) => node;
     public override BuiltInsNode Visit(BuiltInsNode node) => node;
     public override ArgNode Visit(ArgNode node) => node;
     public override IdNode Visit(IdNode node) => node;

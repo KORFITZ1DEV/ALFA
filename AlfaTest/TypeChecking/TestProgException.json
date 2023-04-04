@@ -23,5 +23,6 @@
     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5 = createSquare(0, 0, length, length);\n\nmove(test5 , 200, animDuration);\nwait(test5);\nmove(test5 , -200, animDuration);",
     "Comment": "Invalid type in wait, should be int",
     "ExceptionType": "ArgumentTypeException"
-  }
+  },
+  
 ]
