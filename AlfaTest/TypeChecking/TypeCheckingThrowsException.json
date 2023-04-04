@@ -1,9 +1,9 @@
 [
-{
-  "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test1 = createSquare(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
-  "Comment": "Invalid number of arguments create square",
-  "ExceptionType": "NumArgumentException"
-},
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test1 = createSquare(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
+    "Comment": "Invalid number of arguments create square",
+    "ExceptionType": "InvalidNumberOfArgumentsException"
+  },
   {
     "Prog": "int x = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nsquare test2Error = createSquare(0, 0, 0, length)\n\nsquare test2 = createSquare(test2Error, 0, 0, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
     "Comment": "Invalid type in create square",
@@ -12,7 +12,7 @@
   {
     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test3 = createSquare(0, 0, length, length);\n\nmove(test3, animDuration);\nwait(delay);",
     "Comment": "Invalid number of arguments in move",
-    "ExceptionType": "NumArgumentException"
+    "ExceptionType": "InvalidNumberOfArgumentsException"
   },
   {
     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test4 = createSquare(0, 0, length, length);\n\nmove(x, 200, animDuration);\nwait(delay);\nmove(test4 , -200, animDuration);",
@@ -23,6 +23,5 @@
     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5 = createSquare(0, 0, length, length);\n\nmove(test5 , 200, animDuration);\nwait(test5);\nmove(test5 , -200, animDuration);",
     "Comment": "Invalid type in wait, should be int",
     "ExceptionType": "ArgumentTypeException"
-  },
-  
+  }
 ]

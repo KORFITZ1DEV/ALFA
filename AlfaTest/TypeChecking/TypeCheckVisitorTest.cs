@@ -1,16 +1,16 @@
 using ALFA;
 
-namespace AlfaTest;
+namespace AlfaTest.TypeChecking;
 
-public class TypeVisitorTest
+public class TypeCheckVisitorTest
 {
     [Theory]
-    [ClassData(typeof(FalseTypeTestData))]
-    public void TypeTestThrowException(string prog, string comment, Type exceptionType)
+    [ClassData(typeof(TypeCheckingThrowsExceptionTestData))]
+    public void TypeCheckTestThrowsException(string prog, string comment, Type exceptionType)
     {
         try
         {
-            Prog.MyParseMethod(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+            Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -23,14 +23,14 @@ public class TypeVisitorTest
                 case ArgumentTypeException:
                     Assert.Equal(exceptionType, typeof(ArgumentTypeException));
                     break;
-                case NumArgumentException:
-                    Assert.Equal(exceptionType, typeof(NumArgumentException));
+                case InvalidNumberOfArgumentsException:
+                    Assert.Equal(exceptionType, typeof(InvalidNumberOfArgumentsException));
                     break;
                 case UnknownBuiltinException:
                     Assert.Equal(exceptionType, typeof(UnknownBuiltinException));
                     break;
-                case UndeclaredVariable:
-                    Assert.Equal(exceptionType, typeof(UndeclaredVariable));
+                case UndeclaredVariableException:
+                    Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
                     break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);
@@ -39,10 +39,10 @@ public class TypeVisitorTest
         }
     }
     [Theory]
-    [ClassData(typeof(TrueTypeTestData))]
-    public void TypeTestPass(string prog, string comment, Type exceptionType)
+    [ClassData(typeof(TypeCheckingNoExceptionTestData))]
+    public void TypeCheckTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.MyParseMethod(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+        Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
         Assert.True(true);
     }
 }

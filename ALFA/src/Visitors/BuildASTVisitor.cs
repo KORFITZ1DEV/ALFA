@@ -7,7 +7,7 @@ namespace ALFA.Visitors;
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
     private SymbolTable _symbolTable;
-
+    
     public BuildASTVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
@@ -160,7 +160,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
             if (sym == null) 
-                throw new UndeclaredVariable($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+                throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             
             IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
             return new ArgNode(idNode, context.Start.Line, context.Start.Column);

@@ -10,9 +10,9 @@ public class ArgumentTypeException : Exception
     public ArgumentTypeException(string message)
         : base(message){}
 }
-public class NumArgumentException : Exception
+public class InvalidNumberOfArgumentsException : Exception
 {
-    public NumArgumentException(string message)
+    public InvalidNumberOfArgumentsException(string message)
         : base(message){}
 }
 
@@ -22,8 +22,8 @@ public class UnknownBuiltinException : Exception
         : base(message){}
 }
 
-public class UndeclaredVariable : Exception
+public class UndeclaredVariableException : Exception
 {
-    public UndeclaredVariable(string message)
+    public UndeclaredVariableException(string message)
         : base(message){}
 }

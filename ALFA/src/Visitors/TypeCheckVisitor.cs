@@ -32,7 +32,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
         {
-            throw new NumArgumentException(
+            throw new InvalidNumberOfArgumentsException(
                 $"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
         }
         

@@ -6,14 +6,14 @@ using ALFA.AST_Nodes;
 using ALFA.Visitors;
 using System.Diagnostics;
 
-Prog.MyParseMethod();
+Prog.Main();
 
 namespace ALFA
 {
 
     public static class Prog
     {
-        public static void MyParseMethod(string path = "../../../srcprograms/mvptypes.alfa",string prog = "",string output = "")
+        public static void Main(string path = "../../../srcprograms/mvptypes.alfa",string prog = "",string output = "")
         {
             string _output = output == "" ? "../../../Output/sketch.js" : "../../../../ALFA/Output/sketch.js";
             

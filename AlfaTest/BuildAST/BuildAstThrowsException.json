@@ -1,0 +1,32 @@
+[
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5fuck = createSquare(0, 0, length, length);\n\nmove(200 , mySquare1, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type in move, should be int",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int k = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\nint i = mySquare1;\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type parsing square to int",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint test6 = createSquare(0,0,0,0);\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid type in wait, should be int",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Undeclared variable",
+    "ExceptionType": "UndeclaredVariableException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createCoolSquare(0, 0, length, length);\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Unknown builtins",
+    "ExceptionType": "UnknownBuiltinsException"
+  },
+  {
+    "Prog": "",
+    "Comment": "",
+    "ExceptionType": ""
+  }
+]
