@@ -29,8 +29,6 @@ namespace ALFA
             ALFAParser parser = new ALFAParser(tokens);
             parser.BuildParseTree = true;
             IParseTree tree = parser.program();
-
-            
             
             SymbolTable symbolTable = new();
             BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);

@@ -59,10 +59,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
 
-        // if (context.NUM()==null)
-        // {
-        //     throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
-        // }
+        if (context.NUM()==null)
+        {
+            throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+        }
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
         _symbolTable.EnterSymbol(new Symbol(id, num, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
