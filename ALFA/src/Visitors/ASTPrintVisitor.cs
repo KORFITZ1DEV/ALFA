@@ -15,13 +15,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         
         return node;
     }
-    public override StatementNode Visit(StatementNode node)
-    {
-        Console.WriteLine("\tStmtNode");
-        
-        Visit((dynamic)node);
-        return node;
-    }
+    
     public override VarDclNode Visit(VarDclNode node)
     {
         Console.WriteLine("\t\tVarDcl: ");
@@ -51,13 +45,6 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         return node;
     }
 
-    public override ArgNode Visit(ArgNode node)
-    {
-        Console.Write("\t\t\t\t\tArg: ");
-
-        Visit((dynamic)node.Value);
-        return node;
-    }
     
     public override IdNode Visit(IdNode node)
     {

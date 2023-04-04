@@ -22,11 +22,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override StatementNode Visit(StatementNode node)
-    {
-        Visit((dynamic)node);
-        return node;
-    }
     
     public override FuncCallNode Visit(FuncCallNode node)
     {
@@ -34,11 +29,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             throw new Exception($"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
         }
-        
+
         int i = 0;
         foreach (var actualParam in node.Arguments)
         {
-            if (actualParam.Value is IdNode idNode)
+            if (actualParam is IdNode idNode)
             {
                 Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
                 if (idSymbol != null)
@@ -47,7 +42,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                         throw new Exception($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }
-            else if (actualParam.Value is NumNode numNode)
+            else if (actualParam is NumNode numNode)
             {
                 if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
                     throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
@@ -63,8 +58,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (visitedNode is FuncCallNode)
         {
-            if (node.Type != ALFATypes.TypeEnum.square)
-                throw new Exception($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.square} on line {node.Line}:{node.Col}");
+            if (node.Type != ALFATypes.TypeEnum.rect)
+                throw new Exception($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.rect} on line {node.Line}:{node.Col}");
         }
         else if (visitedNode is NumNode)
         {
@@ -76,7 +71,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     }
     
     public override BuiltInsNode Visit(BuiltInsNode node) => node;
-    public override ArgNode Visit(ArgNode node) => node;
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
     public override TypeNode Visit(TypeNode node) => node;

@@ -2,7 +2,7 @@ using ALFA.Types;
 
 namespace ALFA.AST_Nodes;
 
-public class VarDclNode : StatementNode
+public class VarDclNode : Node
 {
     public ALFATypes.TypeEnum Type { get; set; }
     
