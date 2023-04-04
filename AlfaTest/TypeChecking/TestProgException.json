@@ -24,5 +24,9 @@
     "Comment": "Invalid type in wait, should be int",
     "ExceptionType": "ArgumentTypeException"
   },
-  
+  {
+    "Prog": "int k = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\nint i = mySquare1;\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid typed parsing square to int, this throws nullException in the buildASTVisitor, but should actually be caught by the parser",
+    "ExceptionType": "TypeException"
+  }
 ]
