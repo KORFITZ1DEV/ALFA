@@ -13,7 +13,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         _symbolTable = symbolTable;
     }
     
-    public override Node Visit(ProgramNode node)
+    public override ProgramNode Visit(ProgramNode node)
     {
         foreach (var stmt in node.Statements)
         {
@@ -22,13 +22,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override Node Visit(StatementNode node)
+    public override StatementNode Visit(StatementNode node)
     {
         Visit((dynamic)node);
         return node;
     }
     
-    public override Node Visit(FuncCallNode node)
+    public override FuncCallNode Visit(FuncCallNode node)
     {
         if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
         {
@@ -57,7 +57,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override Node Visit(VarDclNode node)
+    public override VarDclNode Visit(VarDclNode node)
     {
         var visitedNode = Visit((dynamic)node.Value);
 
@@ -75,10 +75,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override Node Visit(BuiltInsNode node) => node;
-    public override Node Visit(ArgNode node) => node;
-    public override Node Visit(IdNode node) => node;
-    public override Node Visit(NumNode node) => node;
-    public override Node Visit(TypeNode node) => node;
+    public override BuiltInsNode Visit(BuiltInsNode node) => node;
+    public override ArgNode Visit(ArgNode node) => node;
+    public override IdNode Visit(IdNode node) => node;
+    public override NumNode Visit(NumNode node) => node;
+    public override TypeNode Visit(TypeNode node) => node;
 } 
     
