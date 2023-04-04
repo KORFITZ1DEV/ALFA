@@ -73,6 +73,5 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override BuiltInsNode Visit(BuiltInsNode node) => node;
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
-    public override TypeNode Visit(TypeNode node) => node;
 } 
     

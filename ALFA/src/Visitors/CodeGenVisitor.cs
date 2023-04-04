@@ -138,9 +138,4 @@ public class CodeGenVisitor : ASTVisitor<Node>
         Emit(node.Value.ToString(), ALFATypes.OutputEnum.VarOutput);
         return node;
     }
-
-    public override TypeNode Visit(TypeNode node)
-    {
-        return node;
-    }
 }
