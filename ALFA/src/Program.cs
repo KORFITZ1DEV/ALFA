@@ -45,7 +45,7 @@ void MyParseMethod()
       typeCheckVisitor.Visit(ast);
       //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
       //astPrintVisitor.Visit(ast);
-      CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../Output/sketch.js");
+      CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, "../../../CodeGen-p5.js");
       codeGenVisitor.Visit(ast);
 }
 

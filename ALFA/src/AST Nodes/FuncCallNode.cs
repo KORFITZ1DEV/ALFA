@@ -2,7 +2,6 @@ namespace ALFA.AST_Nodes;
 
 public class FuncCallNode : Node
 {
-    public string? Identifier { get; set; }
     public BuiltInsNode BuiltIns { get; set; } // 'createRect', 'move', or 'wait'
     public List<Node> Arguments { get; set; } // either a NumNode or an IdNode
     
