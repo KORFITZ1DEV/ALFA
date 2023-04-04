@@ -57,10 +57,4 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         Console.WriteLine("value " + node.Value);
         return node;
     }
-
-    public override TypeNode Visit(TypeNode node)
-    {
-        Console.WriteLine(node.Type);
-        return node;
-    }
 }

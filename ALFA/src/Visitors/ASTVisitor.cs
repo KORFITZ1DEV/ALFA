@@ -12,7 +12,6 @@ public abstract class ASTVisitor<T>
     public abstract T Visit(VarDclNode node);
     public abstract T Visit(IdNode node);
     public abstract T Visit(NumNode node);
-    public abstract T Visit(TypeNode node);
 
     public T Visit(Node node)
     {
@@ -24,7 +23,6 @@ public abstract class ASTVisitor<T>
             VarDclNode varDclNode => Visit(varDclNode),
             IdNode idNode => Visit(idNode),
             NumNode numNode => Visit(numNode),
-            TypeNode typeNode => Visit(typeNode),
             _ => throw new Exception("Unknown node type")
         };
     }
