@@ -68,7 +68,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         Emit("}", ALFATypes.OutputEnum.DrawOutput);
         Emit(_varOutput + _setupOutput + _drawOutput, ALFATypes.OutputEnum.Output);
-        File.WriteAllText(_path + "/Output/sketch.js", _output);
+        File.WriteAllText(_path + "/sketch.js", _output);
         
         return node;
     }

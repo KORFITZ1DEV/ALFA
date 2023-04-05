@@ -7,19 +7,53 @@ using ALFA.Visitors;
 using System.Diagnostics;
 using ALFA.Types;
 
-Prog.Main();
-
 namespace ALFA
 {
-
     public static class Prog
     {
-        public static void Main(string path = "../../../srcprograms/mvp.alfa",string prog = "",string output = "")
+        public static void Main(string[] args)
         {
-            string _output = output == "" ? "../../../CodeGen-p5.js/" : "../../../../ALFA/CodeGen-p5.js/";
+            string _output = String.Empty;
+            string input = String.Empty;
             
-            String input = prog == "" ? File.ReadAllText(path) : prog;
+            if (args.Length == 1) // release mode (.exe)
+            {
+                if (args.Length == 0)
+                    throw new Exception("Missing args");
 
+                if (!args[0].EndsWith(".alfa")) 
+                    throw new Exception("File must be .alfa");
+
+                
+                string? baseDir = Path.GetFullPath(Path.GetDirectoryName(args[0]));
+            
+                if (baseDir is null) 
+                    throw new Exception($"{args[0]} is not a valid path");
+
+                //string path = Path.GetFullPath(args[0]);
+                input = "./CodeGen-p5.js/";
+                // System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                string alfaexeLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                
+                // make output folder 
+                Directory.CreateDirectory("./Output");
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", "./Output/style.css", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", "./Output/index.html", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", "./Output/p5.min.js", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", "./Output/stdlib.js", true);
+
+                _output = baseDir + "Output/";
+            }
+            else if (args.Length == 2)// test / dev mode 
+            {
+                input = File.ReadAllText(args[0]);
+                _output = args[1];
+            }
+            else // invalid mode
+            {
+                throw new Exception("Invalid args");
+            }
+            
             ICharStream stream = CharStreams.fromString(input);
             ITokenSource lexer = new ALFALexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
