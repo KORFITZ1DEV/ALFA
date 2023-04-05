@@ -8,9 +8,9 @@ rect myrect1 = createRect(0, 0, length, length);
 rect myrect2 = createRect(0, 50, length, length);
 
 
-move(myrect1 , 200, animDuration);
+move(myrect1, 200, animDuration);
 wait(delay);
-move(myrect1 , -200, animDuration);
-move(myrect2 , 300, animDuration);
+move(myrect1, -200, animDuration);
+move(myrect2, 300, animDuration);
 wait(delay);
-move(myrect2 , -200, animDuration);
+move(myrect2, -200, animDuration);

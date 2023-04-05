@@ -1,0 +1,37 @@
+[
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5fuck = createRect(0, 0, length, length);\n\nmove(200 , myRect1, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Invalid type in move, should be int",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int k = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Invalid type parsing rect to int",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint test6 = createRect(0,0,0,0);\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Invalid type in wait, should be int",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Undeclared variable",
+    "ExceptionType": "UndeclaredVariableException"
+  },
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createCoolRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Unknown builtins",
+    "ExceptionType": "UnknownBuiltinsException"
+  },
+  {
+    "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test8Error = createRect(rect, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
+    "Comment": "Invalid type in create rect, input of type rect, should maybe be moved to ASTbuild testdata",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
+    "Comment": "Invalid type in move, rect should be first argument, give num",
+    "ExceptionType": "ArgumentTypeException"
+  }
+]

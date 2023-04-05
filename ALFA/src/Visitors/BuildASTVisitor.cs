@@ -20,7 +20,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         List<Node> childList = new List<Node>();
         
-        Debug.Assert(context.statement() != null);
+        //Debug.Assert(context.statement() != null);
         foreach (var stmt in context.statement())
         {
             childList.Add(Visit(stmt));
@@ -31,7 +31,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     
     public override Node VisitStatement(ALFAParser.StatementContext context)
     {
-        // write explicitly - assert this expectation
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
         
@@ -53,7 +52,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 typeEnum = ALFATypes.TypeEnum.rect;
                 break;
             default:
-                throw new Exception("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
+                throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
         
         if (context.funcCall() != null)
@@ -62,7 +61,14 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             _symbolTable.EnterSymbol(new Symbol(id, funcCall, typeEnum, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
         }
-
+        
+        // Can we use this???
+        // Debug.Assert(context.NUM() == null && context.funcCall() == null);
+                
+        if (context.NUM() == null)
+        {
+            throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+        }
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
         _symbolTable.EnterSymbol(new Symbol(id, num, typeEnum, context.Start.Line, context.Start.Column));
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
@@ -89,6 +95,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
+                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isnt a rect");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
@@ -97,7 +104,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 formalParams.AddRange(formalWaitParamsArray);
                 break;
             default:
-                throw new Exception("Invalid built-in function");
+                throw new UnknownBuiltinException("Invalid built-in function");
         }
         
         FuncCallNode funcCallNode = new FuncCallNode(
@@ -118,18 +125,18 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 {
                     Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
                     if (sym == null) 
-                        throw new Exception($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+                        throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             
                     IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
                     funcCallNode.Arguments.Add(idNode);
                     continue;
                 }
-
+                
+                if (argCtx.NUM() == null)
+                    throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+                
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
                 funcCallNode.Arguments.Add((numNode));
-
-
-                
             }
         }
 
@@ -142,5 +149,4 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         BuiltIn builtIn = _formalParams[type];
         return new BuiltInsNode(builtIn.Type, builtIn.FormalParams,  context.Start.Line, context.Start.Column);
     }
-    
 }

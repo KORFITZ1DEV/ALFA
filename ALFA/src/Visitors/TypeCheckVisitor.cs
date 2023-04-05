@@ -22,12 +22,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    
     public override FuncCallNode Visit(FuncCallNode node)
     {
         if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
         {
-            throw new Exception($"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
+            throw new InvalidNumberOfArgumentsException(
+                $"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
         }
 
         int i = 0;
@@ -39,19 +39,20 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 if (idSymbol != null)
                 {
                     if (idSymbol.Type != node.BuiltIns.FormalParams[i])
-                        throw new Exception($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+                        throw new ArgumentTypeException($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }
             else if (actualParam is NumNode numNode)
-            {
+            { //think this check is useless as the parser should not allow it
                 if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
-                    throw new Exception($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+                    throw new ArgumentTypeException($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
             }
             i++;
         }
         return node;
     }
     
+    //Typecheck not needed for VarDcl as they are covered in the BuildASTVisitor, and for some reason it cant be wirtten in => node format
     public override VarDclNode Visit(VarDclNode node)
     {
         var visitedNode = Visit((dynamic)node.Value);
@@ -69,9 +70,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         return node;
     }
-    
+
     public override BuiltInsNode Visit(BuiltInsNode node) => node;
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
-} 
-    
+}
