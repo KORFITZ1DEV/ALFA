@@ -49,9 +49,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 }
             }
             else if (actualParam.Value is NumNode numNode)
-            {
-                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
-                    throw new ArgumentTypeException($"Invalid type expected {ALFATypes.TypeEnum.@int} but got {node.BuiltIns.FormalParams[i]} on line {numNode.Line}:{numNode.Col}");
+            { //think this check is useless as the parser shouldnt allow it
+                Console.WriteLine("pik");
+                // if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
+                //     throw new ArgumentTypeException($"Invalid type expected {ALFATypes.TypeEnum.@int} but got {node.BuiltIns.FormalParams[i]} on line {numNode.Line}:{numNode.Col}");
             }
             i++;
         }

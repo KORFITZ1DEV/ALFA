@@ -88,7 +88,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.square, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
-                if (context.args().arg()[0].ID() == null) throw new Exception("You are trying to move something that isnt a square");
+                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isnt a square");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
@@ -165,7 +165,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
             return new ArgNode(idNode, context.Start.Line, context.Start.Column);
         }
-
+     if (context.NUM()==null)
+        {
+            throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+        }
         NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
         return new ArgNode(numNode, context.Start.Line, context.Start.Column);
     }
