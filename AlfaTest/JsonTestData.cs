@@ -20,7 +20,7 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "ArgumentTypeException":
                     exceptionType = typeof(ArgumentTypeException);
                     break;
-                case "NumArgumentException":
+                case "InvalidNumberOfArgumentsException":
                     exceptionType = typeof(InvalidNumberOfArgumentsException);
                     break;
                 case "UnknownBuiltinException":

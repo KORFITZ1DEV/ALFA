@@ -1,27 +1,47 @@
 [
   {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test1 = createSquare(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
-    "Comment": "Invalid number of arguments create square",
+    "Prog": "int xtest1 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test1 = createSquare(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
+    "Comment": "Invalid number of arguments create square, given 3 arguments og 4",
     "ExceptionType": "InvalidNumberOfArgumentsException"
   },
   {
-    "Prog": "int x = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nsquare test2Error = createSquare(0, 0, 0, length)\n\nsquare test2 = createSquare(test2Error, 0, 0, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
-    "Comment": "Invalid type in create square",
-    "ExceptionType": "ArgumentTypeException"
-  },
-  {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test3 = createSquare(0, 0, length, length);\n\nmove(test3, animDuration);\nwait(delay);",
-    "Comment": "Invalid number of arguments in move",
+    "Prog": "int xtest2 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test2 = createSquare(0, 0, 0 length, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
+    "Comment": "Invalid number of arguments create square, given 5 arguments og 4",
     "ExceptionType": "InvalidNumberOfArgumentsException"
   },
   {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test4 = createSquare(0, 0, length, length);\n\nmove(x, 200, animDuration);\nwait(delay);\nmove(test4 , -200, animDuration);",
-    "Comment": "Invalid type in move, square should be first argument",
+    "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nsquare test3Error = createSquare(0, 0, 0, length)\n\nsquare test3 = createSquare(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",
+    "Comment": "Invalid type in create square, input of type square as id",
     "ExceptionType": "ArgumentTypeException"
   },
   {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5 = createSquare(0, 0, length, length);\n\nmove(test5 , 200, animDuration);\nwait(test5);\nmove(test5 , -200, animDuration);",
-    "Comment": "Invalid type in wait, should be int",
+    "Prog": "int xtest4 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test4 = createSquare(0, 0, length, length);\n\nmove(test4, animDuration);\nwait(delay);",
+    "Comment": "Invalid number of arguments in move, given 2 arguments og 3",
+    "ExceptionType": "InvalidNumberOfArgumentsException"
+  },
+  {
+    "Prog": "int xtest5 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test5 = createSquare(0, 0, length, length);\n\nmove(xtest5, 200, animDuration);\nwait(delay);\nmove(test5 , -200, animDuration);",
+    "Comment": "Invalid type in move, square should be first argument, give int id",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int xtest6 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test6 = createSquare(0, 0, length, length);\n\nmove(test6 , 200, animDuration);\nwait(test6);\nmove(test6 , -200, animDuration);",
+    "Comment": "Invalid type in wait, should be int, but given type square",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int xtest7 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare mySquare1 = createSquare(0, 0, length, length);\nint i = mySquare1;\nmove(mySquare1 , 200, animDuration);\nwait(delay);\nmove(mySquare1 , -200, animDuration);",
+    "Comment": "Invalid typed parsing square to int, this throws nullException in the buildASTVisitor, but should actually be caught by the parser and should be in ASTbuild testdata",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nsquare test8Error = createSquare(square, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
+    "Comment": "Invalid type in create square, input of type square, should maybe be moved to ASTbuild testdata",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test9 = createSquare(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
+    "Comment": "Invalid type in move, square should be first argument, give num",
     "ExceptionType": "ArgumentTypeException"
   }
 ]

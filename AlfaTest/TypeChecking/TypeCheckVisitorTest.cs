@@ -10,6 +10,10 @@ public class TypeCheckVisitorTest
     {
         try
         {
+            if (exceptionType == null)
+            {
+                Console.WriteLine(prog);
+            }
             Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
             Assert.True(false, "Expected exception was not thrown");
         }
