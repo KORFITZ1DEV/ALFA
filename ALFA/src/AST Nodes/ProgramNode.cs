@@ -2,9 +2,9 @@ namespace ALFA.AST_Nodes;
 
 public class ProgramNode : Node
 {
-    public List<StatementNode> Statements { get; set; }
+    public List<Node> Statements { get; set; }
 
-    public ProgramNode(List<StatementNode> statements)
+    public ProgramNode(List<Node> statements)
     {
         Statements = statements;
     }

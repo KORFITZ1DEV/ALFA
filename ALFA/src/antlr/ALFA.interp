@@ -4,12 +4,12 @@ null
 '='
 '('
 ')'
-'createSquare'
+'createRect'
 'move'
 'wait'
 ','
 'int'
-'square'
+'rect'
 null
 null
 null

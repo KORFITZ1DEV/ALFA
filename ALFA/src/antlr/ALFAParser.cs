@@ -47,8 +47,8 @@ public partial class ALFAParser : Parser {
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "';'", "'='", "'('", "')'", "'createSquare'", "'move'", "'wait'", 
-		"','", "'int'", "'square'"
+		null, "';'", "'='", "'('", "')'", "'createRect'", "'move'", "'wait'", 
+		"','", "'int'", "'rect'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, "ID", 

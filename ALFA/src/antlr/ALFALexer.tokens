@@ -15,9 +15,9 @@ WS=13
 '='=2
 '('=3
 ')'=4
-'createSquare'=5
+'createRect'=5
 'move'=6
 'wait'=7
 ','=8
 'int'=9
-'square'=10
+'rect'=10
