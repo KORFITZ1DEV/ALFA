@@ -25,8 +25,13 @@
     "ExceptionType": "UnknownBuiltinsException"
   },
   {
-    "Prog": "",
-    "Comment": "",
-    "ExceptionType": ""
+    "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nsquare test8Error = createSquare(square, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
+    "Comment": "Invalid type in create square, input of type square, should maybe be moved to ASTbuild testdata",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nsquare test9 = createSquare(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
+    "Comment": "Invalid type in move, square should be first argument, give num",
+    "ExceptionType": "ArgumentTypeException"
   }
 ]
