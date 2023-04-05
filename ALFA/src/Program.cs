@@ -14,7 +14,7 @@ namespace ALFA
 
     public static class Prog
     {
-        public static void Main(string path = "../../../srcprograms/mvptypes.alfa",string prog = "",string output = "")
+        public static void Main(string path = "../../../srcprograms/mvp.alfa",string prog = "",string output = "")
         {
             string _output = output == "" ? "../../../CodeGen-p5.js/" : "../../../../ALFA/CodeGen-p5.js/";
             
