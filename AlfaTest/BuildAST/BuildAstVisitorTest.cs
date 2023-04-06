@@ -10,7 +10,7 @@ public class BuildAstVisitorTest
     {
         try
         {
-            Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+            Prog.Main(new string[] {prog, "../../../../ALFA/Output/sketch.js", "--test"});
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -42,7 +42,7 @@ public class BuildAstVisitorTest
     [ClassData(typeof(BuildAstNoExceptionTestData))]
     public void BuildAstTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+        Prog.Main(new string[] {prog, "../../../../ALFA/Output/sketch.js", "--test"});
         Assert.True(true);
     }
 }

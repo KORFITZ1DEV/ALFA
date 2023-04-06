@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="CodeGen-p5.js" />
       <Folder Include="src\antlr" />
     </ItemGroup>
 

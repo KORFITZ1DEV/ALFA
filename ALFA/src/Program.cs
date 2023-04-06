@@ -13,45 +13,44 @@ namespace ALFA
     {
         public static void Main(string[] args)
         {
-            string _output = String.Empty;
             string input = String.Empty;
+            string _output = String.Empty;
             
-            if (args.Length == 1) // release mode (.exe)
-            {
-                if (args.Length == 0)
-                    throw new Exception("Missing args");
-
-                if (!args[0].EndsWith(".alfa")) 
-                    throw new Exception("File must be .alfa");
-
-                
-                string? baseDir = Path.GetFullPath(Path.GetDirectoryName(args[0]));
+            if (args.Length == 0)
+                throw new Exception("Missing input arguments. Please provide a .alfa file, example: alfa ./path/to/file.alfa");
             
-                if (baseDir is null) 
-                    throw new Exception($"{args[0]} is not a valid path");
-
-                //string path = Path.GetFullPath(args[0]);
-                input = "./CodeGen-p5.js/";
-                // System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-                string alfaexeLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-                
-                // make output folder 
-                Directory.CreateDirectory("./Output");
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", "./Output/style.css", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", "./Output/index.html", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", "./Output/p5.min.js", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", "./Output/stdlib.js", true);
-
-                _output = baseDir + "Output/";
-            }
-            else if (args.Length == 2)// test / dev mode 
+            if (args.Contains("--test")) // test mode 
             {
                 input = File.ReadAllText(args[0]);
                 _output = args[1];
             }
-            else // invalid mode
+            else
             {
-                throw new Exception("Invalid args");
+                if (!args[0].EndsWith(".alfa")) 
+                    throw new Exception("Input file must be an alfa file");
+
+                if (args.Length == 2)
+                {
+                    if (Path.Exists(args[1]))
+                    {
+                        _output = args[1];
+                    }
+                    else
+                    {
+                        throw new Exception("Output path does not exist");
+                    }
+                }
+
+                string alfaexeLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                
+                Directory.CreateDirectory($"{_output}/Output");
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", $"{_output}/Output/style.css", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", $"{_output}/Output/index.html", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", $"{_output}/Output/p5.min.js", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", $"{_output}/Output/stdlib.js", true);
+
+                input = File.ReadAllText(args[0]);
+                _output = $"{_output}/Output";   
             }
             
             ICharStream stream = CharStreams.fromString(input);
@@ -84,10 +83,12 @@ namespace ALFA
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
-            ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
-            astPrintVisitor.Visit(ast);
+            //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
+            //astPrintVisitor.Visit(ast);
             CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
+            
+            Process.Start(new ProcessStartInfo($"{_output}/index.html") { UseShellExecute = true });
         }
     }
 }
