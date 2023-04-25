@@ -3,21 +3,17 @@ using Antlr4.Runtime.Tree;
 
 namespace AlfaTest;
 
-public class ParserMocker
+public class ProgramTreeMocker
 {
     private int _myInvokingState = 0;
     
-    public ParserMocker()
+    public ProgramTreeMocker()
     {
         _myInvokingState = 0;
     }
 
-    public List<ALFAParser.StatementContext> MockParseTree()
+    public ALFAParser.ProgramContext MockProgramTree()
     {
-        //TODO needs to change so one can pass statements to it and it creates the tree based on the statemenmts
-        
-        List<ALFAParser.StatementContext> alfaTree = new List<ALFAParser.StatementContext>();
-        
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
         ALFAParser.StatementContext stmtWithVarDclNode = new ALFAParser.StatementContext(programContext, _myInvokingState++);
         ALFAParser.TypeContext terminalIntNode = new ALFAParser.TypeContext(stmtWithVarDclNode, _myInvokingState++);
@@ -50,7 +46,7 @@ public class ParserMocker
         varDclNode.AddChild(rightSideAssignmentImpl);
         rightSideAssignmentImpl.Parent = varDclNode;
         
-        return alfaTree;
+        return programContext;
     }
 
     public List<ALFAParser.StatementContext> MockParseTree(string input)
