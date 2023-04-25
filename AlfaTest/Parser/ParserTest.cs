@@ -7,39 +7,61 @@ namespace AlfaTest.Parser;
 
 public class ParserTest
 {
-    private readonly ALFAParser _sut;
-    
-    private readonly Mock<ICharStream> _iCharStreamMock = new Mock<ICharStream>();
-    private readonly Mock<ITokenSource> _iTokenSourceMock = new Mock<ITokenSource>();
-    private readonly Mock<ITokenStream> _iTokenStreamMock = new Mock<ITokenStream>();
-
 
     public ParserTest()
     {
-        _sut = new ALFAParser(_iTokenStreamMock.Object);
     }
     
     [Theory]
     [ClassData(typeof(ParserTestData))]
-    public void VarDclDoesNotParse(string input)
+    public void ParserProducesExpectedTree(string input, Mock<IParseTree> expectedTree)
     {
+        ICharStream stream = CharStreams.fromString(input);
+        ITokenSource lexer = new ALFALexer(stream);
+        ITokenStream tokens = new CommonTokenStream(lexer);
+        ALFAParser parser = new ALFAParser(tokens);
+        parser.BuildParseTree = true;
+        IParseTree tree = parser.program();
+
+        
+        if(tree.ChildCount == expectedTree.Object.ChildCount)
+        {
+            DescentTree(tree, expectedTree.Object);
+        }
+        else
+        {
+            //At this point we know the two trees are not equal.
+            Assert.Equal(expected: expectedTree.Object, actual: tree);
+        }
         
     }
-    
+
+    private void DescentTree(IParseTree tree, IParseTree expectedTree)
+    {
+        for (int i = 0; i < tree.ChildCount; i++)
+        {
+            var treeChild = tree.GetChild(i);
+            var expectedTreeChild = expectedTree.GetChild(i);
+            
+            Assert.Equal(treeChild, expectedTreeChild);
+            DescentTree(tree.GetChild(i), expectedTree.GetChild(i));
+        }
+    }
 
 }
 
 public class ParserTestData : IEnumerable<object[]>
 {
-    private ParserMocker _parserMocker = new ParserMocker();
+    private readonly ProgramTreeMocker _programTreeMocker = new ProgramTreeMocker();
     public IEnumerator<object[]> GetEnumerator()
     {
-        List<ALFAParser.StatementContext> parseTree = _parserMocker.MockParseTree();
+        var mockedParseTree = new Mock<IParseTree>();
         
-        yield return new object[] { "var x = 1;" };
-
+        mockedParseTree.SetupGet(x=>x.ChildCount).Returns(2);
+        var programNode = _programTreeMocker.MockProgramTree();
         
-        yield return new object[] {"2 plus 7"};
+        mockedParseTree.Setup(x=>x.GetChild(0)).Returns(programNode);
+        yield return new object[] { "int i = 2;", mockedParseTree};
     }
 
     IEnumerator IEnumerable.GetEnumerator()

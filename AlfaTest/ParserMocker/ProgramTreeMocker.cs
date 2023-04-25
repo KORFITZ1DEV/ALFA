@@ -45,6 +45,8 @@ public class ProgramTreeMocker
         
         varDclNode.AddChild(rightSideAssignmentImpl);
         rightSideAssignmentImpl.Parent = varDclNode;
+
+        programContext.children = new List<IParseTree>() { stmtWithVarDclNode };
         
         return programContext;
     }
