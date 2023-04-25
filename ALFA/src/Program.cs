@@ -14,7 +14,7 @@ namespace ALFA
         public static void Main(string[] args)
         {
             string input = String.Empty;
-            string _output = String.Empty;
+            string _output = ".";
             
             if (args.Length == 0)
                 throw new Exception("Missing input arguments. Please provide a .alfa file, example: alfa ./path/to/file.alfa");
