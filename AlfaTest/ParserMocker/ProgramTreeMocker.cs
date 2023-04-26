@@ -11,7 +11,6 @@ public class ProgramTreeMocker
     {
         _myInvokingState = 0;
     }
-
     public ALFAParser.ProgramContext MockProgramTree()
     {
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
@@ -21,7 +20,7 @@ public class ProgramTreeMocker
         TerminalNodeImpl semiColonImpl = new TerminalNodeImpl(new CommonToken(1, ";"));
         
         TerminalNodeImpl terminalNodeImplInt = new TerminalNodeImpl(new CommonToken(9, "int"));
-
+ 
         //Assigning child and parent to TypeContext node
         terminalIntNode.AddChild(terminalNodeImplInt);
         terminalNodeImplInt.Parent = terminalIntNode;
@@ -33,9 +32,9 @@ public class ProgramTreeMocker
         semiColonImpl.Parent = stmtWithVarDclNode;
         
         //Assigning child and parent to VarDclContext node
-        TerminalNodeImpl identifierImpl = new TerminalNodeImpl(new CommonToken(11, "x1"));
+        TerminalNodeImpl identifierImpl = new TerminalNodeImpl(new CommonToken(11, "i"));
         TerminalNodeImpl equalSignImpl = new TerminalNodeImpl(new CommonToken(2, "="));
-        TerminalNodeImpl rightSideAssignmentImpl = new TerminalNodeImpl(new CommonToken(12, "0"));
+        TerminalNodeImpl rightSideAssignmentImpl = new TerminalNodeImpl(new CommonToken(12, "2"));
         
         varDclNode.AddChild(identifierImpl);
         identifierImpl.Parent = varDclNode;
@@ -45,8 +44,11 @@ public class ProgramTreeMocker
         
         varDclNode.AddChild(rightSideAssignmentImpl);
         rightSideAssignmentImpl.Parent = varDclNode;
-
-        programContext.children = new List<IParseTree>() { stmtWithVarDclNode };
+        
+        TerminalNodeImpl eofImpl = new TerminalNodeImpl(new CommonToken(-1, "<EOF>"));
+        eofImpl.Parent = programContext;
+ 
+        programContext.children = new List<IParseTree>() { stmtWithVarDclNode, eofImpl };
         
         return programContext;
     }

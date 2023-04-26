@@ -22,11 +22,12 @@ public class ParserTest
         ALFAParser parser = new ALFAParser(tokens);
         parser.BuildParseTree = true;
         IParseTree tree = parser.program();
+        var mockedProgram = expectedTree.Object.GetChild(0);
 
         
-        if(tree.ChildCount == expectedTree.Object.ChildCount)
+        if(tree.ChildCount == mockedProgram.ChildCount)
         {
-            DescentTree(tree, expectedTree.Object);
+            DescentTree(tree, mockedProgram);
         }
         else
         {
@@ -43,7 +44,12 @@ public class ParserTest
             var treeChild = tree.GetChild(i);
             var expectedTreeChild = expectedTree.GetChild(i);
             
-            Assert.Equal(treeChild, expectedTreeChild);
+            Assert.Equal(expectedTreeChild.GetType(), treeChild.GetType());
+            Assert.Equal(expectedTreeChild.ChildCount, treeChild.ChildCount);
+            if ("TerminalNodeImpl" == treeChild.GetType().Name)
+            {
+                Assert.Equal(expectedTreeChild.ToString(), treeChild.ToString());
+            }
             DescentTree(tree.GetChild(i), expectedTree.GetChild(i));
         }
     }
@@ -59,6 +65,7 @@ public class ParserTestData : IEnumerable<object[]>
         
         mockedParseTree.SetupGet(x=>x.ChildCount).Returns(2);
         var programNode = _programTreeMocker.MockProgramTree();
+        
         
         mockedParseTree.Setup(x=>x.GetChild(0)).Returns(programNode);
         yield return new object[] { "int i = 2;", mockedParseTree};
