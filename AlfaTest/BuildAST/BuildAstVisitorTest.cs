@@ -1,9 +1,15 @@
 ﻿using ALFA;
+using ALFA.Visitors;
 
 namespace AlfaTest.BuildAST;
 
 public class BuildAstVisitorTest
 {
+    private BuildASTVisitor _buildAstVisitor;
+    public BuildAstVisitorTest()
+    {
+         _buildAstVisitor = new BuildASTVisitor();
+    }
     [Theory]
     [ClassData(typeof(BuildAstThrowsExceptionTestData))]
     public void BuildAstTestThrowsException(string prog, string comment, Type exceptionType)

@@ -28,7 +28,7 @@ namespace ALFA
             IParseTree tree = parser.program();
 
             SymbolTable symbolTable = new();
-            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable, FormalParameters.FormalParams);
+            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);

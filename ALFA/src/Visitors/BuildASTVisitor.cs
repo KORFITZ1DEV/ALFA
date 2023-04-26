@@ -8,12 +8,10 @@ namespace ALFA.Visitors;
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
     private SymbolTable _symbolTable;
-    private Dictionary<string, BuiltIn> _formalParams;
 
-    public BuildASTVisitor(SymbolTable symbolTable, Dictionary<string, BuiltIn> formalParams)
+    public BuildASTVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
-        _formalParams = formalParams;
     }
     
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
@@ -146,7 +144,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override BuiltInsNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
     {
         var type = context.GetText();
-        BuiltIn builtIn = _formalParams[type];
+        BuiltIn builtIn = FormalParameters.FormalParams[type];
         return new BuiltInsNode(builtIn.Type, builtIn.FormalParams,  context.Start.Line, context.Start.Column);
     }
 }
