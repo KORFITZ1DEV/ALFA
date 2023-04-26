@@ -2,17 +2,17 @@
 int canvasWidth = 400;
 int canvasHeight = canvasWidth;
 canvas myCanvas = createCanvas(canvasWidth, canvasHeight);
-square mySquare = createSquare(0, 0, 20, 20);
+rect myRect = createRect(0, 0, 20, 20);
 circle myCircle = createCircle(30, 30, 15);
 circle mySmallCircle = createCircle(50, 50, 5);
 
-shape[] myShapes = {mySquare, myCircle};
+shape[] myShapes = {myRect, myCircle};
 
 add(myShapes, mySmallCircle);
 print(myShapes);
 
 color(myCanvas, black);
-color(mySquare, red);
+color(myRect, red);
 color(myCircle, blue);
 
 int myNum = 2+2;
@@ -21,7 +21,7 @@ print(myNum);
 print(myOtherNum);
 print(myShapes[0]);
 
-animation moveRightLeft(square sqr) {
+animation moveRightLeft(rect sqr) {
     move(sqr, 200, animationDuration);
     wait(2);
     move(sqr, -200, animationDuration);
@@ -48,19 +48,18 @@ animation canvasManipulation() {
         add(myCanvas, myShapes);
         if (i < 2) {
             paral{
-                moveRightLeft(mySquare);
-                colorFlickr(mySquare);
+                moveRightLeft(myRect);
+                colorFlickr(myRect);
                 colorMove(myCircle);
             }
-            continue;
         } 
         else if (i < 4) {
         }
         else {
-            moveRightLeft(mySquare);
+            moveRightLeft(myRect);
             resetCanvas(myCanvas);
         }
-            wait(200);
+        wait(200);
     }
 }
 

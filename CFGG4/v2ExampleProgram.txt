@@ -1,0 +1,23 @@
+﻿#Two rects moving on x-axis
+
+int len = 20;
+rect myRect1 = createRect(0,0,len,len);
+len = 40;
+rect myRect2 = createRect(0,60,len,len);
+
+int offset1 = 100;
+int offset2 = 100;
+int duration = 2000;
+
+loop(int i from 0..9) {
+    if(i % 2 == 0 and i != 0) {
+        paral {
+            move(myRect1, offset1, duration);    
+            move(myRect2, offset2, duration);    
+        }
+        offset2 = -offset2;
+    } else {
+        move(myRect1, offset, duration);
+    }
+    offset1 = -offset1;
+}
