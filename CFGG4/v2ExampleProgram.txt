@@ -2,22 +2,22 @@
 
 int len = 20;
 rect myRect1 = createRect(0,0,len,len);
-len = 40;
 rect myRect2 = createRect(0,60,len,len);
 
-int offset1 = 100;
-int offset2 = 100;
+int offsetX1 = 100;
+int offsetX2 = 100;
+int offsetY = 0;
 int duration = 2000;
 
 loop(int i from 0..9) {
     if(i % 2 == 0 and i != 0) {
         paral {
-            move(myRect1, offset1, duration);    
-            move(myRect2, offset2, duration);    
+            move(myRect1, offsetX1, offsetY, duration);    
+            move(myRect2, offsetX2, offsetY, duration);    
         }
-        offset2 = -offset2;
+        offsetX2 = -offsetX2;
     } else {
-        move(myRect1, offset, duration);
+        move(myRect1, offsetX1, offsetY, duration);
     }
-    offset1 = -offset1;
+    offsetX1 = -offsetX1;
 }

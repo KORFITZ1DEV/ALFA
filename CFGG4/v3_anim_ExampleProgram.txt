@@ -1,0 +1,31 @@
+﻿#Now with custom animations
+
+int len = 20;
+rect myRect1 = createRect(0,0,len,len);
+rect myRect2 = createRect(40,40,len,len);
+
+int offsetX = 100;
+int offsetY = 100;
+int duration = 1500;
+
+loop(int i from 1 .. 4) {
+    paral {
+        myAnimation(myRect1, offsetX, offsetY, duration);
+        myAnimation2(myRect2, offsetX, offsetY, duration);
+    }
+}
+
+animation myAnimation (rect someRect, int someOffsetX, int someOffsetY, int someDuration) {
+    move(someRect, someOffsetX, 0, someDuration);
+    move(someRect, 0, someOffsetY, someDuration);
+    wait(200);
+    move(someRect, -someOffsetX, 0, someDuration);
+    move(someRect, 0, -someOffsetY, someDuration);
+}
+
+animation myAnimation2 (rect someRect, int someOffsetX, int someOffsetY, int someDuration) {
+    move(someRect, someOffsetX, 0, someDuration);
+    move(someRect, 0, someOffsetY, someDuration);
+    move(someRect, -someOffsetX, 0, someDuration);
+    move(someRect, 0, -someOffsetY, someDuration);
+}
