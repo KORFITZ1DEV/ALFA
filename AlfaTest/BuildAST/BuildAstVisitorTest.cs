@@ -62,7 +62,15 @@ public class BuildAstVisitorTest
     [ClassData(typeof(BuildAstNoExceptionTestData))]
     public void BuildAstTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+        ICharStream stream = CharStreams.fromString(prog);
+        ITokenSource lexer = new ALFALexer(stream);
+        ITokenStream tokens = new CommonTokenStream(lexer);
+        ALFAParser parser = new ALFAParser(tokens);
+        parser.BuildParseTree = true;
+        IParseTree tree = parser.program();
+        Node ast = _sut.Visit(tree); 
+
+        
         Assert.True(true);
     }
 }
