@@ -39,7 +39,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
-        ALFATypes.TypeEnum typeEnum;
+      //program should thorw an exception if one of the children is a ErrorNodeImpl.
+      ALFATypes.TypeEnum typeEnum;
         
         switch (parent.type().GetText())
         {
