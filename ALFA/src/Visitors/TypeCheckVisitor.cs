@@ -46,7 +46,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             { //think this check is useless as the parser should not allow it
                 if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
                     throw new ArgumentTypeException($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
-            }
+            } 
             i++;
         }
         return node;
