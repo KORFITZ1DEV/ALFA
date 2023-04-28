@@ -22,18 +22,18 @@ loopStmt: 'loop' '(' 'int' ID 'from' (NUM | ID) '..' (NUM | ID) ')' block;
 paralStmt: 'paral' paralBlock;
 
 expr
-    : '(' expr ')'
-    | '!' expr
-    | '-' expr
-    | expr op=('*' | '/' | '%') expr            
-    | expr op=('+' | '-') expr
-    | expr op=('<' | '>' | '<=' | '>=') expr
-    | expr op=('==' | '!=') expr
-    | expr 'and' expr
-    | expr 'or' expr
-    | ID
-    | NUM
-    | bool
+    : '(' expr ')'                                  #Parens
+    | '!' expr                                      #Not
+    | '-' expr                                      #Neg    
+    | expr op=('*' | '/' | '%') expr                #MulDiv
+    | expr op=('+' | '-') expr                      #AddSub
+    | expr op=('<' | '>' | '<=' | '>=') expr        #Relational
+    | expr op=('==' | '!=') expr                    #Equality
+    | expr 'and' expr                               #And
+    | expr 'or' expr                                #Or
+    | ID                                            #Id
+    | NUM                                           #Num
+    | bool                                          #Boolean
     ;
 
 block: '{' stmt* '}';
