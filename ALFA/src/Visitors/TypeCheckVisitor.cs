@@ -60,12 +60,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (visitedNode is FuncCallNode)
         {
             if (node.Type != ALFATypes.TypeEnum.rect)
-                throw new Exception($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.rect} on line {node.Line}:{node.Col}");
+                throw new TypeException($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.rect} on line {node.Line}:{node.Col}");
         }
         else if (visitedNode is NumNode)
         {
             if (node.Type != ALFATypes.TypeEnum.@int)
-                throw new Exception($"Invalid type {node.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {node.Line}:{node.Col}");
+                throw new TypeException($"Invalid type {node.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {node.Line}:{node.Col}");
         }
 
         return node;

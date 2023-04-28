@@ -39,7 +39,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
-      //program should thorw an exception if one of the children is a ErrorNodeImpl.
+      //program should throw an exception if one of the children is a ErrorNodeImpl.
       ALFATypes.TypeEnum typeEnum;
         
         switch (parent.type().GetText())
@@ -94,7 +94,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
-                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isnt a rect");
+                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isn't a rect");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
