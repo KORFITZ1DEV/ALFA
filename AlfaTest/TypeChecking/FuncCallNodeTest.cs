@@ -18,7 +18,7 @@ public class FuncCallNodeTest
 
     try
     {
-_sut.Visit(funcCallNode);
+      _sut.Visit(funcCallNode);
     }
     catch (Exception actualException)
     {
