@@ -19,14 +19,24 @@ public class FuncCallNodeTest
 
     try
     {
-_sut.Visit(funcCallNode);
+      _sut.Visit(funcCallNode);
     }
     catch (Exception actualException)
     {
       Assert.Equal(expectedException.GetType(), actualException.GetType());
     }
   }
+  
+  [Theory]
+  [ClassData(typeof(FuncCallNodeTestsIfValidNumberOfParameters))]
+  public void FunCallNodeValidNumberOfParameters(Node funcCallNode, SymbolTable symbolTable)
+  {
+    _sut = new TypeCheckVisitor(symbolTable);
+    _sut.Visit(funcCallNode);
+    Assert.True(true);
+  }
 }
+
 
 public class FuncCallNodeTestData : IEnumerable<object[]>
 {
@@ -79,7 +89,7 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
   }
 }
 
-public class FuncCallNodeTestsIfValid : IEnumerable<object[]>
+public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
   {
     public IEnumerator<object[]> GetEnumerator()
     {
@@ -89,7 +99,7 @@ public class FuncCallNodeTestsIfValid : IEnumerable<object[]>
       var buildInNode4 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.move, formalparams4, 15, 10);
       var args4 = new List<Node>()
       {
-        new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
+        new IdNode("myrect1", 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
       };
       FuncCallNode funcCallNode4 = new FuncCallNode(buildInNode4, args4, 10, 3);
       yield return new object[]
@@ -119,7 +129,7 @@ public class FuncCallNodeTestsIfValid : IEnumerable<object[]>
       var buildInNode6 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.wait, formalparams6, 15, 10);
       var args6 = new List<Node>()
       {
-        new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
+        new NumNode(2, 41, 42)
       };
       FuncCallNode funcCallNode6 = new FuncCallNode(buildInNode6, args6, 10, 3);
       yield return new object[]
