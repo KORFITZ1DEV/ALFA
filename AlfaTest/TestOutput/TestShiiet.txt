@@ -110,19 +110,5 @@ class ParalAnimation extends Animation {
     }
 }
 
-const Rect1 = new Rectangle(100,100,100,100);
-
-const anim_0 = new MoveAnimation(Rect1,200,4000);
-const anim_1 = new WaitAnimation(300);
-const seqAnim = new SeqAnimation([anim_0,anim_1]);
-
-function setup() {
-	createCanvas(600, 600)
-	startTime = millis()
-}
-
-function draw() {
-	background(255)
-	Rect1.render();
-	seqAnim.play();
-}
+const num1 = 300
+const seqAnim = new SeqAnimation([anim_0]);
