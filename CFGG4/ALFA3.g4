@@ -9,7 +9,7 @@ stmt
     | ifStmt
     | loopStmt
     | paralStmt
-    | animDcl
+    | animDcl           //Only allowed at the top level (NOT allowed in blocks).
     | animCall
     ;
     
@@ -49,7 +49,7 @@ blockStmt
     | loopStmt
     | paralStmt
     | animCall
-    ; //Declaration of custom animations are NOT allowed in blocks.
+    ;
 
 paralBlock: '{' paralBlockStmt* '}';
 paralBlockStmt
