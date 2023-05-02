@@ -1,4 +1,5 @@
-﻿grammar ALFA2;
+﻿//Additions: comments, expressions, if-statement, loop, parallel animations. 
+grammar ALFA2;
 
 prog: stmt+ EOF;
 

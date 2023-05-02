@@ -8,7 +8,7 @@
     {
       "string": "bool someBooleanValue = -400*200+200 < 200+400;play {}",
       "assert": true,
-      "comment": "Tests that the whole left expression is evaluated first and that the right expression is evaluated whereafter the boolean < is applied",
+      "comment": "Tests that the whole left expression is evaluated first and that the right expression is evaluated whereafter the boolean < is applied"
     },
     {
       "string": "bool someBooleanValue = -400*200+200 < 200+400;",

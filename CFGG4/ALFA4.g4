@@ -1,4 +1,5 @@
-﻿grammar ALFA4;
+﻿//Additions: built-in utilities and play statement.
+grammar ALFA4;
 
 prog: stmt+ play EOF;
 

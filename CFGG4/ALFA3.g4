@@ -1,4 +1,5 @@
-﻿grammar ALFA3;
+﻿//Additions: Animation declarations.
+grammar ALFA3;
 
 prog: stmt+ EOF;
 
