@@ -38,7 +38,7 @@ animDcl: 'animation' ID '(' formalParams ')' block;
 expr
     : '(' expr ')'                                                      #Parens
     | '!' expr                                                          #Not
-    | '-' expr                                                          #Neg    
+    | '-' expr                                                          #UnaryMinus    
     | expr op=('*' | '/' | '%') expr                                    #MulDiv
     | expr op=('+' | '-') expr                                          #AddSub
     | expr op=('<' | '>' | '<=' | '>=') expr                            #Relational

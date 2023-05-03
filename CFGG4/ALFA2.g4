@@ -25,7 +25,7 @@ paralStmt: 'paral' paralBlock;
 expr
     : '(' expr ')'                                  #Parens
     | '!' expr                                      #Not
-    | '-' expr                                      #Neg    
+    | '-' expr                                      #UnaryMinus    
     | expr op=('*' | '/' | '%') expr                #MulDiv
     | expr op=('+' | '-') expr                      #AddSub
     | expr op=('<' | '>' | '<=' | '>=') expr        #Relational
@@ -47,7 +47,7 @@ builtInCreateShape: 'createRect';
 builtInCreateShapeCall: builtInCreateShape '(' actualParams ')';
 
 builtInParalAnim: 'move';
-builtInParalAnimCall: builtInParalAnim '(' actualParams ')' ';';  
+builtInParalAnimCall: builtInParalAnim '(' actualParams ')' ';';
 
 actualParams: (expr (',' expr)*)?;
 

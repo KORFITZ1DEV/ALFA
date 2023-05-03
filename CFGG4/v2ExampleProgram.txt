@@ -1,5 +1,6 @@
 ﻿#Two rects moving on x-axis
-
+int LOWERBOUND = 0;
+int UPPERBOUND = 100;
 int len = 20;
 rect myRect1 = createRect(0,0,len,len);
 rect myRect2 = createRect(0,60,len,len);
@@ -9,7 +10,7 @@ int offsetX2 = 100;
 int offsetY = 0;
 int duration = 2000;
 
-loop(int i from 0..9) {
+loop(int i from LOWERBOUND..UPPERBOUND) {
     if (i % 2 == 0 and i != 0) {
         paral {
             move(myRect1, offsetX1, offsetY, duration);    
