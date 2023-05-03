@@ -2,16 +2,15 @@ namespace ALFA;
 // Fischer Crafting a Compiler page 292 figure 8.7
 public class SymbolTable
 {
-    private int _depth = 0;
-    private Dictionary<string, Symbol> _symbols = new(); 
-    private List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
+    public int _depth = 0;
+    public Dictionary<string, Symbol> _symbols = new(); 
+    public List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
 
     public void OpenScope()
     {
         _depth++;
         _scopeDisplay[_depth] = null;
     }
-    
     public void CloseScope()
     {
         Symbol? sym = _scopeDisplay[_depth];
