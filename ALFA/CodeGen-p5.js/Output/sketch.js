@@ -113,7 +113,7 @@ class ParalAnimation extends Animation {
 const x1 = 0
 const y1 = 0
 const x2 = 100
-const y2 = 120
+const y2 = 140
 const length = 100
 const width = 200
 const animDuration = 1000
