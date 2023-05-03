@@ -1,4 +1,4 @@
-﻿//Additions: built-in utilities and play statement.
+﻿//Additions: arrays, new data types, colours, built-in utilities and play statement.
 grammar ALFA4;
 
 prog: stmt+ play EOF;
