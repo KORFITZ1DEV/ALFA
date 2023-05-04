@@ -27,3 +27,8 @@ public class UndeclaredVariableException : Exception
     public UndeclaredVariableException(string message)
         : base(message){}
 }
+
+public class RedeclaredVariableException : Exception
+{
+    public RedeclaredVariableException(string message) : base(message){}
+}

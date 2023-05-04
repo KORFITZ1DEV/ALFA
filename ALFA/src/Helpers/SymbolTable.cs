@@ -9,7 +9,7 @@ public class SymbolTable
     public void OpenScope()
     {
         _depth++;
-        _scopeDisplay[_depth] = null;
+        _scopeDisplay.Add(null);
     }
     public void CloseScope()
     {
@@ -33,7 +33,7 @@ public class SymbolTable
         Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
         if (oldSymbol != null && oldSymbol.Depth == _depth)
         {
-            throw new Exception($"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
+            throw new RedeclaredVariableException($"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
         
         Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.Type, symbol.LineNumber, symbol.ColumnNumber);
@@ -42,6 +42,11 @@ public class SymbolTable
 
         if (oldSymbol == null)
         {
+            if (_symbols.ContainsKey(symbol.Name))
+            {
+                oldSymbol = _symbols[symbol.Name];
+                _symbols.Remove(symbol.Name);
+            }
             _symbols.Add(symbol.Name, newSymbol);
         }
         else
@@ -53,13 +58,13 @@ public class SymbolTable
         newSymbol.PrevSymbol = oldSymbol!;
     }
 
-    public Symbol? RetrieveSymbol(string name)
+    public Symbol? RetrieveSymbol(string name) 
     {
         Symbol? sym;
         if (!_symbols.TryGetValue(name, out sym)) return null;
         while (sym != null)
         {
-            if (sym.Name == name)
+            if (sym.Name == name && sym.Depth == _depth) 
             {
                 return sym;
             }
