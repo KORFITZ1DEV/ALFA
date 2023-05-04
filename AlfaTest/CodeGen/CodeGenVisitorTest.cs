@@ -35,7 +35,6 @@ public class CodeGenTest
     
     Assert.Equal(expectedVarOutput, _sut._varOutput);
     Assert.Equal(expectedDrawOutput, _sut._drawOutput);
-
   }
   
   [Theory]

@@ -17,7 +17,7 @@ public class SymbolTable
         while (sym != null)
         {
             Symbol? prevSymbol = sym.PrevSymbol;
-            _symbols.Remove(sym.Name);
+            //_symbols.Remove(sym.Name);
             if (prevSymbol != null)
             {
                 _symbols.Add(prevSymbol.Name, prevSymbol);
