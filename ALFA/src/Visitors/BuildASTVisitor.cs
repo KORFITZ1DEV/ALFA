@@ -126,7 +126,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return builtInAnimCallNodeNode;
     }
     
-    public override BuiltInCreateShapeNode VisitBuiltIns(ALFAParser.BuiltInCreateShapeCallContext context)
+    public override BuiltInCreateShapeNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
     {
         string? identifier = null;
         var type = context.builtInCreateShape().GetText();
