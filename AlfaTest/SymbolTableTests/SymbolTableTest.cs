@@ -87,6 +87,16 @@ public class SymbolTableTest
         
     }
 
+    [Theory]
+    [ClassData(typeof(DeclaredLocallyTestData))]
+    public void DeclaredLocallyTest(string symbolName, SymbolTable symbolTable, bool expected)
+    {
+        
+        Assert.Equal(expected ,symbolTable.DeclaredLocally(symbolName));
+        
+    }
+    
+
 }
 
 public class SymbolTableTestData : IEnumerable<object[]>
@@ -233,7 +243,7 @@ public class CloseScopeTestData : IEnumerable<object[]>
         NumNode numNode = new NumNode(20, 25, 20);
         Symbol oldSymbol = new Symbol("Num1", numNode, ALFATypes.TypeEnum.@int, 19, 20);
         Symbol midSymbol = new Symbol("Num2", numNode, ALFATypes.TypeEnum.@int, 15, 15);
-        Symbol newSymbol1 = new Symbol("Num3", numNode, ALFATypes.TypeEnum.@int, 15, 15);
+        Symbol newSymbol1 = new Symbol("Num3", numNode, ALFATypes.TypeEnum.@int, 16, 16);
         newSymbol1.Depth = 1;
         oldSymbol.Depth = 1;
         midSymbol.Depth = 1;
@@ -241,6 +251,7 @@ public class CloseScopeTestData : IEnumerable<object[]>
         midSymbol.PrevSymbol = oldSymbol;
         SymbolTable symbolTable = new SymbolTable();
         symbolTable._depth = 1;
+        symbolTable._symbols.Add(newSymbol1.Name, newSymbol1);
         symbolTable._scopeDisplay.Add(null);
         symbolTable._scopeDisplay[1] = newSymbol1;
         int expectedDepth = 0;
@@ -258,4 +269,43 @@ public class CloseScopeTestData : IEnumerable<object[]>
     {
         return GetEnumerator();
     }
+    
 }
+
+public class DeclaredLocallyTestData : IEnumerable<object[]>
+{
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        SymbolTable _symbolTable = new SymbolTable();
+        _symbolTable._depth = 0;
+        NumNode _numNode = new NumNode(20, 25, 20);
+        Symbol oldSymbol = new Symbol("Num1", _numNode, ALFATypes.TypeEnum.@int, 19, 20);
+        Symbol midSymbol = new Symbol("Num2", _numNode, ALFATypes.TypeEnum.@int, 15, 15);
+        Symbol newSymbol1 = new Symbol("Num3", _numNode, ALFATypes.TypeEnum.@int, 16, 16);
+        newSymbol1.Depth = 1;
+        oldSymbol.Depth = 1;
+        midSymbol.Depth = 1;
+        newSymbol1.PrevSymbol = midSymbol;
+        midSymbol.PrevSymbol = oldSymbol;
+        _symbolTable._scopeDisplay[0] = newSymbol1;
+        yield return new object[]
+        {
+            newSymbol1.Name, _symbolTable, true
+        };
+        yield return new object[]
+        {
+            oldSymbol.Name, _symbolTable, true
+        };
+        yield return new object[]
+        {
+            midSymbol.Name, _symbolTable, true
+        };
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+
+    

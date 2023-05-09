@@ -49,11 +49,6 @@ public class SymbolTable
             }
             _symbols.Add(symbol.Name, newSymbol);
         }
-        else
-        {
-            _symbols.Remove(oldSymbol.Name);
-            _symbols.Add(symbol.Name, newSymbol);
-        }
 
         newSymbol.PrevSymbol = oldSymbol!;
     }
@@ -76,6 +71,18 @@ public class SymbolTable
 
     public bool DeclaredLocally(string name)
     {
-        return _scopeDisplay[_depth] != null && _scopeDisplay[_depth]!.Name == name;
+        bool isDeclaredLocally = false;
+        Symbol? sym = _scopeDisplay[_depth];
+        while (sym != null)
+        {
+            if (sym!.Name == name)
+            {
+                isDeclaredLocally = true;
+            }
+
+            sym = sym.PrevSymbol;
+        }
+
+        return isDeclaredLocally; 
     }
 }
