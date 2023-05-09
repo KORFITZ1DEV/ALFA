@@ -9,11 +9,9 @@ public class DeclaredLocally
 {
     [Theory]
     [ClassData(typeof(DeclaredLocallyTestData))]
-    public void DeclaredLocallyTest(string symbolName, SymbolTable symbolTable, bool expected)
+    public void DeclaredLocallyTests(string symbolName, SymbolTable symbolTable, bool expected)
     {
-        
         Assert.Equal(expected ,symbolTable.DeclaredLocally(symbolName));
-        
     }
 }
 
@@ -27,9 +25,9 @@ public class DeclaredLocallyTestData : IEnumerable<object[]>
         Symbol oldSymbol = new Symbol("Num1", _numNode, ALFATypes.TypeEnum.@int, 19, 20);
         Symbol midSymbol = new Symbol("Num2", _numNode, ALFATypes.TypeEnum.@int, 15, 15);
         Symbol newSymbol1 = new Symbol("Num3", _numNode, ALFATypes.TypeEnum.@int, 16, 16);
-        newSymbol1.Depth = 1;
-        oldSymbol.Depth = 1;
-        midSymbol.Depth = 1;
+        newSymbol1.Depth = 0;
+        oldSymbol.Depth = 0;
+        midSymbol.Depth = 0;
         newSymbol1.PrevSymbol = midSymbol;
         midSymbol.PrevSymbol = oldSymbol;
         _symbolTable._scopeDisplay[0] = newSymbol1;

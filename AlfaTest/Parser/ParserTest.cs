@@ -7,11 +7,6 @@ namespace AlfaTest.Parser;
 
 public class ParserTest
 {
-
-    public ParserTest()
-    {
-    }
-    
     [Theory]
     [ClassData(typeof(ParserTestData))]
     public void ParserProducesExpectedTree(string input, Mock<IParseTree> expectedTree)
@@ -34,7 +29,6 @@ public class ParserTest
             //At this point we know the two trees are not equal.
             Assert.Equal(expected: expectedTree.Object, actual: tree);
         }
-        
     }
 
     private void DescentTree(IParseTree tree, IParseTree expectedTree)

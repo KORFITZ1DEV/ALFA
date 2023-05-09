@@ -25,7 +25,7 @@ public class ProgramTreeMocker
         terminalIntNode.AddChild(terminalNodeImplInt);
         terminalNodeImplInt.Parent = terminalIntNode;
         
-        //Assigning child and parent to StatementContext node
+        //Assigning child to StatementContext node
         stmtWithVarDclNode.AddChild(terminalIntNode);
         stmtWithVarDclNode.AddChild(varDclNode);
         stmtWithVarDclNode.AddChild(semiColonImpl);

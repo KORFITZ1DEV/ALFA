@@ -79,7 +79,7 @@ public class SymbolTable
         Symbol? sym = _scopeDisplay[_depth];
         while (sym != null)
         {
-            if (sym!.Name == name)
+            if (sym.Name == name)
             {
                 isDeclaredLocally = true;
             }
