@@ -1,16 +1,35 @@
 ﻿using ALFA;
+using ALFA.AST_Nodes;
+using ALFA.Visitors;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 
 namespace AlfaTest.BuildAST;
 
 public class BuildAstVisitorTest
 {
+    private BuildASTVisitor _sut;
+    public BuildAstVisitorTest()
+    {
+         _sut = new BuildASTVisitor(new SymbolTable ());
+    }
+    
     [Theory]
     [ClassData(typeof(BuildAstThrowsExceptionTestData))]
     public void BuildAstTestThrowsException(string prog, string comment, Type exceptionType)
     {
+        ICharStream stream = CharStreams.fromString(prog);
+        ITokenSource lexer = new ALFALexer(stream);
+        ITokenStream tokens = new CommonTokenStream(lexer);
+        ALFAParser parser = new ALFAParser(tokens);
+        parser.BuildParseTree = true;
+        IParseTree tree = parser.program();
+
+        
         try
         {
-            Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+            Node ast = _sut.Visit(tree); 
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -42,7 +61,15 @@ public class BuildAstVisitorTest
     [ClassData(typeof(BuildAstNoExceptionTestData))]
     public void BuildAstTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+        ICharStream stream = CharStreams.fromString(prog);
+        ITokenSource lexer = new ALFALexer(stream);
+        ITokenStream tokens = new CommonTokenStream(lexer);
+        ALFAParser parser = new ALFAParser(tokens);
+        parser.BuildParseTree = true;
+        IParseTree tree = parser.program();
+        Node ast = _sut.Visit(tree); 
+
+        
         Assert.True(true);
     }
 }

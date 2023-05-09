@@ -7,14 +7,14 @@ namespace ALFA.Visitors;
 public class CodeGenVisitor : ASTVisitor<Node>
 {
     
-    private string _output = string.Empty;
-    private string _varOutput = string.Empty;
-    private string _setupOutput = string.Empty;
-    private string _drawOutput = string.Empty;
+    public string _output = string.Empty;
+    public string _varOutput = string.Empty;
+    public string _setupOutput = string.Empty;
+    public string _drawOutput = string.Empty;
     
-    private int _animationCount = 0;
-    private SymbolTable _symbolTable;
-    private string _path;
+    public int _animationCount = 0;
+    public SymbolTable _symbolTable;
+    public string _path;
 
     public CodeGenVisitor(SymbolTable st, string path)
     {

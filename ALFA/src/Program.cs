@@ -26,27 +26,9 @@ namespace ALFA
             ALFAParser parser = new ALFAParser(tokens);
             parser.BuildParseTree = true;
             IParseTree tree = parser.program();
-            
-            Dictionary<string, BuiltIn> formalParams = new()
-            {
-                {"createRect", new BuiltIn(
-                    new List<ALFATypes.TypeEnum>() 
-                        { ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int }, 
-                    ALFATypes.BuiltInTypeEnum.createRect)},
-            
-                {"move", new BuiltIn(new List<ALFATypes.TypeEnum>()
-                {
-                    ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int
-                },ALFATypes.BuiltInTypeEnum.move)},
-            
-                {"wait", new BuiltIn(new List<ALFATypes.TypeEnum>()
-                {
-                    ALFATypes.TypeEnum.@int
-                }, ALFATypes.BuiltInTypeEnum.wait)}
-            };
-            
+
             SymbolTable symbolTable = new();
-            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable, formalParams);
+            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
