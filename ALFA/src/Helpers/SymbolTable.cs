@@ -31,11 +31,12 @@ public class SymbolTable
     public void EnterSymbol(Symbol symbol)
     {
         Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
-        if (oldSymbol != null && oldSymbol.Depth == _depth)
+        if (oldSymbol != null)
         {
-            throw new RedeclaredVariableException($"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
+            throw new RedeclaredVariableException(
+                $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
-        
+
         Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.Type, symbol.LineNumber, symbol.ColumnNumber);
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
@@ -50,6 +51,9 @@ public class SymbolTable
             _symbols.Add(symbol.Name, newSymbol);
         }
 
+        //As the oldSymbol is set to previous symbol, one with the same name
+        //This could result in an issue when closing a scope as the oldsymbol
+        //may be overwritten and thus maybe lost.
         newSymbol.PrevSymbol = oldSymbol!;
     }
 
