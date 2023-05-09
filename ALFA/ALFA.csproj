@@ -26,8 +26,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CodeGen-p5.js" />
       <Folder Include="src\antlr" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\index.html" />
+      <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\p5.min.js" />
+      <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\sketch.js" />
+      <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\style.css" />
+      <None Include="bin\Debug\net7.0\CodeGen-p5.js\stdlib.js" />
     </ItemGroup>
 
 </Project>

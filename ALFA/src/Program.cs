@@ -5,6 +5,7 @@ using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Visitors;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using ALFA.Types;
 
 namespace ALFA
@@ -59,27 +60,9 @@ namespace ALFA
             ALFAParser parser = new ALFAParser(tokens);
             parser.BuildParseTree = true;
             IParseTree tree = parser.program();
-            
-            Dictionary<string, BuiltIn> formalParams = new()
-            {
-                {"createRect", new BuiltIn(
-                    new List<ALFATypes.TypeEnum>() 
-                        { ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int }, 
-                    ALFATypes.BuiltInTypeEnum.createRect)},
-            
-                {"move", new BuiltIn(new List<ALFATypes.TypeEnum>()
-                {
-                    ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int
-                },ALFATypes.BuiltInTypeEnum.move)},
-            
-                {"wait", new BuiltIn(new List<ALFATypes.TypeEnum>()
-                {
-                    ALFATypes.TypeEnum.@int
-                }, ALFATypes.BuiltInTypeEnum.wait)}
-            };
-            
+
             SymbolTable symbolTable = new();
-            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable, formalParams);
+            BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
@@ -88,7 +71,12 @@ namespace ALFA
             CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
             
-            Process.Start(new ProcessStartInfo($"{_output}/index.html") { UseShellExecute = true });
+            string path = ($"{_output}/index.html");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
+            {
+                path = path.Replace("/", "\\");
+            }
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
         }
     }
 }

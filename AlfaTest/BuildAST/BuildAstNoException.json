@@ -1,7 +1,17 @@
 [
   {
-    "Prog": "",
-    "Comment": "",
+    "Prog": "int x1 = 0;\nint y1 = 0;\nint x2 = 100;\nint y2 = 120;\n\nint length = 100;\nint width = 200;\nint animDuration = 1000;\nint delay = 300;\nrect myrect1 = createRect(x1, y1, width, length);\nrect myrect2 = createRect(x2, y2, length, length);\n\nmove(myrect1, 200, animDuration);\nwait(delay);\nmove(myrect2, 300, animDuration);\nmove(myrect1, -200, animDuration);\nwait(delay);\nmove(myrect2, -200, animDuration);",
+    "Comment": "laver 2 firkanter henholdsvis til højre og derefter venter hvorefter den rykker tilbage.",
+    "ExceptionType": ""
+  },
+  {
+    "Prog": "int x1 = 0;\nint y1 = 0;\nint x2 = 100;\nint y2 = 120;\n\nint length = 100;\nint width = 200;\nint animDuration = 1000;\nint delay = 300;\nrect myrect1 = createRect(x1, y1, width, length);\nrect myrect2 = createRect(x2, y2, length, length);\n\nmove(myrect1, -200, animDuration);\nwait(delay);\nmove(myrect2, -200, animDuration);",
+    "Comment" : "laver 2 firkanter og rykker dem til venstre",
+    "ExceptionType": ""
+  },
+  {
+    "Prog": "rect myrect1 = createRect(100, 100, 20, 20);\nrect myrect2 = createRect(300, 300, 20, 20);\n\nmove(myrect1, -200, 500);\nwait(1000);\nmove(myrect2, -200, 500);",
+    "Comment": "Laver rect med konstanter",
     "ExceptionType": ""
   }
 ]

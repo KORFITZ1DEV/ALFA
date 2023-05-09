@@ -1,13 +1,14 @@
+﻿#L23 ICharStream stream =
 int x1 = 0;
 int y1 = 0;
 int x2 = 100;
-int y2 = 140;
+int y2 = 120;
 
 int length = 100;
 int width = 200;
 int animDuration = 1000;
 int delay = 300;
-rect myrect1 = createRect(x1, y1, width, length);
+rect myrect1 = createRect(x1, y1, width, length
 rect myrect2 = createRect(x2, y2, length, length);
 
 move(myrect1, 200, animDuration);
@@ -17,5 +18,5 @@ move(myrect1, -200, animDuration);
 wait(delay);
 move(myrect2, -200, animDuration);
 
-rect myrect3 = createRect(200, 150, 20, 20);
-move(myrect3, 200, animDuration);
+#L24: Lexer: AlfaLexer
+input:

@@ -8,12 +8,10 @@ namespace ALFA.Visitors;
 public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
     private SymbolTable _symbolTable;
-    private Dictionary<string, BuiltIn> _formalParams;
 
-    public BuildASTVisitor(SymbolTable symbolTable, Dictionary<string, BuiltIn> formalParams)
+    public BuildASTVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
-        _formalParams = formalParams;
     }
     
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
@@ -41,7 +39,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
-        ALFATypes.TypeEnum typeEnum;
+      //program should throw an exception if one of the children is a ErrorNodeImpl.
+      ALFATypes.TypeEnum typeEnum;
         
         switch (parent.type().GetText())
         {
@@ -95,7 +94,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalMoveParamsArray);
                 builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
-                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isnt a rect");
+                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isn't a rect");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
@@ -146,7 +145,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override BuiltInsNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
     {
         var type = context.GetText();
-        BuiltIn builtIn = _formalParams[type];
+        BuiltIn builtIn = FormalParameters.FormalParams[type];
         return new BuiltInsNode(builtIn.Type, builtIn.FormalParams,  context.Start.Line, context.Start.Column);
     }
 }
