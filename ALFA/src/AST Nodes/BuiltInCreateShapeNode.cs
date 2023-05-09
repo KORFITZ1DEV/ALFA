@@ -8,7 +8,7 @@ public class BuiltInCreateShapeNode : Node
     public List<Node> Arguments { get; set; } // can consist of NumNode or IdNode
 
 
-    public BuiltInCreateShapeNode(ALFATypes.CreateShapeEnum type, List<Node> arguments)
+    public BuiltInCreateShapeNode(ALFATypes.CreateShapeEnum type, List<Node> arguments, int line, int col) : base(line, col)
     {
         Type = type;
         Arguments = arguments;

@@ -83,15 +83,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         
         switch (type)
         {
-            /*case "createRect":
-                ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
-                formalParams.AddRange(formalCSParamsArray);
-                //TODO remove
-                builtInAnimEnum = ALFATypes.BuiltInAnimEnum.move;
-                
-                var parent = (ALFAParser.VarDclContext)context.Parent;
-                identifier = parent.ID().GetText();
-                break;*/
             case "move":
                 builtInAnimEnum = ALFATypes.BuiltInAnimEnum.move;
                 if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isn't a rect");
@@ -120,7 +111,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             
                     IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
-                    funcCallNode.Arguments.Add(idNode);
+                    builtInAnimCallNodeNode.Arguments.Add(idNode);
                     continue;
                 }
                 
@@ -128,16 +119,62 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                     throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
                 
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                funcCallNode.Arguments.Add((numNode));
+                builtInAnimCallNodeNode.Arguments.Add((numNode));
             }
         }
 
-        return funcCallNode;
+        return builtInAnimCallNodeNode;
     }
     
-    public override BuiltInAnimCallNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
+    public override BuiltInCreateShapeNode VisitBuiltIns(ALFAParser.BuiltInCreateShapeCallContext context)
     {
-        var type = context.GetText();
-        return new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, context.Start.Line, context.Start.Column);
+        string? identifier = null;
+        var type = context.builtInCreateShape().GetText();
+        ALFATypes.CreateShapeEnum createShapeEnum;
+
+        
+        switch (type)
+        {
+            case "createRect":
+                createShapeEnum = ALFATypes.CreateShapeEnum.createRect;
+                var parent = (ALFAParser.VarDclContext)context.Parent;
+                identifier = parent.ID().GetText();
+                
+                break;
+            
+            default:
+                throw new UnknownBuiltinException("Invalid built-in function");
+        }
+        
+        BuiltInCreateShapeNode builtInAnimCallNodeNode = new BuiltInCreateShapeNode(createShapeEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+
+        if (context.args() != null)
+        {
+            foreach (var argCtx in context.args().arg())
+            {
+                var id = argCtx.ID();
+                var num = argCtx.NUM();
+
+                if (id != null)
+                {
+                    Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
+                    if (sym == null) 
+                        throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
+            
+                    IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
+                    builtInAnimCallNodeNode.Arguments.Add(idNode);
+                    continue;
+                }
+                
+                if (argCtx.NUM() == null)
+                    throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+                
+                NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
+                builtInAnimCallNodeNode.Arguments.Add((numNode));
+            }
+        }
+
+
+        return builtInAnimCallNodeNode;
     }
 }
