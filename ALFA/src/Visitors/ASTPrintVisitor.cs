@@ -58,11 +58,11 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         return node;
     }
 
-    public override BuiltInCreateShapeNode Visit(BuiltInCreateShapeNode node)
+    public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
     {
         Console.Write("\t\t\tBuiltIns: ");
-        Console.WriteLine(node.Type.ToString());
+        Console.WriteLine(callNode.Type.ToString());
 
-        return node;
+        return callNode;
     }
 }

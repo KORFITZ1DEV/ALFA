@@ -11,7 +11,7 @@ public abstract class ASTVisitor<T>
     public abstract T Visit(VarDclNode node);
     public abstract T Visit(IdNode node);
     public abstract T Visit(NumNode node);
-    public abstract T Visit(BuiltInCreateShapeNode node);
+    public abstract T Visit(BuiltInCreateShapeCallNode callNode);
     
 
     public T Visit(Node node)
@@ -19,7 +19,7 @@ public abstract class ASTVisitor<T>
         return node switch
         {
             BuiltInAnimCallNode builtInAnimNode => Visit(builtInAnimNode),
-            BuiltInCreateShapeNode builtInCreateShapeNode => Visit(builtInCreateShapeNode),
+            BuiltInCreateShapeCallNode builtInCreateShapeNode => Visit(builtInCreateShapeNode),
             ProgramNode programNode => Visit(programNode),
             VarDclNode varDclNode => Visit(varDclNode),
             IdNode idNode => Visit(idNode),

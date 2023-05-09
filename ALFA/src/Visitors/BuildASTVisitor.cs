@@ -54,11 +54,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
         
-        if (context.funcCall() != null)
+        if (context.builtInCreateShapeCall() != null)
         {
-            var funcCall = (FuncCallNode)Visit(context.funcCall());
-            _symbolTable.EnterSymbol(new Symbol(id, funcCall, typeEnum, context.Start.Line, context.Start.Column));
-            return new VarDclNode(typeEnum, id, funcCall, context.Start.Line, 0);
+            var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
+            _symbolTable.EnterSymbol(new Symbol(id, builtInCreateShapeCall, typeEnum, context.Start.Line, context.Start.Column));
+            return new VarDclNode(typeEnum, id, builtInCreateShapeCall, context.Start.Line, 0);
         }
         
         // Can we use this???
@@ -126,7 +126,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return builtInAnimCallNodeNode;
     }
     
-    public override BuiltInCreateShapeNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
+    public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
     {
         string? identifier = null;
         var type = context.builtInCreateShape().GetText();
@@ -146,7 +146,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 throw new UnknownBuiltinException("Invalid built-in function");
         }
         
-        BuiltInCreateShapeNode builtInAnimCallNodeNode = new BuiltInCreateShapeNode(createShapeEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+        BuiltInCreateShapeCallNode builtInAnimCallCallNodeCallNode = new BuiltInCreateShapeCallNode(createShapeEnum,new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.args() != null)
         {
@@ -162,7 +162,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
             
                     IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
-                    builtInAnimCallNodeNode.Arguments.Add(idNode);
+                    builtInAnimCallCallNodeCallNode.Arguments.Add(idNode);
                     continue;
                 }
                 
@@ -170,11 +170,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                     throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
                 
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                builtInAnimCallNodeNode.Arguments.Add((numNode));
+                builtInAnimCallCallNodeCallNode.Arguments.Add((numNode));
             }
         }
 
 
-        return builtInAnimCallNodeNode;
+        return builtInAnimCallCallNodeCallNode;
     }
 }

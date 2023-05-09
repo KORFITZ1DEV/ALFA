@@ -112,15 +112,15 @@ public class CodeGenVisitor : ASTVisitor<Node>
         return node;
     }
 
-    public override BuiltInCreateShapeNode Visit(BuiltInCreateShapeNode node)
+    public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
     {
-        switch (node.Type)
+        switch (callNode.Type)
         {
             case ALFATypes.CreateShapeEnum.createRect:
                 Emit("new Rectangle(", ALFATypes.OutputEnum.VarOutput);
                 break;
         }
-        return node;
+        return callNode;
     }
 
     public override IdNode Visit(IdNode node)
