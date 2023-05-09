@@ -1,0 +1,70 @@
+﻿#Now with arrays
+
+int animationDuration = 4000;
+int canvasWidth = 400;
+int canvasHeight = canvasWidth;
+canvas myCanvas = createCanvas(canvasWidth, canvasHeight);
+rect myRect = createRect(0, 0, 20, 20);
+circle myCircle = createCircle(30, 30, 15);
+circle mySmallCircle = createCircle(50, 50, 5);
+
+shape[] myShapes = {myRect, myCircle};
+
+add(myShapes, mySmallCircle);
+print(myShapes);
+
+color(myCanvas, black);
+color(myRect, red);
+color(myCircle, blue);
+
+int myNum = 2+2;
+int myOtherNum= -400*200+200;
+print(myNum);
+print(myOtherNum);
+print(myShapes[0]);
+
+animation moveRightLeft(rect sqr) {
+    move(sqr, 200, animationDuration);
+    wait(2);
+    move(sqr, -200, animationDuration);
+}
+
+animation colorMove(circle circ) {
+    paral{
+        color(circ, green, 3000);
+        moveTo(circ, 150, 150, 5000);
+    }
+}
+
+animation colorFlickr(shape elem) {
+    loop(int i from 1..10) {
+        color(elem, white);
+        wait(200);
+        color(elem, red);
+        wait(200);
+    }
+}
+
+animation canvasManipulation() {
+    loop(int i from 1..6) {
+        add(myCanvas, myShapes);
+        if (i < 2) {
+            paral{
+                moveRightLeft(myRect);
+                colorFlickr(myRect);
+                colorMove(myCircle);
+            }
+        } 
+        else if (i < 4) {
+        }
+        else {
+            moveRightLeft(myRect);
+            resetCanvas(myCanvas);
+        }
+        wait(200);
+    }
+}
+
+play {
+    canvasManipulation();
+}

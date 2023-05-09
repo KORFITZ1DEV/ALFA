@@ -1,4 +1,4 @@
-grammar ALFA;
+﻿grammar OldVersionWorks;
 //https://stackoverflow.com/questions/26471876/how-to-tell-the-precedence-of-operators-in-a-context-free-grammar
 //page 144 sebesta
 
@@ -7,13 +7,13 @@ prog: stmt* playStmt EOF;
 stmt: (type varDcl | funcCall) ';' | animDcl | loopStmt;    //statement can either be vardcl, funcCall, animDcl, loopStmt
 
 varDcl:   '[]' ID ('=' '{' arrayElem (',' arrayElem)* '}')? //array declaration 
-        | <assoc=right> ID '=' (createFuncCall | expr) ;    //Right associative variable declaration
+        | <assoc=right> ID '=' (createFuncCall | expr) ;    //Right associative variable assignment
 
-createFuncCall: createFunc '(' args ')';                    //built-in function call that returns square/canvas/circle
+createFuncCall: createFunc '(' args ')';                    //built-in function call that returns rect/canvas/circle
 
 funcCall: ID '(' args ')'                                   //user defined animation call 
         | builtInFuncCall;                                  
-        
+
 args: (arg (',' arg)*)?;                                    //arguments passed to a function
 
 builtInFuncCall:  (seqFunc | builtInFunc) '(' args ')';    
@@ -40,9 +40,9 @@ terminalExpr: NUM                                                   //priority (
 
 blockStmt: (varDcl | builtInFuncCall | funcCall) ';' | ifStmt | paralStmt | loopStmt ;
 
-ifStmt: 'if' '(' condition ')' block ('else if' block)* ('else' block)?;
+ifStmt: 'if' '(' condition ')' block ('else if' '(' condition ')' block)* ('else' block)?;
 
-condition: ('!')? arg ( boolOp ('!')? arg )*;
+condition: ('not')? arg ( boolOp ('not')? arg )*;
 
 block: '{' blockStmt* '}';
 
@@ -50,16 +50,13 @@ paralStmt: 'paral' '{' (paralBlockStmt)* '}';
 
 paralBlockStmt: (builtInFuncCall | funcCall) ';';
 
-loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' loopBlockStmt* '}';
-
-loopBlockStmt:  varDcl ';' | ifStmt | paralStmt | loopStmt | builtInFuncCall ';' | funcCall ';';
+loopStmt: 'loop' '(' 'int' ID 'from' '-'?NUM '..' '-'?NUM ')' '{' blockStmt* '}';
 
 playStmt: 'play' '{' playBlockStmt* '}';
 
 playBlockStmt: paralStmt | loopStmt | funcCall ';' ;
 
-
-type: 'int' | 'bool' | 'canvas' | 'square' | 'circle' | 'shape';
+type: 'int' | 'bool' | 'canvas' | 'rect' | 'circle' | 'shape';
 bool: 'true' | 'false';
 unaryOp: '-'| 'not';
 multiOp: '*' | '/' | '%'; 
@@ -70,6 +67,6 @@ ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUM: '0'| [1-9][0-9]* ;
 builtInFunc: 'add' | 'color' | 'print' | 'moveTo' | 'move';
 seqFunc: 'resetCanvas' | 'wait' ;
-createFunc: 'createSquare' | 'createCircle' | 'createCanvas';
+createFunc: 'createRect' | 'createCircle' | 'createCanvas';
 color: 'white' | 'black' | 'red' | 'green' | 'blue';
 WS: [ \t\r\n]+ -> skip;

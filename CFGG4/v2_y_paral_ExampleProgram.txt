@@ -1,0 +1,29 @@
+﻿#Two rects moving in parallel
+
+int len = 20;
+rect myRect1 = createRect(0,0,len,len);
+rect myRect2 = createRect(40,40,len,len);
+
+int offsetX = 100;
+int offsetY = 100;
+int duration = 1500;
+
+loop(int i from 1 .. 4) {
+    paral {
+        move(myRect1, offsetX, 0, duration);
+        move(myRect2, offsetX, 0, duration);
+    }
+    paral {
+        move(myRect1, 0, offsetY, duration);
+        move(myRect2, 0, offsetY, duration);
+    }
+    wait(200);
+    paral {
+        move(myRect1, -offsetX, 0, duration);
+        move(myRect2, -offsetX, 0, duration);
+    }
+    paral {
+        move(myRect1, 0, -offsetY, duration);
+        move(myRect2, 0, -offsetY, duration);
+    }
+}
