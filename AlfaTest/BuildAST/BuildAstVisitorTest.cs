@@ -13,9 +13,8 @@ public class BuildAstVisitorTest
     public BuildAstVisitorTest()
     {
          _sut = new BuildASTVisitor(new SymbolTable ());
-         
-         
     }
+    
     [Theory]
     [ClassData(typeof(BuildAstThrowsExceptionTestData))]
     public void BuildAstTestThrowsException(string prog, string comment, Type exceptionType)

@@ -26,8 +26,4 @@
       <ProjectReference Include="..\ALFA\ALFA.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="CodeGen" />
-    </ItemGroup>
-
 </Project>
