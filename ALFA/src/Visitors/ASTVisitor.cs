@@ -6,19 +6,20 @@ namespace ALFA.Visitors;
 public abstract class ASTVisitor<T>
 {
 
-    public abstract T Visit(BuiltInsNode node);
-    public abstract T Visit(FuncCallNode node);
+    public abstract T Visit(BuiltInAnimCallNode node);
     public abstract T Visit(ProgramNode node);
     public abstract T Visit(VarDclNode node);
     public abstract T Visit(IdNode node);
     public abstract T Visit(NumNode node);
+    public abstract T Visit(BuiltInCreateShapeNode node);
+    
 
     public T Visit(Node node)
     {
         return node switch
         {
-            BuiltInsNode builtInsNode => Visit(builtInsNode),
-            FuncCallNode funcCallNode => Visit(funcCallNode),
+            BuiltInAnimCallNode builtInAnimNode => Visit(builtInAnimNode),
+            BuiltInCreateShapeNode builtInCreateShapeNode => Visit(builtInCreateShapeNode),
             ProgramNode programNode => Visit(programNode),
             VarDclNode varDclNode => Visit(varDclNode),
             IdNode idNode => Visit(idNode),

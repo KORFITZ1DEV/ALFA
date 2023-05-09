@@ -50,17 +50,29 @@ public interface IALFAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVarDcl([NotNull] ALFAParser.VarDclContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ALFAParser.funcCall"/>.
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFuncCall([NotNull] ALFAParser.FuncCallContext context);
+	Result VisitBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ALFAParser.builtIns"/>.
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitBuiltIns([NotNull] ALFAParser.BuiltInsContext context);
+	Result VisitBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.args"/>.
 	/// </summary>

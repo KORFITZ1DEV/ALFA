@@ -32,7 +32,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
         
-        return VisitFuncCall(context.funcCall());
+        return VisitBuiltInAnimCall(context.builtInAnimCall());
     }
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
@@ -73,45 +73,38 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
-    public override FuncCallNode VisitFuncCall(ALFAParser.FuncCallContext context)
+    public override BuiltInAnimCallNode VisitBuiltInAnimCall(ALFAParser.BuiltInAnimCallContext context)
     {
+        //TODO maybe check for context's parent.
+
         string? identifier = null;
-        var type = context.builtIns().GetText();
-        ALFATypes.BuiltInTypeEnum builtInTypeEnum;
-        List<ALFATypes.TypeEnum> formalParams = new List<ALFATypes.TypeEnum>();
+        var type = context.builtInAnim().GetText();
+        ALFATypes.BuiltInAnimEnum builtInAnimEnum;
         
         switch (type)
         {
-            case "createRect":
+            /*case "createRect":
                 ALFATypes.TypeEnum[] formalCSParamsArray = {ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
                 formalParams.AddRange(formalCSParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.createRect;
+                //TODO remove
+                builtInAnimEnum = ALFATypes.BuiltInAnimEnum.move;
                 
                 var parent = (ALFAParser.VarDclContext)context.Parent;
                 identifier = parent.ID().GetText();
-                break;
+                break;*/
             case "move":
-                ALFATypes.TypeEnum[] formalMoveParamsArray = {ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int};
-                formalParams.AddRange(formalMoveParamsArray);
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.move;
+                builtInAnimEnum = ALFATypes.BuiltInAnimEnum.move;
                 if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isn't a rect");
                 identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
-                builtInTypeEnum = ALFATypes.BuiltInTypeEnum.wait;
-                ALFATypes.TypeEnum[] formalWaitParamsArray = {ALFATypes.TypeEnum.@int};
-                formalParams.AddRange(formalWaitParamsArray);
+                builtInAnimEnum = ALFATypes.BuiltInAnimEnum.wait;
                 break;
             default:
                 throw new UnknownBuiltinException("Invalid built-in function");
         }
         
-        FuncCallNode funcCallNode = new FuncCallNode(
-            new BuiltInsNode(builtInTypeEnum, formalParams, context.Start.Line, context.Start.Column),
-            new List<Node>(),
-            context.Start.Line,
-            context.Start.Column
-        );
+        BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.args() != null)
         {
@@ -142,10 +135,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return funcCallNode;
     }
     
-    public override BuiltInsNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
+    public override BuiltInAnimCallNode VisitBuiltIns(ALFAParser.BuiltInsContext context)
     {
         var type = context.GetText();
-        BuiltIn builtIn = FormalParameters.FormalParams[type];
-        return new BuiltInsNode(builtIn.Type, builtIn.FormalParams,  context.Start.Line, context.Start.Column);
+        return new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, context.Start.Line, context.Start.Column);
     }
 }

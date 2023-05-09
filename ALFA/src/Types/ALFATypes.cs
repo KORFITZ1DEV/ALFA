@@ -8,11 +8,15 @@ public class ALFATypes
         rect
     }
     
-    public enum BuiltInTypeEnum
+    public enum BuiltInAnimEnum
     {
-        createRect,
         move,
         wait
+    }
+
+    public enum CreateShapeEnum
+    {
+        createRect
     }
     public enum OutputEnum
     {

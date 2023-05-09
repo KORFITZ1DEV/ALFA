@@ -72,29 +72,53 @@ public partial class ALFABaseListener : IALFAListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitVarDcl([NotNull] ALFAParser.VarDclContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.funcCall"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterFuncCall([NotNull] ALFAParser.FuncCallContext context) { }
+	public virtual void EnterBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.funcCall"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitFuncCall([NotNull] ALFAParser.FuncCallContext context) { }
+	public virtual void ExitBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.builtIns"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBuiltIns([NotNull] ALFAParser.BuiltInsContext context) { }
+	public virtual void EnterBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.builtIns"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBuiltIns([NotNull] ALFAParser.BuiltInsContext context) { }
+	public virtual void ExitBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.args"/>.
 	/// <para>The default implementation does nothing.</para>

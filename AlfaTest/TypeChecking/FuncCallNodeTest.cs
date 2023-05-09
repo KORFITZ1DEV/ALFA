@@ -46,7 +46,7 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
     var symbolTable1 = new SymbolTable();
 
     var formalParams1 = FormalParameters.FormalParams["createRect"].FormalParams;
-    var buildInNode1 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect, formalParams1, 50, 25);
+    var buildInNode1 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams1, 50, 25);
     var args1 = new List<Node>()
     {
       new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22),
@@ -55,7 +55,7 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
 
     var symbolTable2 = new SymbolTable();
     var formalParams2 = FormalParameters.FormalParams["createRect"].FormalParams;
-    var buildInNode2 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect, formalParams2, 30, 10);
+    var buildInNode2 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams2, 30, 10);
     var args2 = new List<Node>()
     {
       new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
@@ -65,7 +65,7 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
     var symbol = new Symbol("myrect1", idNode, ALFATypes.TypeEnum.rect, 10, 5);
     var formalParams3 = FormalParameters.FormalParams["createRect"].FormalParams;
     symbolTable3.EnterSymbol(symbol);
-    var buildInNode3 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect, formalParams3, 20, 15);
+    var buildInNode3 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams3, 20, 15);
     var args3 = new List<Node>()
     {
       idNode, new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
@@ -96,7 +96,7 @@ public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
       //Check if move is valid.
       var symboltable4 = new SymbolTable();
       var formalparams4 = FormalParameters.FormalParams["move"].FormalParams;
-      var buildInNode4 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.move, formalparams4, 15, 10);
+      var buildInNode4 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, formalparams4, 15, 10);
       var args4 = new List<Node>()
       {
         new IdNode("myrect1", 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
@@ -111,7 +111,7 @@ public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
       //Check if Createrect is valid
       var symboltable5 = new SymbolTable();
       var formalparams5 = FormalParameters.FormalParams["createRect"].FormalParams;
-      var buildInNode5 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect, formalparams5, 15, 10);
+      var buildInNode5 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalparams5, 15, 10);
       var args5 = new List<Node>()
       {
         new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
@@ -126,7 +126,7 @@ public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
       //check if wait is valid
       var symboltable6 = new SymbolTable();
       var formalparams6 = FormalParameters.FormalParams["wait"].FormalParams;
-      var buildInNode6 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.wait, formalparams6, 15, 10);
+      var buildInNode6 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, formalparams6, 15, 10);
       var args6 = new List<Node>()
       {
         new NumNode(2, 41, 42)

@@ -24,7 +24,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         return node;
     }
 
-    public override FuncCallNode Visit(FuncCallNode node)
+    /*public override FuncCallNode Visit(FuncCallNode node)
     {
         Console.WriteLine("\n\t\tFuncCall:");
         Visit(node.BuiltIns);
@@ -36,11 +36,11 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         }
         
         return node;
-    }
-    public override BuiltInsNode Visit(BuiltInsNode node)
+    }*/
+    public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
         Console.Write("\t\t\tBuiltIns: ");
-        Console.WriteLine(node.BuiltInType.ToString());
+        Console.WriteLine(node.BuiltInAnimType.ToString());
         
         return node;
     }
@@ -55,6 +55,14 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     public override NumNode Visit(NumNode node)
     {
         Console.WriteLine("value " + node.Value);
+        return node;
+    }
+
+    public override BuiltInCreateShapeNode Visit(BuiltInCreateShapeNode node)
+    {
+        Console.Write("\t\t\tBuiltIns: ");
+        Console.WriteLine(node.Type.ToString());
+
         return node;
     }
 }

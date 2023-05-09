@@ -33,7 +33,7 @@ public class VarDclNodeTestData : IEnumerable<object[]>
     public IEnumerator<object[]> GetEnumerator()
     {
         var symbolTable1 = new SymbolTable();
-        var buildInNode1 = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect, FormalParameters.FormalParams["createRect"].FormalParams, 50, 25);
+        var buildInNode1 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, FormalParameters.FormalParams["createRect"].FormalParams, 50, 25);
         var args1 = new List<Node>()
         {
             new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22) 

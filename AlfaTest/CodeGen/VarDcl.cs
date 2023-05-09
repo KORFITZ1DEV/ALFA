@@ -30,7 +30,7 @@ public class VarDclCodeGenTestData : IEnumerable<object[]>
     public IEnumerator<object[]> GetEnumerator()
     {
     
-        BuiltInsNode buildInsNodeCreateRect = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect,
+        BuiltInAnimCallNode buildInAnimCallNodeCreateRect = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect,
             FormalParameters.FormalParams["createRect"].FormalParams, 15, 10);
         List<Node> numNodesCreateRect = new List<Node>()
         {
@@ -39,7 +39,7 @@ public class VarDclCodeGenTestData : IEnumerable<object[]>
             new NumNode(100, 60, 20),
             new NumNode(100, 60, 20)
         };
-        FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInsNodeCreateRect, numNodesCreateRect, 10, 25);
+        FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInAnimCallNodeCreateRect, numNodesCreateRect, 10, 25);
         VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.rect, "rect1" ,funcCallNodeCreateRect, 25, 20);
         SymbolTable symbolTableVarDclNode = new SymbolTable();
         yield return new object[]

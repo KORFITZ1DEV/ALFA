@@ -71,7 +71,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       programNodeWithVarDcl, symbolTableProgramNodeWithVarDcl, varOutputWithVarDcl, setupOutputWithVarDcl, drawOutputWithVarDcl, outputWithVarDcl
     };
 
-    BuiltInsNode buildInsNodeCreateRect = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect,
+    BuiltInAnimCallNode buildInAnimCallNodeCreateRect = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect,
     FormalParameters.FormalParams["createRect"].FormalParams, 15, 10);
     List<Node> numNodesCreateRect = new List<Node>()
     {
@@ -81,7 +81,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       new NumNode(100, 60, 20)
     };
     
-    FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInsNodeCreateRect, numNodesCreateRect, 10, 25);
+    FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInAnimCallNodeCreateRect, numNodesCreateRect, 10, 25);
     SymbolTable symbolTableProgramRect = new SymbolTable();
     VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, "Rect1" , funcCallNodeCreateRect, 25, 20);
     string varOutputRect = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
@@ -102,7 +102,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     };
 
        
-    BuiltInsNode buildInsNodeMove = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.move,
+    BuiltInAnimCallNode buildInAnimCallNodeMove = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move,
       FormalParameters.FormalParams["move"].FormalParams, 20, 15);
     IdNode idNode1 = new IdNode("Rect1", 20, 10);
 
@@ -112,7 +112,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       new NumNode(200, 60, 20),
       new NumNode(4000, 60, 20),
     };
-    FuncCallNode funcCallNodeMove = new FuncCallNode(buildInsNodeMove, numNodesMove, 10, 25);
+    FuncCallNode funcCallNodeMove = new FuncCallNode(buildInAnimCallNodeMove, numNodesMove, 10, 25);
     string varOutputRectAndMove = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
     varOutputRectAndMove += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMove += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";
@@ -138,9 +138,9 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     };
     
     
-    BuiltInsNode buildInsNodeMoveTwoFunc = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.move,
+    BuiltInAnimCallNode buildInAnimCallNodeMoveTwoFunc = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move,
       FormalParameters.FormalParams["move"].FormalParams, 20, 15);
-    BuiltInsNode builtInsNodeWait = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.wait,
+    BuiltInAnimCallNode builtInAnimCallNodeWait = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait,
       FormalParameters.FormalParams["wait"].FormalParams, 25, 10);
     IdNode idNode1TwoFunc = new IdNode("Rect1", 20, 10);
 
@@ -154,8 +154,8 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     {
       new NumNode(300, 60, 20)
     };
-    FuncCallNode funcCallNodeMoveTwoFunc = new FuncCallNode(buildInsNodeMoveTwoFunc, numNodesMoveTwoFunc, 10, 25);
-    FuncCallNode funcCallNodeWaitTwoFunc = new FuncCallNode(builtInsNodeWait, numNodesWaitTwoFunc, 10, 20);
+    FuncCallNode funcCallNodeMoveTwoFunc = new FuncCallNode(buildInAnimCallNodeMoveTwoFunc, numNodesMoveTwoFunc, 10, 25);
+    FuncCallNode funcCallNodeWaitTwoFunc = new FuncCallNode(builtInAnimCallNodeWait, numNodesWaitTwoFunc, 10, 20);
     string varOutputRectAndMoveTwoFunc = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
     varOutputRectAndMoveTwoFunc += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMoveTwoFunc += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";

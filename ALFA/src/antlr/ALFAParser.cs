@@ -39,15 +39,16 @@ public partial class ALFAParser : Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, ID=11, NUM=12, WS=13;
 	public const int
-		RULE_program = 0, RULE_statement = 1, RULE_varDcl = 2, RULE_funcCall = 3, 
-		RULE_builtIns = 4, RULE_args = 5, RULE_arg = 6, RULE_type = 7;
+		RULE_program = 0, RULE_statement = 1, RULE_varDcl = 2, RULE_builtInAnim = 3, 
+		RULE_builtInAnimCall = 4, RULE_builtInCreateShape = 5, RULE_builtInCreateShapeCall = 6, 
+		RULE_args = 7, RULE_arg = 8, RULE_type = 9;
 	public static readonly string[] ruleNames = {
-		"program", "statement", "varDcl", "funcCall", "builtIns", "args", "arg", 
-		"type"
+		"program", "statement", "varDcl", "builtInAnim", "builtInAnimCall", "builtInCreateShape", 
+		"builtInCreateShapeCall", "args", "arg", "type"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "';'", "'='", "'('", "')'", "'createRect'", "'move'", "'wait'", 
+		null, "';'", "'='", "'move'", "'wait'", "'('", "')'", "'createRect'", 
 		"','", "'int'", "'rect'"
 	};
 	private static readonly string[] _SymbolicNames = {
@@ -125,21 +126,21 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 17;
+			State = 21;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 16;
+				State = 20;
 				statement();
 				}
 				}
-				State = 19;
+				State = 23;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1760L) != 0) );
-			State = 21;
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1560L) != 0) );
+			State = 25;
 			Match(Eof);
 			}
 		}
@@ -161,8 +162,8 @@ public partial class ALFAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public VarDclContext varDcl() {
 			return GetRuleContext<VarDclContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public FuncCallContext funcCall() {
-			return GetRuleContext<FuncCallContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInAnimCallContext builtInAnimCall() {
+			return GetRuleContext<BuiltInAnimCallContext>(0);
 		}
 		public StatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -192,29 +193,28 @@ public partial class ALFAParser : Parser {
 		StatementContext _localctx = new StatementContext(Context, State);
 		EnterRule(_localctx, 2, RULE_statement);
 		try {
-			State = 30;
+			State = 34;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case T__8:
 			case T__9:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 23;
+				State = 27;
 				type();
-				State = 24;
+				State = 28;
 				varDcl();
-				State = 25;
+				State = 29;
 				Match(T__0);
 				}
 				break;
-			case T__4:
-			case T__5:
-			case T__6:
+			case T__2:
+			case T__3:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 27;
-				funcCall();
-				State = 28;
+				State = 31;
+				builtInAnimCall();
+				State = 32;
 				Match(T__0);
 				}
 				break;
@@ -235,8 +235,8 @@ public partial class ALFAParser : Parser {
 
 	public partial class VarDclContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public FuncCallContext funcCall() {
-			return GetRuleContext<FuncCallContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInCreateShapeCallContext builtInCreateShapeCall() {
+			return GetRuleContext<BuiltInCreateShapeCallContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(ALFAParser.NUM, 0); }
 		public VarDclContext(ParserRuleContext parent, int invokingState)
@@ -269,24 +269,22 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 32;
-			Match(ID);
-			State = 33;
-			Match(T__1);
 			State = 36;
+			Match(ID);
+			State = 37;
+			Match(T__1);
+			State = 40;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__4:
-			case T__5:
 			case T__6:
 				{
-				State = 34;
-				funcCall();
+				State = 38;
+				builtInCreateShapeCall();
 				}
 				break;
 			case NUM:
 				{
-				State = 35;
+				State = 39;
 				Match(NUM);
 				}
 				break;
@@ -306,51 +304,47 @@ public partial class ALFAParser : Parser {
 		return _localctx;
 	}
 
-	public partial class FuncCallContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public BuiltInsContext builtIns() {
-			return GetRuleContext<BuiltInsContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArgsContext args() {
-			return GetRuleContext<ArgsContext>(0);
-		}
-		public FuncCallContext(ParserRuleContext parent, int invokingState)
+	public partial class BuiltInAnimContext : ParserRuleContext {
+		public BuiltInAnimContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_funcCall; } }
+		public override int RuleIndex { get { return RULE_builtInAnim; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.EnterFuncCall(this);
+			if (typedListener != null) typedListener.EnterBuiltInAnim(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.ExitFuncCall(this);
+			if (typedListener != null) typedListener.ExitBuiltInAnim(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitFuncCall(this);
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInAnim(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public FuncCallContext funcCall() {
-		FuncCallContext _localctx = new FuncCallContext(Context, State);
-		EnterRule(_localctx, 6, RULE_funcCall);
+	public BuiltInAnimContext builtInAnim() {
+		BuiltInAnimContext _localctx = new BuiltInAnimContext(Context, State);
+		EnterRule(_localctx, 6, RULE_builtInAnim);
+		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 38;
-			builtIns();
-			State = 39;
-			Match(T__2);
-			State = 40;
-			args();
-			State = 41;
-			Match(T__3);
+			State = 42;
+			_la = TokenStream.LA(1);
+			if ( !(_la==T__2 || _la==T__3) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -364,47 +358,157 @@ public partial class ALFAParser : Parser {
 		return _localctx;
 	}
 
-	public partial class BuiltInsContext : ParserRuleContext {
-		public BuiltInsContext(ParserRuleContext parent, int invokingState)
+	public partial class BuiltInAnimCallContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInAnimContext builtInAnim() {
+			return GetRuleContext<BuiltInAnimContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ArgsContext args() {
+			return GetRuleContext<ArgsContext>(0);
+		}
+		public BuiltInAnimCallContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_builtIns; } }
+		public override int RuleIndex { get { return RULE_builtInAnimCall; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.EnterBuiltIns(this);
+			if (typedListener != null) typedListener.EnterBuiltInAnimCall(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.ExitBuiltIns(this);
+			if (typedListener != null) typedListener.ExitBuiltInAnimCall(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBuiltIns(this);
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInAnimCall(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public BuiltInsContext builtIns() {
-		BuiltInsContext _localctx = new BuiltInsContext(Context, State);
-		EnterRule(_localctx, 8, RULE_builtIns);
-		int _la;
+	public BuiltInAnimCallContext builtInAnimCall() {
+		BuiltInAnimCallContext _localctx = new BuiltInAnimCallContext(Context, State);
+		EnterRule(_localctx, 8, RULE_builtInAnimCall);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 43;
-			_la = TokenStream.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 224L) != 0)) ) {
-			ErrorHandler.RecoverInline(this);
+			State = 44;
+			builtInAnim();
+			State = 45;
+			Match(T__4);
+			State = 46;
+			args();
+			State = 47;
+			Match(T__5);
+			State = 48;
+			Match(T__0);
 			}
-			else {
-				ErrorHandler.ReportMatch(this);
-			    Consume();
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BuiltInCreateShapeContext : ParserRuleContext {
+		public BuiltInCreateShapeContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_builtInCreateShape; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBuiltInCreateShape(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBuiltInCreateShape(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInCreateShape(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BuiltInCreateShapeContext builtInCreateShape() {
+		BuiltInCreateShapeContext _localctx = new BuiltInCreateShapeContext(Context, State);
+		EnterRule(_localctx, 10, RULE_builtInCreateShape);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 50;
+			Match(T__6);
 			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BuiltInCreateShapeCallContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInCreateShapeContext builtInCreateShape() {
+			return GetRuleContext<BuiltInCreateShapeContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ArgsContext args() {
+			return GetRuleContext<ArgsContext>(0);
+		}
+		public BuiltInCreateShapeCallContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_builtInCreateShapeCall; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBuiltInCreateShapeCall(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBuiltInCreateShapeCall(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInCreateShapeCall(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BuiltInCreateShapeCallContext builtInCreateShapeCall() {
+		BuiltInCreateShapeCallContext _localctx = new BuiltInCreateShapeCallContext(Context, State);
+		EnterRule(_localctx, 12, RULE_builtInCreateShapeCall);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 52;
+			builtInCreateShape();
+			State = 53;
+			Match(T__4);
+			State = 54;
+			args();
+			State = 55;
+			Match(T__5);
 			}
 		}
 		catch (RecognitionException re) {
@@ -451,26 +555,26 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public ArgsContext args() {
 		ArgsContext _localctx = new ArgsContext(Context, State);
-		EnterRule(_localctx, 10, RULE_args);
+		EnterRule(_localctx, 14, RULE_args);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 45;
+			State = 57;
 			arg();
-			State = 50;
+			State = 62;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==T__7) {
 				{
 				{
-				State = 46;
+				State = 58;
 				Match(T__7);
-				State = 47;
+				State = 59;
 				arg();
 				}
 				}
-				State = 52;
+				State = 64;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -516,12 +620,12 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public ArgContext arg() {
 		ArgContext _localctx = new ArgContext(Context, State);
-		EnterRule(_localctx, 12, RULE_arg);
+		EnterRule(_localctx, 16, RULE_arg);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 53;
+			State = 65;
 			_la = TokenStream.LA(1);
 			if ( !(_la==ID || _la==NUM) ) {
 			ErrorHandler.RecoverInline(this);
@@ -570,12 +674,12 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public TypeContext type() {
 		TypeContext _localctx = new TypeContext(Context, State);
-		EnterRule(_localctx, 14, RULE_type);
+		EnterRule(_localctx, 18, RULE_type);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 55;
+			State = 67;
 			_la = TokenStream.LA(1);
 			if ( !(_la==T__8 || _la==T__9) ) {
 			ErrorHandler.RecoverInline(this);
@@ -598,22 +702,25 @@ public partial class ALFAParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,13,58,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-		7,7,1,0,4,0,18,8,0,11,0,12,0,19,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,
-		1,31,8,1,1,2,1,2,1,2,1,2,3,2,37,8,2,1,3,1,3,1,3,1,3,1,3,1,4,1,4,1,5,1,
-		5,1,5,5,5,49,8,5,10,5,12,5,52,9,5,1,6,1,6,1,7,1,7,1,7,0,0,8,0,2,4,6,8,
-		10,12,14,0,3,1,0,5,7,1,0,11,12,1,0,9,10,53,0,17,1,0,0,0,2,30,1,0,0,0,4,
-		32,1,0,0,0,6,38,1,0,0,0,8,43,1,0,0,0,10,45,1,0,0,0,12,53,1,0,0,0,14,55,
-		1,0,0,0,16,18,3,2,1,0,17,16,1,0,0,0,18,19,1,0,0,0,19,17,1,0,0,0,19,20,
-		1,0,0,0,20,21,1,0,0,0,21,22,5,0,0,1,22,1,1,0,0,0,23,24,3,14,7,0,24,25,
-		3,4,2,0,25,26,5,1,0,0,26,31,1,0,0,0,27,28,3,6,3,0,28,29,5,1,0,0,29,31,
-		1,0,0,0,30,23,1,0,0,0,30,27,1,0,0,0,31,3,1,0,0,0,32,33,5,11,0,0,33,36,
-		5,2,0,0,34,37,3,6,3,0,35,37,5,12,0,0,36,34,1,0,0,0,36,35,1,0,0,0,37,5,
-		1,0,0,0,38,39,3,8,4,0,39,40,5,3,0,0,40,41,3,10,5,0,41,42,5,4,0,0,42,7,
-		1,0,0,0,43,44,7,0,0,0,44,9,1,0,0,0,45,50,3,12,6,0,46,47,5,8,0,0,47,49,
-		3,12,6,0,48,46,1,0,0,0,49,52,1,0,0,0,50,48,1,0,0,0,50,51,1,0,0,0,51,11,
-		1,0,0,0,52,50,1,0,0,0,53,54,7,1,0,0,54,13,1,0,0,0,55,56,7,2,0,0,56,15,
-		1,0,0,0,4,19,30,36,50
+		4,1,13,70,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,2,9,7,9,1,0,4,0,22,8,0,11,0,12,0,23,1,0,1,0,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,3,1,35,8,1,1,2,1,2,1,2,1,2,3,2,41,8,2,1,3,1,3,1,4,1,4,1,
+		4,1,4,1,4,1,4,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,5,7,61,8,7,10,7,
+		12,7,64,9,7,1,8,1,8,1,9,1,9,1,9,0,0,10,0,2,4,6,8,10,12,14,16,18,0,3,1,
+		0,3,4,1,0,11,12,1,0,9,10,63,0,21,1,0,0,0,2,34,1,0,0,0,4,36,1,0,0,0,6,42,
+		1,0,0,0,8,44,1,0,0,0,10,50,1,0,0,0,12,52,1,0,0,0,14,57,1,0,0,0,16,65,1,
+		0,0,0,18,67,1,0,0,0,20,22,3,2,1,0,21,20,1,0,0,0,22,23,1,0,0,0,23,21,1,
+		0,0,0,23,24,1,0,0,0,24,25,1,0,0,0,25,26,5,0,0,1,26,1,1,0,0,0,27,28,3,18,
+		9,0,28,29,3,4,2,0,29,30,5,1,0,0,30,35,1,0,0,0,31,32,3,8,4,0,32,33,5,1,
+		0,0,33,35,1,0,0,0,34,27,1,0,0,0,34,31,1,0,0,0,35,3,1,0,0,0,36,37,5,11,
+		0,0,37,40,5,2,0,0,38,41,3,12,6,0,39,41,5,12,0,0,40,38,1,0,0,0,40,39,1,
+		0,0,0,41,5,1,0,0,0,42,43,7,0,0,0,43,7,1,0,0,0,44,45,3,6,3,0,45,46,5,5,
+		0,0,46,47,3,14,7,0,47,48,5,6,0,0,48,49,5,1,0,0,49,9,1,0,0,0,50,51,5,7,
+		0,0,51,11,1,0,0,0,52,53,3,10,5,0,53,54,5,5,0,0,54,55,3,14,7,0,55,56,5,
+		6,0,0,56,13,1,0,0,0,57,62,3,16,8,0,58,59,5,8,0,0,59,61,3,16,8,0,60,58,
+		1,0,0,0,61,64,1,0,0,0,62,60,1,0,0,0,62,63,1,0,0,0,63,15,1,0,0,0,64,62,
+		1,0,0,0,65,66,7,1,0,0,66,17,1,0,0,0,67,68,7,2,0,0,68,19,1,0,0,0,4,23,34,
+		40,62
 	};
 
 	public static readonly ATN _ATN =

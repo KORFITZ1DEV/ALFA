@@ -2,13 +2,15 @@ grammar ALFA;
 
 program : statement+ EOF;
 
-statement: type varDcl ';' | funcCall ';';
+statement: type varDcl ';' | builtInAnimCall ';';
 
-varDcl: ID '=' (funcCall | NUM);
+varDcl: ID '=' (builtInCreateShapeCall | NUM);
 
-funcCall: builtIns '(' args ')';
+builtInAnim: 'move' | 'wait';
+builtInAnimCall: builtInAnim '(' args ')' ';';                 
 
-builtIns: 'createRect' | 'move' | 'wait';
+builtInCreateShape: 'createRect';
+builtInCreateShapeCall: builtInCreateShape '(' args ')';
 
 args: arg (',' arg)*;
 
