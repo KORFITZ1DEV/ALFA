@@ -66,8 +66,8 @@ namespace ALFA
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
-            //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
-            //astPrintVisitor.Visit(ast);
+            ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
+            astPrintVisitor.Visit(ast);
             CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
             
