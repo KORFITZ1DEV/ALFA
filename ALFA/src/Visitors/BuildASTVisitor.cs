@@ -42,7 +42,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
       //program should throw an exception if one of the children is a ErrorNodeImpl.
       ALFATypes.TypeEnum typeEnum;
         
-        switch (parent.type().GetText())
+        switch (context.type().GetText())
         {
             case "int":
                 typeEnum = ALFATypes.TypeEnum.@int;
