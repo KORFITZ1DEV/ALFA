@@ -78,13 +78,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         Node child = Visit((dynamic)node.Value);
 
-        if (child is BuiltInAnimCallNode builtInAnimNode)
-        {
-            if (builtInAnimNode.BuiltInAnimType == ALFATypes.BuiltInAnimEnum.move)
-            {
-            }
-        }
-        
         Emit("\n", ALFATypes.OutputEnum.VarOutput);
         return node;
     }
@@ -98,7 +91,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 
                 var child = Visit((dynamic)node.Arguments[0]);
 
-                if (child is IdNode && !_drawOutput.Contains($"{child.Identifier}.render();"))
+                if (!_drawOutput.Contains($"{child.Identifier}.render();"))
                 {
                     Emit($"\t{child.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
                 }
