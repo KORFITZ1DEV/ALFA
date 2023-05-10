@@ -37,10 +37,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
-        var parent = (ALFAParser.StatementContext)context.Parent;
         string id = context.ID().GetText();
-      //program should throw an exception if one of the children is a ErrorNodeImpl.
-      ALFATypes.TypeEnum typeEnum;
+        //program should throw an exception if one of the children is a ErrorNodeImpl.
+        ALFATypes.TypeEnum typeEnum;
         
         switch (context.type().GetText())
         {
