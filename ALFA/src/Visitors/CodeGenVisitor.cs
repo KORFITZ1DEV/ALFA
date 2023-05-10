@@ -107,11 +107,11 @@ public class CodeGenVisitor : ASTVisitor<Node>
             
             case ALFATypes.BuiltInAnimEnum.wait:
                 Emit($"const anim_{_animationCount} = new WaitAnimation(", ALFATypes.OutputEnum.VarOutput);
+                Visit(node.Arguments[0]);
                 _animationCount++;
                 break;
         }
         
-        Visit(node.Arguments[0]);
         foreach (var arg in node.Arguments.Skip(1))
         {
             Emit(",", ALFATypes.OutputEnum.VarOutput);
