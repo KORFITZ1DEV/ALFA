@@ -2,9 +2,9 @@ grammar ALFA;
 
 program : statement+ EOF;
 
-statement: type varDcl | builtInAnimCall;
+statement: varDcl | builtInAnimCall;
 
-varDcl: ID '=' (builtInCreateShapeCall | NUM) ';';
+varDcl: type ID '=' (builtInCreateShapeCall | NUM) ';';
 
 builtInAnim: 'move' | 'wait';
 builtInAnimCall: builtInAnim '(' args ')' ';';                 
