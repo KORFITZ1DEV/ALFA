@@ -82,7 +82,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
         {
             if (builtInAnimNode.BuiltInAnimType == ALFATypes.BuiltInAnimEnum.move)
             {
-                Emit($"\t{node.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
             }
         }
         
@@ -96,6 +95,13 @@ public class CodeGenVisitor : ASTVisitor<Node>
         {
             case ALFATypes.BuiltInAnimEnum.move:
                 Emit($"const anim_{_animationCount} = new MoveAnimation(", ALFATypes.OutputEnum.VarOutput);
+                
+                var child = Visit((dynamic)node.Arguments[0]);
+
+                if (child is IdNode && !_drawOutput.Contains($"{child.Identifier}.render();"))
+                {
+                    Emit($"\t{child.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
+                }
                 _animationCount++;
                 break;
             
@@ -103,11 +109,16 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 Emit($"const anim_{_animationCount} = new WaitAnimation(", ALFATypes.OutputEnum.VarOutput);
                 _animationCount++;
                 break;
-            
-            /*case ALFATypes.BuiltInAnimEnum.createRect:
-                Emit("new Rectangle(", ALFATypes.OutputEnum.VarOutput);
-                break;*/
         }
+        
+        Visit(node.Arguments[0]);
+        foreach (var arg in node.Arguments.Skip(1))
+        {
+            Emit(",", ALFATypes.OutputEnum.VarOutput);
+            Visit(arg);
+        }
+
+        Emit(");\n", ALFATypes.OutputEnum.VarOutput);
         
         return node;
     }
@@ -120,6 +131,17 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 Emit("new Rectangle(", ALFATypes.OutputEnum.VarOutput);
                 break;
         }
+
+        //Todo create function that has a list of nodes as a parameter
+        Visit(callNode.Arguments[0]);
+        foreach (var arg in callNode.Arguments.Skip(1))
+        {
+            Emit(",", ALFATypes.OutputEnum.VarOutput);
+            Visit(arg);
+        }
+
+        Emit(");\n", ALFATypes.OutputEnum.VarOutput);
+
         return callNode;
     }
 

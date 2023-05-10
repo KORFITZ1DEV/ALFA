@@ -119,7 +119,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                     throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
                 
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                builtInAnimCallNodeNode.Arguments.Add((numNode));
+                builtInAnimCallNodeNode.Arguments.Add(numNode);
             }
         }
 
