@@ -36,6 +36,12 @@ public class TypeCheckVisitorTest
                 case UndeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
                     break;
+                case RedeclaredVariableException:
+                    Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
+                    break;
+                case SemanticErrorException:
+                    Assert.Equal(exceptionType, typeof(SemanticErrorException));
+                    break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);
                     break;

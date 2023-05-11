@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using ALFA.AST_Nodes;
 using ALFA.Types;
+using Antlr4.Runtime.Tree;
 
 namespace ALFA.Visitors;
 // https://stackoverflow.com/questions/29971097/how-to-create-ast-with-antlr4
@@ -38,7 +39,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
         string id = context.ID().GetText();
-        //program should throw an exception if one of the children is a ErrorNodeImpl.
+
         ALFATypes.TypeEnum typeEnum;
         
         switch (context.type().GetText())
@@ -52,23 +53,42 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             default:
                 throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
-        
+
         if (context.builtInCreateShapeCall() != null)
         {
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
+            var retrievedSymbol = _symbolTable.RetrieveSymbol(id);
+            
+            if (retrievedSymbol != null)
+            {
+                throw new RedeclaredVariableException("Redeclared variable on line " + retrievedSymbol.LineNumber + ":" + retrievedSymbol.ColumnNumber);
+            }
+            
             _symbolTable.EnterSymbol(new Symbol(id, builtInCreateShapeCall, typeEnum, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, builtInCreateShapeCall, context.Start.Line, 0);
         }
         
-        // Can we use this???
-        // Debug.Assert(context.NUM() == null && context.funcCall() == null);
-                
         if (context.NUM() == null)
         {
             throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
         }
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
+        
+        var declaredSymbol = _symbolTable.RetrieveSymbol(id);
+            
+        if (declaredSymbol != null)
+        {
+            throw new RedeclaredVariableException("Redeclared variable on line " + context.Start.Line + ":" + context.Start.Column);
+        }
         _symbolTable.EnterSymbol(new Symbol(id, num, typeEnum, context.Start.Line, context.Start.Column));
+        
+        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
+        
+        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
+        {
+            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+        }
+        
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
     
@@ -121,6 +141,13 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 builtInAnimCallNodeNode.Arguments.Add(numNode);
             }
         }
+        
+        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
+        
+        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
+        {
+            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+        }
 
         return builtInAnimCallNodeNode;
     }
@@ -137,7 +164,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             case "createRect":
                 createShapeEnum = ALFATypes.CreateShapeEnum.createRect;
                 var parent = (ALFAParser.VarDclContext)context.Parent;
-                identifier = parent.ID().GetText();
+                parent.ID().GetText();
                 
                 break;
             

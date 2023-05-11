@@ -29,6 +29,16 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "UndeclaredVariableException":
                     exceptionType = typeof(UndeclaredVariableException);
                     break;
+                case "RedeclaredVariableException":
+                    exceptionType = typeof(RedeclaredVariableException);
+                    break;
+                case "SemanticError":
+                    exceptionType = typeof(SemanticErrorException);
+                    break;
+                case "":
+                    break;
+                default:
+                    throw new Exception("Someone created a test in BuildAstThrowsException with an exception type that is not being switched on in JsonTestData.cs");
             }
 
             yield return new object[] { item.Prog, item.Comment, exceptionType };

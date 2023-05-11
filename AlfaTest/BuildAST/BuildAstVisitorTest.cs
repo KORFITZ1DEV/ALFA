@@ -26,6 +26,11 @@ public class BuildAstVisitorTest
         parser.BuildParseTree = true;
         IParseTree tree = parser.program();
 
+        if (prog ==
+            "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myCoolRect = createCoolRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);")
+        {
+            Console.WriteLine("Fix this test");
+        }
         
         try
         {
@@ -50,6 +55,12 @@ public class BuildAstVisitorTest
                     break;
                 case UndeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
+                    break;
+                case RedeclaredVariableException:
+                    Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
+                    break;
+                case SemanticErrorException:
+                    Assert.Equal(exceptionType, typeof(SemanticErrorException));
                     break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);
