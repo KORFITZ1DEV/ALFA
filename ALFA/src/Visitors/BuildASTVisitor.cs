@@ -76,6 +76,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
         }
+        
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
         
         var declaredSymbol = _symbolTable.RetrieveSymbol(id);
