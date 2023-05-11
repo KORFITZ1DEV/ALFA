@@ -32,8 +32,12 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
-        
-        return VisitBuiltInAnimCall(context.builtInAnimCall());
+        if (context.builtInAnimCall() != null)
+        {
+            return VisitBuiltInAnimCall(context.builtInAnimCall());
+        }
+
+        throw new Exception("Invalid statement");
     }
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
