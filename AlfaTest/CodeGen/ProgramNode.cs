@@ -16,7 +16,7 @@ public class ProgramNodeTest
         string expectedVarOutput, string expectedSetupOutput, string expectedDrawOutput, string expectedOutput)
     {
         _sut = new CodeGenVisitor(symbolTable, "../TestOutput");
-        _sut._path = "../../../../ALFA/CodeGen-p5.js";
+        _sut._path = "../../../../ALFA/CodeGen-p5.js/Output/";
 
         _sut.Visit(node);
     
@@ -71,8 +71,6 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       programNodeWithVarDcl, symbolTableProgramNodeWithVarDcl, varOutputWithVarDcl, setupOutputWithVarDcl, drawOutputWithVarDcl, outputWithVarDcl
     };
 
-    BuiltInAnimCallNode buildInAnimCallNodeCreateRect = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect,
-    FormalParameters.FormalParams["createRect"].FormalParams, 15, 10);
     List<Node> numNodesCreateRect = new List<Node>()
     {
       new NumNode(100, 60, 20),
@@ -80,10 +78,11 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       new NumNode(100, 60, 20),
       new NumNode(100, 60, 20)
     };
+    BuiltInCreateShapeCallNode buildInAnimCallNodeCreateRect = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect,numNodesCreateRect, 15, 10);
+
     
-    FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInAnimCallNodeCreateRect, numNodesCreateRect, 10, 25);
     SymbolTable symbolTableProgramRect = new SymbolTable();
-    VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, "Rect1" , funcCallNodeCreateRect, 25, 20);
+    VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, "Rect1" , buildInAnimCallNodeCreateRect, 25, 20);
     string varOutputRect = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
     varOutputRect += "\n\nconst Rect1 = new Rectangle(100,100,100,100);\n";
     varOutputRect += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
@@ -101,18 +100,17 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       programNodeRect, symbolTableProgramRect, varOutputRect, setupOutputRect, drawOutputRect, outputRect
     };
 
-       
-    BuiltInAnimCallNode buildInAnimCallNodeMove = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move,
-      FormalParameters.FormalParams["move"].FormalParams, 20, 15);
     IdNode idNode1 = new IdNode("Rect1", 20, 10);
-
     List<Node> numNodesMove = new List<Node>()
     {
       idNode1,
       new NumNode(200, 60, 20),
       new NumNode(4000, 60, 20),
     };
-    FuncCallNode funcCallNodeMove = new FuncCallNode(buildInAnimCallNodeMove, numNodesMove, 10, 25);
+       
+    BuiltInAnimCallNode buildInAnimCallNodeMove = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, numNodesMove, 20, 15);
+
+
     string varOutputRectAndMove = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
     varOutputRectAndMove += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMove += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";
@@ -122,7 +120,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     string setupOutputRectAndMove = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
     List<Node> programNodeWithRectStatementsAndMove = new List<Node>()
     {
-      varDclNodeRect, funcCallNodeMove
+      varDclNodeRect, buildInAnimCallNodeMove
     };
     
     
@@ -137,25 +135,22 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
       programNodeRectAndMove, symbolTableProgramNodeRectAndMove, varOutputRectAndMove, setupOutputRectAndMove, drawOutputRectAndMove, outputRectAndMove
     };
     
-    
-    BuiltInAnimCallNode buildInAnimCallNodeMoveTwoFunc = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move,
-      FormalParameters.FormalParams["move"].FormalParams, 20, 15);
-    BuiltInAnimCallNode builtInAnimCallNodeWait = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait,
-      FormalParameters.FormalParams["wait"].FormalParams, 25, 10);
     IdNode idNode1TwoFunc = new IdNode("Rect1", 20, 10);
-
     List<Node> numNodesMoveTwoFunc = new List<Node>()
     {
       idNode1TwoFunc,
       new NumNode(200, 60, 20),
       new NumNode(4000, 60, 20)
     };
+    
     List<Node> numNodesWaitTwoFunc = new List<Node>()
     {
       new NumNode(300, 60, 20)
     };
-    FuncCallNode funcCallNodeMoveTwoFunc = new FuncCallNode(buildInAnimCallNodeMoveTwoFunc, numNodesMoveTwoFunc, 10, 25);
-    FuncCallNode funcCallNodeWaitTwoFunc = new FuncCallNode(builtInAnimCallNodeWait, numNodesWaitTwoFunc, 10, 20);
+    
+    BuiltInAnimCallNode buildInAnimCallNodeMoveTwoFunc = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, numNodesMoveTwoFunc, 20, 15);
+    BuiltInAnimCallNode builtInAnimCallNodeWait = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, numNodesWaitTwoFunc, 25, 10);
+
     string varOutputRectAndMoveTwoFunc = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
     varOutputRectAndMoveTwoFunc += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMoveTwoFunc += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";
@@ -166,7 +161,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     string setupOutputRectAndMoveTwoFunc = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
     List<Node> programNodeWithRectStatementsAndMoveTwoFunc = new List<Node>()
     {
-      varDclNodeRect, funcCallNodeMoveTwoFunc, funcCallNodeWaitTwoFunc
+      varDclNodeRect, buildInAnimCallNodeMoveTwoFunc, builtInAnimCallNodeWait
     };
 
     ProgramNode programNodeRectAndMoveTwoFunc = new ProgramNode(programNodeWithRectStatementsAndMoveTwoFunc);

@@ -39,9 +39,7 @@ public class VarDclNodeTestData : IEnumerable<object[]>
         };
         var buildInNode1 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args1, 50, 25);
 
-
-        var varDclValueNode1 = new FuncCallNode(buildInNode1, args1, 50, 25);
-        var varDclNode1 = new VarDclNode(ALFATypes.TypeEnum.@int, "test1", varDclValueNode1, 25, 25);
+        var varDclNode1 = new VarDclNode(ALFATypes.TypeEnum.@int, "test1", buildInNode1, 25, 25);
 
         var symbolTable2 = new SymbolTable();
         var varDclValueNode2 = new NumNode(25, 20, 10);

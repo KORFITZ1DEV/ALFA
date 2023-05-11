@@ -24,12 +24,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
-        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.BuiltInAnimType.ToString()];
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
         
         if (node.Arguments.Count != nodeFormalParameters.Count)
         {
             throw new InvalidNumberOfArgumentsException(
-                $"Invalid number of arguments to {node.BuiltInAnimType.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
+                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
         }
 
         int i = 0;
@@ -40,7 +40,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
                 if (idSymbol != null)
                 {
-                    if (idSymbol.Type != FormalParameters.FormalParams[node.BuiltInAnimType.ToString()][i])
+                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }

@@ -14,7 +14,7 @@ public class TypeCheckVisitorTest
             {
                 Console.WriteLine(prog);
             }
-            Prog.Main(new string[] {prog, "../../../../ALFA/Output/sketch.js", "--test"});
+            Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -46,7 +46,7 @@ public class TypeCheckVisitorTest
     [ClassData(typeof(TypeCheckingNoExceptionTestData))]
     public void TypeCheckTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(new string[] {prog, "../../../../ALFA/Output/sketch.js", "--test"});
+        Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
         Assert.True(true);
     }
 }

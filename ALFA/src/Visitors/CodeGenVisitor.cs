@@ -78,13 +78,18 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         Node child = Visit((dynamic)node.Value);
 
+        if (child is BuiltInCreateShapeCallNode)
+        {
+            Emit($"\t{node.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
+        }
+
         Emit("\n", ALFATypes.OutputEnum.VarOutput);
         return node;
     }
 
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
-        switch (node.BuiltInAnimType)
+        switch (node.Type)
         {
             case ALFATypes.BuiltInAnimEnum.move:
                 Emit($"const anim_{_animationCount} = new MoveAnimation(", ALFATypes.OutputEnum.VarOutput);
@@ -125,7 +130,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 break;
         }
 
-        //Todo create function that has a list of nodes as a parameter
         Visit(callNode.Arguments[0]);
         foreach (var arg in callNode.Arguments.Skip(1))
         {

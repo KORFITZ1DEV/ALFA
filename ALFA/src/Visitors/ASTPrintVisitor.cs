@@ -40,7 +40,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
         Console.Write("\t\t\tBuiltIns: ");
-        Console.WriteLine(node.BuiltInAnimType.ToString());
+        Console.WriteLine(node.Type.ToString());
         
         return node;
     }

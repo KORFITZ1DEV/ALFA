@@ -4,12 +4,12 @@ namespace ALFA.AST_Nodes;
 
 public class BuiltInAnimCallNode : Node
 {
-    public ALFATypes.BuiltInAnimEnum BuiltInAnimType;
+    public ALFATypes.BuiltInAnimEnum Type { get; set; }
     public List<Node> Arguments { get; set; }
 
-    public BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum builtInAnimType, List<Node> arguments, int line, int col) : base(line, col)
+    public BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum type, List<Node> arguments, int line, int col) : base(line, col)
     {
-        BuiltInAnimType = builtInAnimType;
+        Type = type;
         Arguments = arguments;
     }
 }

@@ -45,40 +45,40 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
     //Test for the createrect.
     var symbolTable1 = new SymbolTable();
 
-    var formalParams1 = FormalParameters.FormalParams["createRect"].FormalParams;
-    var buildInNode1 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams1, 50, 25);
     var args1 = new List<Node>()
     {
       new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22),
       new NumNode(0, 21, 22)
     };
+    var buildInNode1 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args1, 50, 25);
+    
+    yield return new object[]
+      { buildInNode1, new InvalidNumberOfArgumentsException("Invalid number of arguments"), symbolTable1 };
 
-    var symbolTable2 = new SymbolTable();
-    var formalParams2 = FormalParameters.FormalParams["createRect"].FormalParams;
-    var buildInNode2 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams2, 30, 10);
+
     var args2 = new List<Node>()
     {
       new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
     };
+    var symbolTable2 = new SymbolTable();
+    var buildInNode2 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args2, 30, 10);
+    
+
+    
     var idNode = new IdNode("myrect1", 10, 15);
     var symbolTable3 = new SymbolTable();
     var symbol = new Symbol("myrect1", idNode, ALFATypes.TypeEnum.rect, 10, 5);
-    var formalParams3 = FormalParameters.FormalParams["createRect"].FormalParams;
     symbolTable3.EnterSymbol(symbol);
-    var buildInNode3 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalParams3, 20, 15);
+
     var args3 = new List<Node>()
     {
       idNode, new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
     };
+    var buildInNode3 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args3, 20, 15);
 
-    FuncCallNode funcCallNode1 = new FuncCallNode(buildInNode1, args1, 50, 25);
-    FuncCallNode funcCallNode2 = new FuncCallNode(buildInNode2, args2, 30, 10);
-    FuncCallNode funcCallNode3 = new FuncCallNode(buildInNode3, args3, 30, 15);
+
     yield return new object[]
-      { funcCallNode1, new InvalidNumberOfArgumentsException("Invalid number of arguments"), symbolTable1 };
-    yield return new object[]
-      { funcCallNode2, new InvalidNumberOfArgumentsException("Invalid number of arguments"), symbolTable2 };
-    yield return new object[] { funcCallNode3, new ArgumentTypeException("Invalid type in arguments"), symbolTable3 };
+      { buildInNode3, new ArgumentTypeException("Invalid number of arguments"), symbolTable3 };
 
 
   }
@@ -95,46 +95,44 @@ public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
     {
       //Check if move is valid.
       var symboltable4 = new SymbolTable();
-      var formalparams4 = FormalParameters.FormalParams["move"].FormalParams;
-      var buildInNode4 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, formalparams4, 15, 10);
+      
       var args4 = new List<Node>()
       {
         new IdNode("myrect1", 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
       };
-      FuncCallNode funcCallNode4 = new FuncCallNode(buildInNode4, args4, 10, 3);
+      var buildInNode4 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, args4 , 15, 10);
+
       yield return new object[]
       {
-        funcCallNode4, symboltable4
+        buildInNode4, symboltable4
       };
       
       
       //Check if Createrect is valid
       var symboltable5 = new SymbolTable();
-      var formalparams5 = FormalParameters.FormalParams["createRect"].FormalParams;
-      var buildInNode5 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.createRect, formalparams5, 15, 10);
       var args5 = new List<Node>()
       {
         new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
       };
-      FuncCallNode funcCallNode5 = new FuncCallNode(buildInNode5, args5, 10, 3);
+      var buildInNode5 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args5, 15, 10);
+
       yield return new object[]
       {
-        funcCallNode5, symboltable5
+        buildInNode5, symboltable5
       };
       
       
       //check if wait is valid
       var symboltable6 = new SymbolTable();
-      var formalparams6 = FormalParameters.FormalParams["wait"].FormalParams;
-      var buildInNode6 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, formalparams6, 15, 10);
       var args6 = new List<Node>()
       {
         new NumNode(2, 41, 42)
       };
-      FuncCallNode funcCallNode6 = new FuncCallNode(buildInNode6, args6, 10, 3);
+      var buildInNode6 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, args6, 15, 10);
+
       yield return new object[]
       {
-        funcCallNode6, symboltable6
+        buildInNode6, symboltable6
       };
       
       

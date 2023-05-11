@@ -22,7 +22,7 @@ namespace ALFA
             
             if (args.Contains("--test")) // test mode 
             {
-                input = File.ReadAllText(args[0]);
+                input = args[0];
                 _output = args[1];
             }
             else
@@ -75,8 +75,7 @@ namespace ALFA
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
             {
                 path = path.Replace("/", "\\");
-            }
-            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            } Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
         }
     }
 }
