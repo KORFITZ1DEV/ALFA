@@ -46,7 +46,7 @@ public class TypeCheckVisitorTest
     [ClassData(typeof(TypeCheckingNoExceptionTestData))]
     public void TypeCheckTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
+        Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
         Assert.True(true);
     }
 }
