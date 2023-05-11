@@ -33,5 +33,16 @@
     "Prog": "int xtest10 = 2; int xtest10 = 4;",
     "Comment": "Redlecared variable in the same scope should result in an RedeclaredVariableException.",
     "ExceptionType": "RedeclaredVariableException"
+  },
+  {
+    "Prog": "rect myRect1 = createRect(50, 50, 50, 50); rect myRect1 = createRect(100, 100, 100, 100);",
+    "Comment": "Redlecared variable in the same scope should result in an RedeclaredVariableException.",
+    "ExceptionType": "RedeclaredVariableException"
+  },
+  {
+    "Prog": "wait(duration);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with an undefined variable.",
+    "ExceptionType": "UndeclaredVariableException"
   }
+
 ]

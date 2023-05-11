@@ -58,11 +58,28 @@ public class ParserTestData : IEnumerable<object[]>
         var mockedParseTree = new Mock<IParseTree>();
         
         mockedParseTree.SetupGet(x=>x.ChildCount).Returns(2);
-        var programNode = _programTreeMocker.MockProgramTree();
-        
+        var programNode = _programTreeMocker.MockProgramTreeWithIntVarDcl();
         
         mockedParseTree.Setup(x=>x.GetChild(0)).Returns(programNode);
         yield return new object[] { "int i = 2;", mockedParseTree};
+
+        var mockedParseTree1 = new Mock<IParseTree>();
+        mockedParseTree1.SetupGet(x => x.ChildCount).Returns(2);
+        var programNode1 = _programTreeMocker.MockProgramTreeWithRectVarDcl();
+        mockedParseTree1.Setup(x => x.GetChild(0)).Returns(programNode1);
+        yield return new object[] { "rect myRect1 = createRect(100, 100, 100, 100);", mockedParseTree1};
+        
+        var mockedParseTree2 = new Mock<IParseTree>();
+        mockedParseTree2.SetupGet(x => x.ChildCount).Returns(2);
+        var programNode2 = _programTreeMocker.MockProgramTreeWithWait();
+        mockedParseTree2.Setup(x => x.GetChild(0)).Returns(programNode2);
+        yield return new object[] { "wait(100);", mockedParseTree2};
+        
+        var mockedParseTree3 = new Mock<IParseTree>();
+        mockedParseTree3.SetupGet(x => x.ChildCount).Returns(2);
+        var programNode3 = _programTreeMocker.MockProgramTreeWithMove();
+        mockedParseTree3.Setup(x => x.GetChild(0)).Returns(programNode3);
+        yield return new object[] {"move(myRect1, 100, 100);", mockedParseTree3};
     }
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -76,11 +76,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }
-            else if (actualParam is NumNode numNode)
-            { 
-                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int) //Thrown when our built in create shapes don't only consist of ints.
-                    throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
-            } 
             i++;
         }
         return callNode;

@@ -26,12 +26,6 @@ public class BuildAstVisitorTest
         parser.BuildParseTree = true;
         IParseTree tree = parser.program();
 
-        if (prog ==
-            "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myCoolRect = createCoolRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);")
-        {
-            Console.WriteLine("Fix this test");
-        }
-        
         try
         {
             Node ast = _sut.Visit(tree); 
