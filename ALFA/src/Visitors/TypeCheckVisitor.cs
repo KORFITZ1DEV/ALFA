@@ -45,8 +45,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 }
             }
             else if (actualParam is NumNode numNode)
-            { //think this check is useless as the parser should not allow it
-                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
+            { 
+                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int) 
                     throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
             } 
             i++;
@@ -77,8 +77,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 }
             }
             else if (actualParam is NumNode numNode)
-            { //think this check is useless as the parser should not allow it
-                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
+            { 
+                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int) //Thrown when our built in create shapes don't only consist of ints.
                     throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
             } 
             i++;

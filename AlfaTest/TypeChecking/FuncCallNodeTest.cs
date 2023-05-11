@@ -55,32 +55,30 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
     yield return new object[]
       { buildInNode1, new InvalidNumberOfArgumentsException("Invalid number of arguments"), symbolTable1 };
 
-
-    var args2 = new List<Node>()
-    {
-      new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
-    };
-    var symbolTable2 = new SymbolTable();
-    var buildInNode2 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args2, 30, 10);
-    
-
-    
     var idNode = new IdNode("myrect1", 10, 15);
     var symbolTable3 = new SymbolTable();
     var symbol = new Symbol("myrect1", idNode, ALFATypes.TypeEnum.rect, 10, 5);
     symbolTable3.EnterSymbol(symbol);
 
-    var args3 = new List<Node>()
+    var args2 = new List<Node>()
     {
       idNode, new NumNode(1, 31, 32), new NumNode(1, 31, 32), new NumNode(1, 31, 32)
     };
-    var buildInNode3 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args3, 20, 15);
+    var buildInNode2 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args2, 20, 15);
 
 
     yield return new object[]
+      { buildInNode2, new ArgumentTypeException("Invalid number of arguments"), symbolTable3 };
+
+    var args3 = new List<Node>()
+    {
+      new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22)
+    };
+    var buildInNode3 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, args3, 50, 25);
+    
+    yield return new object[]
       { buildInNode3, new ArgumentTypeException("Invalid number of arguments"), symbolTable3 };
-
-
+    
   }
 
   IEnumerator IEnumerable.GetEnumerator()
