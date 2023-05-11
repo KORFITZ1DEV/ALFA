@@ -44,14 +44,14 @@ namespace ALFA
 
                 string alfaexeLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
                 
-                Directory.CreateDirectory($"{_output}/Output");
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", $"{_output}/Output/style.css", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", $"{_output}/Output/index.html", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", $"{_output}/Output/p5.min.js", true);
-                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", $"{_output}/Output/stdlib.js", true);
+                Directory.CreateDirectory($"{_output}/CodeGen-p5.js/Output");
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", $"{_output}/CodeGen-p5.js/Output/style.css", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", $"{_output}/CodeGen-p5.js/Output/index.html", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", $"{_output}/CodeGen-p5.js/Output/p5.min.js", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", $"{_output}/CodeGen-p5.js/Output/stdlib.js", true);
 
                 input = File.ReadAllText(args[0]);
-                _output = $"{_output}/Output";   
+                _output = $"{_output}/CodeGen-p5.js/Output";   
             }
             
             ICharStream stream = CharStreams.fromString(input);
@@ -66,8 +66,8 @@ namespace ALFA
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
-            ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
-            astPrintVisitor.Visit(ast);
+            //ASTPrintVisitor astPrintVisitor = new ASTPrintVisitor();
+            //astPrintVisitor.Visit(ast);
             CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
             
