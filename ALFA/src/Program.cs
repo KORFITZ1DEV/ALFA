@@ -70,6 +70,8 @@ namespace ALFA
             //astPrintVisitor.Visit(ast);
             CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);
+
+            if (args.Contains("--test")) return;
             
             string path = ($"{_output}/index.html");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
