@@ -68,6 +68,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
 
+           
             _symbolTable.EnterSymbol(new Symbol(id, builtInCreateShapeCall, typeEnum, context.Start.Line, context.Start.Column));
             return new VarDclNode(typeEnum, id, builtInCreateShapeCall, context.Start.Line, 0);
         }
@@ -81,12 +82,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         
         _symbolTable.EnterSymbol(new Symbol(id, num, typeEnum, context.Start.Line, context.Start.Column));
         
-        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
-        
-        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
-        {
-            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
-        }
+
         
         return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
     }
@@ -187,6 +183,13 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
                 builtInAnimCallCallNodeCallNode.Arguments.Add((numNode));
             }
+        }
+        
+        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
+
+        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
+        {
+            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
         }
 
         return builtInAnimCallCallNodeCallNode;
