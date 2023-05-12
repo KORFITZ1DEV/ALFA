@@ -7,7 +7,7 @@
   {
     "Prog": "int xtest2 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test2 = createRect(0, 0, 0 length, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
     "Comment": "Invalid number of arguments create rect, given 5 arguments og 4",
-    "ExceptionType": "SemanticErrorException"
+    "ExceptionType": "SyntacticException"
   },
   {
     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length)\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",

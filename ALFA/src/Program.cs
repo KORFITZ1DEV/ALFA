@@ -77,7 +77,7 @@ namespace ALFA
             var errorNodeImplChild = findErrorNode(tree);
             if (errorNodeImplChild != null)
             {
-                throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+                throw new SyntacticException($"Something is syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
             }
             
             SymbolTable symbolTable = new();

@@ -53,8 +53,8 @@ public class BuildAstVisitorTest
                 case RedeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
                     break;
-                case SemanticErrorException:
-                    Assert.Equal(exceptionType, typeof(SemanticErrorException));
+                case SyntacticException:
+                    Assert.Equal(exceptionType, typeof(SyntacticException));
                     break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);

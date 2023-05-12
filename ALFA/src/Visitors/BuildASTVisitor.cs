@@ -83,7 +83,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
         {
-            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+            throw new SyntacticException($"Something is syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
         }
         
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
@@ -197,7 +197,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
         {
-            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+            throw new SyntacticException($"Something is Syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
         }
 
         return builtInAnimCallCallNodeCallNode;

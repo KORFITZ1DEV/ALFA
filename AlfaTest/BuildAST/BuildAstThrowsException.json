@@ -17,7 +17,7 @@
   {
     "Prog": "int length = 20; rect myCoolRect = createCoolRect(0, 0, length, length);",
     "Comment": "Unknown builtins",
-    "ExceptionType": "SemanticErrorException"
+    "ExceptionType": "SyntacticException"
   },
   {
     "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test8Error = createRect(rect, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
