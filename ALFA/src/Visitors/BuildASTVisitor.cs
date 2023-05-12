@@ -78,6 +78,14 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
         }
         
+        
+        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
+
+        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
+        {
+            throw new SemanticErrorException($"Something is semantically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+        }
+        
         NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
         
         _symbolTable.EnterSymbol(new Symbol(id, num, typeEnum, context.Start.Line, context.Start.Column));

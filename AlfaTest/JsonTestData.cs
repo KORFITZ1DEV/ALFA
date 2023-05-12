@@ -32,7 +32,7 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "RedeclaredVariableException":
                     exceptionType = typeof(RedeclaredVariableException);
                     break;
-                case "SemanticError":
+                case "SemanticErrorException":
                     exceptionType = typeof(SemanticErrorException);
                     break;
                 case "":
