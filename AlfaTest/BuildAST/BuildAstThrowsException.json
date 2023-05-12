@@ -15,9 +15,9 @@
     "ExceptionType": "UndeclaredVariableException"
   },
   {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myCoolRect = createCoolRect(0, 0, length, length);\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Prog": "int length = 20; rect myCoolRect = createCoolRect(0, 0, length, length);",
     "Comment": "Unknown builtins",
-    "ExceptionType": "SemanticError"
+    "ExceptionType": "SyntacticException"
   },
   {
     "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test8Error = createRect(rect, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
@@ -43,6 +43,21 @@
     "Prog": "wait(duration);",
     "Comment": "Calls an BuiltInAnimCallNode visit with an undefined variable.",
     "ExceptionType": "UndeclaredVariableException"
+  },  
+  {
+    "Prog": "wait(0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
+    "Prog": "int duration = 0; wait(duration);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration saved in the symboltable under an id that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
+  },  
+  {
+    "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
   }
 
 ]

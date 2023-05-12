@@ -110,31 +110,11 @@ class ParalAnimation extends Animation {
     }
 }
 
-const x1 = 0
-const y1 = 0
-const x2 = 100
-const y2 = 140
-const length = 100
-const width = 200
-const animDuration = 1000
-const delay = 300
-const myrect1 = new Rectangle(x1,y1,width,length);
+const Rect1 = new Rectangle(100,100,100,100);
 
-const myrect2 = new Rectangle(x2,y2,length,length);
-
-const anim_0 = new MoveAnimation(myrect1,200,animDuration);
-const anim_1 = new WaitAnimation(delay);
-const anim_2 = new MoveAnimation(myrect2,300,animDuration);
-const anim_3 = new MoveAnimation(myrect1,-200,animDuration);
-const anim_4 = new WaitAnimation(delay);
-const anim_5 = new MoveAnimation(myrect2,-200,animDuration);
-const myrect3 = new Rectangle(200,150,20,20);
-
-const anim_6 = new MoveAnimation(myrect3,400,600);
-const myrect4 = new Rectangle(200,350,40,30);
-
-const anim_7 = new MoveAnimation(myrect4,200,700);
-const seqAnim = new SeqAnimation([anim_0,anim_1,anim_2,anim_3,anim_4,anim_5,anim_6,anim_7]);
+const anim_0 = new MoveAnimation(Rect1,200,4000);
+const anim_1 = new WaitAnimation(300);
+const seqAnim = new SeqAnimation([anim_0,anim_1]);
 
 function setup() {
 	createCanvas(1000, 1000)
@@ -143,9 +123,6 @@ function setup() {
 
 function draw() {
 	background(255)
-	myrect1.render();
-	myrect2.render();
-	myrect3.render();
-	myrect4.render();
+	Rect1.render();
 	seqAnim.play();
 }

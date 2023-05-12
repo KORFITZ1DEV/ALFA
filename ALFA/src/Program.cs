@@ -16,9 +16,11 @@ namespace ALFA
         {
             string input = String.Empty;
             string _output = ".";
-            
+
             if (args.Length == 0)
                 throw new Exception("Missing input arguments. Please provide a .alfa file, example: alfa ./path/to/file.alfa");
+            
+            
             
             if (args.Contains("--test")) // test mode 
             {
@@ -54,13 +56,30 @@ namespace ALFA
                 _output = $"{_output}/CodeGen-p5.js/Output";   
             }
             
+            string path = ($"{_output}/index.html");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
+            {
+                path = path.Replace("/", "\\");
+            }
+
+            if (File.Exists($"{_output}/sketch.js"))
+            {
+                File.Delete($"{_output}/sketch.js");
+            } 
+            
             ICharStream stream = CharStreams.fromString(input);
             ITokenSource lexer = new ALFALexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
             ALFAParser parser = new ALFAParser(tokens);
             parser.BuildParseTree = true;
             IParseTree tree = parser.program();
-
+            
+            var errorNodeImplChild = findErrorNode(tree);
+            if (errorNodeImplChild != null)
+            {
+                throw new SyntacticException($"Something is syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+            }
+            
             SymbolTable symbolTable = new();
             BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
@@ -73,12 +92,22 @@ namespace ALFA
 
             if (args.Contains("--test")) return;
             
-            string path = ($"{_output}/index.html");
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
-            {
-                path = path.Replace("/", "\\");
-            } 
+
             Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+        
+        private static ErrorNodeImpl? findErrorNode(IParseTree context)
+        {
+            for (int i = 0; i < context.ChildCount; i++)
+            {
+                var child = context.GetChild(i);
+                if(child is ErrorNodeImpl errorNodeChild)
+                {
+                    return errorNodeChild;
+                }
+            }
+            
+            return null;
         }
     }
 }
