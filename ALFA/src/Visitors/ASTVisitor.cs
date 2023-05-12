@@ -23,8 +23,7 @@ public abstract class ASTVisitor<T>
             ProgramNode programNode => Visit(programNode),
             VarDclNode varDclNode => Visit(varDclNode),
             IdNode idNode => Visit(idNode),
-            NumNode numNode => Visit(numNode),
-            _ => throw new Exception("Unknown node type")
+            NumNode numNode => Visit(numNode)
         };
     }
 }

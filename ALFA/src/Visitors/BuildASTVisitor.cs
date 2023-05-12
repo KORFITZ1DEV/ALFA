@@ -19,7 +19,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         List<Node> childList = new List<Node>();
         
-        //Debug.Assert(context.statement() != null);
         foreach (var stmt in context.statement())
         {
             childList.Add(Visit(stmt));
@@ -189,7 +188,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 builtInAnimCallCallNodeCallNode.Arguments.Add((numNode));
             }
         }
-
 
         return builtInAnimCallCallNodeCallNode;
     }
