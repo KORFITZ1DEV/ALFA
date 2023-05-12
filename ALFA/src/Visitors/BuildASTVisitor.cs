@@ -150,7 +150,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 {
                     if (numNode.Value <= 0)
                     {
-                        throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 {num.Symbol.Line} column {num.Symbol.Column}");
+                        throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {num.Symbol.Line} column {num.Symbol.Column}");
                     }
                 }
 
