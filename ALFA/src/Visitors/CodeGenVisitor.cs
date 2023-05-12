@@ -45,7 +45,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         string stdLib = File.ReadAllText((_path + "/stdlib.js"));
         Emit(stdLib + "\n\n", ALFATypes.OutputEnum.VarOutput);
-        Emit("\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
+        Emit("\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
         Emit("function draw() {\n\tbackground(255)\n", ALFATypes.OutputEnum.DrawOutput);
         
         foreach (var stmt in node.Statements)

@@ -134,7 +134,7 @@ const anim_6 = new MoveAnimation(myrect3,200,animDuration);
 const seqAnim = new SeqAnimation([anim_0,anim_1,anim_2,anim_3,anim_4,anim_5,anim_6]);
 
 function setup() {
-	createCanvas(600, 600)
+	createCanvas(1000, 1000)
 	startTime = millis()
 }
 

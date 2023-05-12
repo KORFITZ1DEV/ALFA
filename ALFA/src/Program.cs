@@ -77,7 +77,8 @@ namespace ALFA
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)
             {
                 path = path.Replace("/", "\\");
-            } Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            } 
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
         }
     }
 }

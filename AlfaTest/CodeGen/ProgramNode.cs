@@ -37,7 +37,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     string baseVarOutput = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js") + "\n\nconst seqAnim = new SeqAnimation([anim_0]);\n";
 
     string baseDrawOutput = "function draw() {\n\tbackground(255)\n\tseqAnim.play();\n}";
-    string baseSetupOutput = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
+    string baseSetupOutput = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
     
     ProgramNode programNodeTestStdLib = new ProgramNode(new List<Node>());
     SymbolTable symbolTableProgramNode = new SymbolTable();
@@ -55,7 +55,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     varOutputWithVarDcl += "\n\nconst num1 = 300";
     varOutputWithVarDcl += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
     string drawOutputWithVarDcl = "function draw() {\n\tbackground(255)\n\tseqAnim.play();\n}";
-    string setupOutputWithVarDcl = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
+    string setupOutputWithVarDcl = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
     List<Node> programNodeWithVarDclStatements = new List<Node>()
     {
       varDclNodeNumChild
@@ -87,7 +87,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     varOutputRect += "\n\nconst Rect1 = new Rectangle(100,100,100,100);\n";
     varOutputRect += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
     string drawOutputRect = "function draw() {\n\tbackground(255)\n\tRect1.render();\n\tseqAnim.play();\n}";
-    string setupOutputRect = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
+    string setupOutputRect = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
     string outputRect = varOutputRect + setupOutputRect + drawOutputRect ;
     List<Node> programNodeWithRectStatements = new List<Node>()
     {
@@ -117,7 +117,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     varOutputRectAndMove += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
     
     string drawOutputRectAndMove = "function draw() {\n\tbackground(255)\n\tRect1.render();\n\tseqAnim.play();\n}";
-    string setupOutputRectAndMove = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
+    string setupOutputRectAndMove = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
     List<Node> programNodeWithRectStatementsAndMove = new List<Node>()
     {
       varDclNodeRect, buildInAnimCallNodeMove
@@ -158,7 +158,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     varOutputRectAndMoveTwoFunc += "\nconst seqAnim = new SeqAnimation([anim_0,anim_1]);\n";
 
     string drawOutputRectAndMoveTwoFunc = "function draw() {\n\tbackground(255)\n\tRect1.render();\n\tseqAnim.play();\n}";
-    string setupOutputRectAndMoveTwoFunc = "\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n";
+    string setupOutputRectAndMoveTwoFunc = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
     List<Node> programNodeWithRectStatementsAndMoveTwoFunc = new List<Node>()
     {
       varDclNodeRect, buildInAnimCallNodeMoveTwoFunc, builtInAnimCallNodeWait
