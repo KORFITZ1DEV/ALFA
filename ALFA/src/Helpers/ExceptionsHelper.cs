@@ -37,3 +37,8 @@ public class SyntacticException : Exception
 {
     public SyntacticException(string message) : base(message){}
 }
+
+public class NonPositiveAnimationDurationException : Exception
+{
+    public NonPositiveAnimationDurationException(string message) : base(message){}
+}

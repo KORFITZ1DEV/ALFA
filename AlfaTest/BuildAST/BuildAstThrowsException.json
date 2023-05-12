@@ -43,6 +43,16 @@
     "Prog": "wait(duration);",
     "Comment": "Calls an BuiltInAnimCallNode visit with an undefined variable.",
     "ExceptionType": "UndeclaredVariableException"
+  },  
+  {
+    "Prog": "wait(0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
+    "Prog": "int duration = 0; wait(duration);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration saved in the symboltable under an id that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
   }
 
 ]

@@ -117,10 +117,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 throw new UnknownBuiltinException("Invalid built-in function");
         }
         
-        BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+        BuiltInAnimCallNode builtInAnimCallNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.args() != null)
         {
+            int i = 0;
             foreach (var argCtx in context.args().arg())
             {
                 var id = argCtx.ID();
@@ -131,18 +132,33 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                     Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
                     if (sym == null) 
                         throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
-            
+
+                    if (i == FormalParameters.FormalParams[type].Count() - 1 && sym.Value is NumNode locNumNode)
+                    {
+                        if(locNumNode.Value == 0) throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {id.Symbol.Line} column {id.Symbol.Column}");
+                    }
+                    
                     IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
-                    builtInAnimCallNodeNode.Arguments.Add(idNode);
+                    builtInAnimCallNode.Arguments.Add(idNode);
                     continue;
                 }
                 
                 NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                builtInAnimCallNodeNode.Arguments.Add(numNode);
+                builtInAnimCallNode.Arguments.Add(numNode);
+                if (i == FormalParameters.FormalParams[type].Count() - 1)
+                {
+                    if (numNode.Value <= 0)
+                    {
+                        throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 {num.Symbol.Line} column {num.Symbol.Column}");
+                    }
+                }
             }
+            i++;
         }
+
+
         
-        return builtInAnimCallNodeNode;
+        return builtInAnimCallNode;
     }
     
     public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)

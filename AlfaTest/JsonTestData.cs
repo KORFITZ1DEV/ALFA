@@ -35,6 +35,9 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "SyntacticException":
                     exceptionType = typeof(SyntacticException);
                     break;
+                case "NonPositiveAnimationDurationException":
+                    exceptionType = typeof(NonPositiveAnimationDurationException);
+                    break;
                 case "":
                     break;
                 default:

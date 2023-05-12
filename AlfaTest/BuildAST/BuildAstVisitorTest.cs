@@ -56,8 +56,12 @@ public class BuildAstVisitorTest
                 case SyntacticException:
                     Assert.Equal(exceptionType, typeof(SyntacticException));
                     break;
+                case NonPositiveAnimationDurationException:
+                    Assert.Equal(exceptionType, typeof(NonPositiveAnimationDurationException));
+                    break;
                 default:
-                    Assert.Equal(new Exception("randomstuff"), actualException);
+                    Assert.Equal(new Exception("" +
+                                               "randomstuff"), actualException);
                     break;
             }
         }

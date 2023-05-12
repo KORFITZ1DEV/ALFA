@@ -1,1 +1,2 @@
-createRect(200, 350, 40, 30);
+int duration = 0;
+wait(duration);
