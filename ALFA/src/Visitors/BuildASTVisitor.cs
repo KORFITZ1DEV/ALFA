@@ -140,6 +140,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                     
                     IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
                     builtInAnimCallNode.Arguments.Add(idNode);
+                    i++;
                     continue;
                 }
                 
@@ -152,8 +153,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 {num.Symbol.Line} column {num.Symbol.Column}");
                     }
                 }
+
+                i++;
             }
-            i++;
         }
 
 

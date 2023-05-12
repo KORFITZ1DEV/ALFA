@@ -53,6 +53,11 @@
     "Prog": "int duration = 0; wait(duration);",
     "Comment": "Calls an BuiltInAnimCallNode visit with a duration saved in the symboltable under an id that is non-positive.",
     "ExceptionType": "NonPositiveAnimationDurationException"
+  },  
+  {
+    "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
   }
 
 ]
