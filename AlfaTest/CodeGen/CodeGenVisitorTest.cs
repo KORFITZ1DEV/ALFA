@@ -42,30 +42,35 @@ public class CodeGenVisitorTestData : IEnumerable<object[]>
     {
       idNode1, symbolTable2, "Rect1"
     };
+ 
+    List<Node> numNodesMove = new List<Node>()
+    {
+      idNode1,
+      new NumNode(200, 60, 20),
+      new NumNode(4000, 60, 20),
+    };
+
     
-    BuiltInsNode buildInsNodeMove = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.move,
-      FormalParameters.FormalParams["move"].FormalParams, 20, 15);
+    BuiltInAnimCallNode buildInAnimCallNodeMove = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, numNodesMove, 20, 15);
     SymbolTable symbolTableMove = new SymbolTable();
     yield return new object[]
     {
-      buildInsNodeMove, symbolTableMove, "const anim_0 = new MoveAnimation("
+      buildInAnimCallNodeMove, symbolTableMove, "const anim_0 = new MoveAnimation(Rect1,200,4000);\n"
     };
     
-    BuiltInsNode buildInsNodeWait = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.wait,
-      FormalParameters.FormalParams["wait"].FormalParams, 15, 10);
+    List<Node> numNodesWait = new List<Node>()
+    {
+      new NumNode(100, 60, 20),
+    };
+    
+    BuiltInAnimCallNode buildInAnimCallNodeWait = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, numNodesWait, 15, 10);
     SymbolTable symbolTableWait = new SymbolTable();
     yield return new object[]
     {
-      buildInsNodeWait, symbolTableWait, "const anim_0 = new WaitAnimation("
+      buildInAnimCallNodeWait, symbolTableWait, "const anim_0 = new WaitAnimation(100);\n"
     };
 
-    BuiltInsNode buildInsNodeCreateRect = new BuiltInsNode(ALFATypes.BuiltInTypeEnum.createRect,
-      FormalParameters.FormalParams["createRect"].FormalParams, 15, 10);
-    SymbolTable symbolTableCreateRect = new SymbolTable();
-    yield return new object[]
-    {
-      buildInsNodeCreateRect, symbolTableCreateRect, "new Rectangle("
-    };
+    
     List<Node> numNodesCreateRect = new List<Node>()
     {
       new NumNode(100, 60, 20),
@@ -73,36 +78,24 @@ public class CodeGenVisitorTestData : IEnumerable<object[]>
       new NumNode(100, 60, 20),
       new NumNode(100, 60, 20)
     };
-    
-    FuncCallNode funcCallNodeCreateRect = new FuncCallNode(buildInsNodeCreateRect, numNodesCreateRect, 10, 25);
-    SymbolTable symbolTableFuncCallCreateRect = new SymbolTable();
+    BuiltInCreateShapeCallNode buildInAnimCallNodeCreateRect = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, numNodesCreateRect, 15, 10);
+    SymbolTable symbolTableCreateRect = new SymbolTable();
     yield return new object[]
     {
-      funcCallNodeCreateRect, symbolTableFuncCallCreateRect, "new Rectangle(100,100,100,100);\n"
+      buildInAnimCallNodeCreateRect, symbolTableCreateRect, "new Rectangle(100,100,100,100);\n"
     };
-    
-    List<Node> numNodesWait = new List<Node>()
-    {
-      new NumNode(100, 60, 20),
-    };
-    FuncCallNode funcCallNodeWait = new FuncCallNode(buildInsNodeWait, numNodesWait, 10, 25);
+
+
     SymbolTable symbolTableFuncCallWait = new SymbolTable();
     yield return new object[]
     {
-      funcCallNodeWait, symbolTableFuncCallWait, "const anim_0 = new WaitAnimation(100);\n"
+      buildInAnimCallNodeWait, symbolTableFuncCallWait, "const anim_0 = new WaitAnimation(100);\n"
     };
     
-    List<Node> numNodesMove = new List<Node>()
-    {
-      idNode1,
-      new NumNode(100, 60, 20),
-      new NumNode(100, 60, 20),
-    };
-    FuncCallNode funcCallNodeMove = new FuncCallNode(buildInsNodeMove, numNodesMove, 10, 25);
     SymbolTable symbolTableFunccallMove = new SymbolTable();
     yield return new object[]
     {
-      funcCallNodeMove, symbolTableFunccallMove, "const anim_0 = new MoveAnimation(Rect1,100,100);\n"
+      buildInAnimCallNodeMove, symbolTableFunccallMove, "const anim_0 = new MoveAnimation(Rect1,200,4000);\n"
     };
 
     VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, "num1" ,numNode1, 25, 20);

@@ -22,12 +22,14 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
     
-    public override FuncCallNode Visit(FuncCallNode node)
+    public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
-        if (node.Arguments.Count != node.BuiltIns.FormalParams.Count)
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
+        
+        if (node.Arguments.Count != nodeFormalParameters.Count)
         {
             throw new InvalidNumberOfArgumentsException(
-                $"Invalid number of arguments to {node.BuiltIns.BuiltInType.ToString()}, expected {node.BuiltIns.FormalParams.Count} but got {node.Arguments.Count} arguments");
+                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
         }
 
         int i = 0;
@@ -38,18 +40,45 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
                 if (idSymbol != null)
                 {
-                    if (idSymbol.Type != node.BuiltIns.FormalParams[i])
-                        throw new ArgumentTypeException($"Invalid type, expected {node.BuiltIns.FormalParams[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
+                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }
             else if (actualParam is NumNode numNode)
-            { //think this check is useless as the parser should not allow it
-                if (node.BuiltIns.FormalParams[i] != ALFATypes.TypeEnum.@int)
-                    throw new ArgumentTypeException($"Invalid type expected {node.BuiltIns.FormalParams[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+            { 
+                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int) 
+                    throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
             } 
             i++;
         }
         return node;
+    }
+
+    public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
+    {
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[callNode.Type.ToString()];
+        
+        if (callNode.Arguments.Count != nodeFormalParameters.Count)
+        {
+            throw new InvalidNumberOfArgumentsException(
+                $"Invalid number of arguments to {callNode.Type.ToString()}, expected {nodeFormalParameters.Count} but got {callNode.Arguments.Count} arguments");
+        }
+
+        int i = 0;
+        foreach (var actualParam in callNode.Arguments)
+        {
+            if (actualParam is IdNode idNode)
+            {
+                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                if (idSymbol != null)
+                {
+                    if (idSymbol.Type != FormalParameters.FormalParams[callNode.Type.ToString()][i])
+                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+                }
+            }
+            i++;
+        }
+        return callNode;
     }
     
     //Typecheck not needed for VarDcl as they are covered in the BuildASTVisitor, and for some reason it cant be wirtten in => node format
@@ -57,7 +86,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         var visitedNode = Visit((dynamic)node.Value);
 
-        if (visitedNode is FuncCallNode)
+        if (visitedNode is BuiltInCreateShapeCallNode)
         {
             if (node.Type != ALFATypes.TypeEnum.rect)
                 throw new TypeException($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.rect} on line {node.Line}:{node.Col}");
@@ -71,7 +100,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
-    public override BuiltInsNode Visit(BuiltInsNode node) => node;
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
 }

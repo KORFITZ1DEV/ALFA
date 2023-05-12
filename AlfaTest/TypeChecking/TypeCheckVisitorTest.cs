@@ -14,7 +14,7 @@ public class TypeCheckVisitorTest
             {
                 Console.WriteLine(prog);
             }
-            Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+            Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -36,6 +36,12 @@ public class TypeCheckVisitorTest
                 case UndeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
                     break;
+                case RedeclaredVariableException:
+                    Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
+                    break;
+                case SemanticErrorException:
+                    Assert.Equal(exceptionType, typeof(SemanticErrorException));
+                    break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);
                     break;
@@ -46,7 +52,7 @@ public class TypeCheckVisitorTest
     [ClassData(typeof(TypeCheckingNoExceptionTestData))]
     public void TypeCheckTestNoException(string prog, string comment, Type exceptionType)
     {
-        Prog.Main(prog: prog, output: "../../../../ALFA/Output/sketch.js");
+        Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
         Assert.True(true);
     }
 }

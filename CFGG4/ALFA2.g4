@@ -18,7 +18,7 @@ assignStmt: <assoc=right> ID '=' (builtInCreateShapeCall | expr);
 
 ifStmt: 'if' '(' expr ')' block ('else if' '(' expr ')' block)* ('else' block)?;
 
-loopStmt: 'loop' '(' 'int' ID 'from' (NUM | ID) '..' (NUM | ID) ')' block;
+loopStmt: 'loop' '(' 'int' ID 'from' expr '..' expr ')' block;
 
 paralStmt: 'paral' paralBlock;
 

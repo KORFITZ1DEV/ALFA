@@ -18,4 +18,7 @@ wait(delay);
 move(myrect2, -200, animDuration);
 
 rect myrect3 = createRect(200, 150, 20, 20);
-move(myrect3, 200, animDuration);
+move(myrect3, 400, 600);
+
+rect myrect4 = createRect(200, 350, 40, 30);
+move(myrect4, 200, 700);

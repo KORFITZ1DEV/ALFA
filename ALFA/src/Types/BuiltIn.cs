@@ -3,11 +3,11 @@ namespace ALFA.Types;
 public class BuiltIn
 {
     public List<ALFATypes.TypeEnum> FormalParams;
-    public ALFATypes.BuiltInTypeEnum Type;
+    public ALFATypes.BuiltInAnimEnum Anim;
 
-    public BuiltIn(List<ALFATypes.TypeEnum>formalParams, ALFATypes.BuiltInTypeEnum type)
+    public BuiltIn(List<ALFATypes.TypeEnum>formalParams, ALFATypes.BuiltInAnimEnum anim)
     {
         FormalParams = formalParams;
-        Type = type;
+        Anim = anim;
     }
 }

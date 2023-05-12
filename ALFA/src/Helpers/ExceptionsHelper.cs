@@ -32,3 +32,8 @@ public class RedeclaredVariableException : Exception
 {
     public RedeclaredVariableException(string message) : base(message){}
 }
+
+public class SemanticErrorException : Exception
+{
+    public SemanticErrorException(string message) : base(message){}
+}

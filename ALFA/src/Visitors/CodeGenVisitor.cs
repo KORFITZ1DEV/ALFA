@@ -45,7 +45,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         string stdLib = File.ReadAllText((_path + "/stdlib.js"));
         Emit(stdLib + "\n\n", ALFATypes.OutputEnum.VarOutput);
-        Emit("\nfunction setup() {\n\tcreateCanvas(600, 600)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
+        Emit("\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
         Emit("function draw() {\n\tbackground(255)\n", ALFATypes.OutputEnum.DrawOutput);
         
         foreach (var stmt in node.Statements)
@@ -68,7 +68,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         Emit("}", ALFATypes.OutputEnum.DrawOutput);
         Emit(_varOutput + _setupOutput + _drawOutput, ALFATypes.OutputEnum.Output);
-        File.WriteAllText(_path + "/Output/sketch.js", _output);
+        File.WriteAllText(_path + "/sketch.js", _output);
         
         return node;
     }
@@ -78,55 +78,70 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         Node child = Visit((dynamic)node.Value);
 
-        if (child is FuncCallNode funcCallNode)
+        if (child is BuiltInCreateShapeCallNode)
         {
-            if (funcCallNode.BuiltIns.BuiltInType == ALFATypes.BuiltInTypeEnum.createRect)
-            {
-                Emit($"\t{node.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
-            }
+            Emit($"\t{node.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
         }
-        
+
         Emit("\n", ALFATypes.OutputEnum.VarOutput);
         return node;
     }
 
-    public override FuncCallNode Visit(FuncCallNode node)
+    public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
-        Visit(node.BuiltIns);
+        switch (node.Type)
+        {
+            case ALFATypes.BuiltInAnimEnum.move:
+                Emit($"const anim_{_animationCount} = new MoveAnimation(", ALFATypes.OutputEnum.VarOutput);
+                
+                var child = Visit((dynamic)node.Arguments[0]);
 
-        Visit(node.Arguments[0]);
+                if (!_drawOutput.Contains($"{child.Identifier}.render();"))
+                {
+                    Emit($"\t{child.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
+                }
+                _animationCount++;
+                break;
+            
+            case ALFATypes.BuiltInAnimEnum.wait:
+                Emit($"const anim_{_animationCount} = new WaitAnimation(", ALFATypes.OutputEnum.VarOutput);
+                Visit(node.Arguments[0]);
+                _animationCount++;
+                break;
+        }
+        
         foreach (var arg in node.Arguments.Skip(1))
         {
             Emit(",", ALFATypes.OutputEnum.VarOutput);
             Visit(arg);
         }
-        
+
         Emit(");\n", ALFATypes.OutputEnum.VarOutput);
+        
         return node;
     }
-    public override BuiltInsNode Visit(BuiltInsNode node)
+
+    public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
     {
-        switch (node.BuiltInType)
+        switch (callNode.Type)
         {
-            case ALFATypes.BuiltInTypeEnum.move:
-                Emit($"const anim_{_animationCount} = new MoveAnimation(", ALFATypes.OutputEnum.VarOutput);
-                _animationCount++;
-                break;
-            
-            case ALFATypes.BuiltInTypeEnum.wait:
-                Emit($"const anim_{_animationCount} = new WaitAnimation(", ALFATypes.OutputEnum.VarOutput);
-                _animationCount++;
-                break;
-            
-            case ALFATypes.BuiltInTypeEnum.createRect:
+            case ALFATypes.CreateShapeEnum.createRect:
                 Emit("new Rectangle(", ALFATypes.OutputEnum.VarOutput);
                 break;
         }
-        
-        return node;
+
+        Visit(callNode.Arguments[0]);
+        foreach (var arg in callNode.Arguments.Skip(1))
+        {
+            Emit(",", ALFATypes.OutputEnum.VarOutput);
+            Visit(arg);
+        }
+
+        Emit(");\n", ALFATypes.OutputEnum.VarOutput);
+
+        return callNode;
     }
-    
-    
+
     public override IdNode Visit(IdNode node)
     {
         Emit(node.Identifier, ALFATypes.OutputEnum.VarOutput);
@@ -138,4 +153,5 @@ public class CodeGenVisitor : ASTVisitor<Node>
         Emit(node.Value.ToString(), ALFATypes.OutputEnum.VarOutput);
         return node;
     }
+
 }
