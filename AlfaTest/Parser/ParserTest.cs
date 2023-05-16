@@ -50,7 +50,6 @@ public class ParserTestData : IEnumerable<object[]>
     public IEnumerator<object[]> GetEnumerator()
     {
         var expectedTree = _programTreeMocker.MockProgramTreeWithIntVarDcl();
-        
         yield return new object[] { "int i = 2;", expectedTree};
 
         var expectedTree1 = _programTreeMocker.MockProgramTreeWithRectVarDcl();
