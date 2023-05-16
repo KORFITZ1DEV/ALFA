@@ -7,10 +7,6 @@ namespace AlfaTest.Parser;
 
 public class ParserTest
 {
-    public ParserTest()
-    {
-        
-    }
     
     [Theory]
     [ClassData(typeof(ParserTestData))]
