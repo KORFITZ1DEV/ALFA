@@ -19,7 +19,7 @@ public class VarDclTest
         _sut = new CodeGenVisitor(symbolTable, "../TestOutput");
 
         _sut.Visit(node);
-    
+        
         Assert.Equal(expectedVarOutput, _sut._varOutput);
         Assert.Equal(expectedDrawOutput, _sut._drawOutput);
     }

@@ -7,9 +7,14 @@ namespace AlfaTest.Parser;
 
 public class ParserTest
 {
+    public ParserTest()
+    {
+        
+    }
+    
     [Theory]
     [ClassData(typeof(ParserTestData))]
-    public void ParserProducesExpectedTree(string input, Mock<IParseTree> expectedTree)
+    public void ParserProducesExpectedTree(string input, IParseTree expectedTree)
     {
         ICharStream stream = CharStreams.fromString(input);
         ITokenSource lexer = new ALFALexer(stream);
@@ -17,18 +22,11 @@ public class ParserTest
         ALFAParser parser = new ALFAParser(tokens);
         parser.BuildParseTree = true;
         IParseTree tree = parser.program();
-        var mockedProgram = expectedTree.Object.GetChild(0);
-
         
-        if(tree.ChildCount == mockedProgram.ChildCount)
-        {
-            DescentTree(tree, mockedProgram);
-        }
+        if(tree.ChildCount == expectedTree.ChildCount)
+            DescentTree(tree, expectedTree);
         else
-        {
-            //At this point we know the two trees are not equal.
-            Assert.Equal(expected: expectedTree.Object, actual: tree);
-        }
+            Assert.Equal(expected: expectedTree, actual: tree);
     }
 
     private void DescentTree(IParseTree tree, IParseTree expectedTree)
@@ -38,13 +36,13 @@ public class ParserTest
             var treeChild = tree.GetChild(i);
             var expectedTreeChild = expectedTree.GetChild(i);
             
-            Assert.Equal(expectedTreeChild.GetType(), treeChild.GetType());
-            Assert.Equal(expectedTreeChild.ChildCount, treeChild.ChildCount);
-            if ("TerminalNodeImpl" == treeChild.GetType().Name)
+            Assert.Equal(expectedTree.GetType(), tree.GetType());
+            Assert.Equal(expectedTree.ChildCount, tree.ChildCount);
+            if ("TerminalNodeImpl" == tree.GetType().Name)
             {
-                Assert.Equal(expectedTreeChild.ToString(), treeChild.ToString());
+                Assert.Equal(expectedTree.ToString(), tree.ToString());
             }
-            DescentTree(tree.GetChild(i), expectedTree.GetChild(i));
+            DescentTree(treeChild, expectedTreeChild);
         }
     }
 
@@ -55,31 +53,18 @@ public class ParserTestData : IEnumerable<object[]>
     private readonly ProgramTreeMocker _programTreeMocker = new ProgramTreeMocker();
     public IEnumerator<object[]> GetEnumerator()
     {
-        var mockedParseTree = new Mock<IParseTree>();
+        var expectedTree = _programTreeMocker.MockProgramTreeWithIntVarDcl();
         
-        mockedParseTree.SetupGet(x=>x.ChildCount).Returns(2);
-        var programNode = _programTreeMocker.MockProgramTreeWithIntVarDcl();
-        
-        mockedParseTree.Setup(x=>x.GetChild(0)).Returns(programNode);
-        yield return new object[] { "int i = 2;", mockedParseTree};
+        yield return new object[] { "int i = 2;", expectedTree};
 
-        var mockedParseTree1 = new Mock<IParseTree>();
-        mockedParseTree1.SetupGet(x => x.ChildCount).Returns(2);
-        var programNode1 = _programTreeMocker.MockProgramTreeWithRectVarDcl();
-        mockedParseTree1.Setup(x => x.GetChild(0)).Returns(programNode1);
-        yield return new object[] { "rect myRect1 = createRect(100, 100, 100, 100);", mockedParseTree1};
+        var expectedTree1 = _programTreeMocker.MockProgramTreeWithRectVarDcl();
+        yield return new object[] { "rect myRect1 = createRect(100, 100, 100, 100);", expectedTree1};
         
-        var mockedParseTree2 = new Mock<IParseTree>();
-        mockedParseTree2.SetupGet(x => x.ChildCount).Returns(2);
-        var programNode2 = _programTreeMocker.MockProgramTreeWithWait();
-        mockedParseTree2.Setup(x => x.GetChild(0)).Returns(programNode2);
-        yield return new object[] { "wait(100);", mockedParseTree2};
+        var expectedTree2 = _programTreeMocker.MockProgramTreeWithWait();
+        yield return new object[] { "wait(100);", expectedTree2};
         
-        var mockedParseTree3 = new Mock<IParseTree>();
-        mockedParseTree3.SetupGet(x => x.ChildCount).Returns(2);
-        var programNode3 = _programTreeMocker.MockProgramTreeWithMove();
-        mockedParseTree3.Setup(x => x.GetChild(0)).Returns(programNode3);
-        yield return new object[] {"move(myRect1, 100, 100);", mockedParseTree3};
+        var expectedTree3 = _programTreeMocker.MockProgramTreeWithMove();
+        yield return new object[] {"move(myRect1, 100, 100);", expectedTree3};
     }
 
     IEnumerator IEnumerable.GetEnumerator()
