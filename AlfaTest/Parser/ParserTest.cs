@@ -20,12 +20,12 @@ public class ParserTest
         IParseTree tree = parser.program();
         
         if(tree.ChildCount == expectedTree.ChildCount)
-            DescentTree(tree, expectedTree);
+            DescendTree(tree, expectedTree);
         else
             Assert.Equal(expected: expectedTree, actual: tree);
     }
 
-    private void DescentTree(IParseTree tree, IParseTree expectedTree)
+    private void DescendTree(IParseTree tree, IParseTree expectedTree)
     {
         for (int i = 0; i < tree.ChildCount; i++)
         {
@@ -38,7 +38,7 @@ public class ParserTest
             {
                 Assert.Equal(expectedTree.ToString(), tree.ToString());
             }
-            DescentTree(treeChild, expectedTreeChild);
+            DescendTree(treeChild, expectedTreeChild);
         }
     }
 
