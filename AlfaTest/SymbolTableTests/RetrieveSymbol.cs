@@ -6,6 +6,7 @@ using ALFA.Types;
 
 namespace AlfaTest.SymbolTableTests;
 
+//Look into using ITestOutputHelper https://xunit.net/docs/capturing-output.
 public class RetrieveSymbol
 {
     private readonly SymbolTable _sut;
