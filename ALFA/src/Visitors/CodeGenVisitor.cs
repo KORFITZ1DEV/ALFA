@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
@@ -94,10 +93,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 Visit((dynamic)node.Arguments[2], ALFATypes.OutputEnum.MainOutput);
                 Emit(");\n\t", ALFATypes.OutputEnum.MainOutput);
                 
-                if (!_drawOutput.Contains($"{child.Identifier}.draw();"))
-                {
-                    Emit($"\t{child.Identifier}.draw();\n", ALFATypes.OutputEnum.DrawOutput);
-                }
                 break;
             
             case ALFATypes.BuiltInAnimEnum.wait:
@@ -119,11 +114,11 @@ public class CodeGenVisitor : ASTVisitor<Node>
                 break;
         }
 
-        Visit((dynamic)callNode.Arguments[0], ALFATypes.OutputEnum.VarOutput);
+        Visit((dynamic)callNode.Arguments[0]);
         foreach (var arg in callNode.Arguments.Skip(1))
         {
             Emit(",", ALFATypes.OutputEnum.VarOutput);
-            Visit((dynamic)arg, ALFATypes.OutputEnum.VarOutput);
+            Visit((dynamic)arg);
         }
 
         Emit(");", ALFATypes.OutputEnum.VarOutput);
