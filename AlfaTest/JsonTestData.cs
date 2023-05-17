@@ -40,7 +40,7 @@ public abstract class JsonTestData : IEnumerable<object[]>
                     exceptionType = typeof(NonPositiveAnimationDurationException);
                     break;
                 case "":
-                    yield return new object[] { item.Prog, item.Comment };
+                    yield return new object[] { item.Prog };
                     alreadyReturned = true;
                     break;
                 default:
