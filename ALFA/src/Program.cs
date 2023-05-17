@@ -30,34 +30,34 @@ namespace ALFA
                 input = args[0];
                 _output = args[1];
             }
-            //else
-            //{
-            //    if (!args[0].EndsWith(".alfa")) 
-            //        throw new Exception("Input file must be an alfa file");
+            else
+            {
+                if (!args[0].EndsWith(".alfa")) 
+                    throw new Exception("Input file must be an alfa file");
 
-            //    if (args.Length == 2)
-            //    {
-            //        if (Path.Exists(args[1]))
-            //        {
-            //            _output = args[1];
-            //        }
-            //        else
-            //        {
-            //            throw new Exception("Output path does not exist");
-            //        }
-            //    }
+                if (args.Length == 2)
+                {
+                    if (Path.Exists(args[1]))
+                    {
+                        _output = args[1];
+                    }
+                    else
+                    {
+                        throw new Exception("Output path does not exist");
+                    }
+                }
 
-            //    string alfaexeLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                string alfaexeLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
                 
-            //    Directory.CreateDirectory($"{_output}/CodeGen-p5.js/Output");
-            //    File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", $"{_output}/CodeGen-p5.js/Output/style.css", true);
-            //    File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", $"{_output}/CodeGen-p5.js/Output/index.html", true);
-            //    File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", $"{_output}/CodeGen-p5.js/Output/p5.min.js", true);
-            //    File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", $"{_output}/CodeGen-p5.js/Output/stdlib.js", true);
+                Directory.CreateDirectory($"{_output}/CodeGen-p5.js/Output");
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/style.css", $"{_output}/CodeGen-p5.js/Output/style.css", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/index.html", $"{_output}/CodeGen-p5.js/Output/index.html", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/Output/p5.min.js", $"{_output}/CodeGen-p5.js/Output/p5.min.js", true);
+                File.Copy(alfaexeLocation + "/CodeGen-p5.js/stdlib.js", $"{_output}/CodeGen-p5.js/Output/stdlib.js", true);
 
-            //    input = File.ReadAllText(args[0]);
-            //    _output = $"{_output}/CodeGen-p5.js/Output";   
-            //}
+                input = File.ReadAllText(args[0]);
+                _output = $"{_output}/CodeGen-p5.js/Output";   
+            }
             
             string path = ($"{_output}/index.html");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true)

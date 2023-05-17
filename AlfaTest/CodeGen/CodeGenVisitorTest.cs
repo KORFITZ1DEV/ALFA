@@ -17,7 +17,7 @@ public class CodeGenTest
   [ClassData(typeof(CodeGenVisitorTestData))]
   public void WritesCorrectlyToVarOutput(Node node, SymbolTable symbolTable, string expectedOutput)
   {
-    _sut = new CodeGenVisitor(symbolTable, "../TestOutput");
+    _sut = new CodeGenVisitor(symbolTable, "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js/");
 
     _sut.Visit(node);
 
