@@ -24,6 +24,7 @@ public class ALFATypes
     public enum OutputEnum
     {
         VarOutput,
+        MainOutput,
         SetupOutput,
         DrawOutput,
         Output
