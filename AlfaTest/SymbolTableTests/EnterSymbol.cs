@@ -57,7 +57,7 @@ public class EnterSymbolTestData : IEnumerable<object[]>
         symbolTableRedeclaredSymbol._symbols.Add(oldSymbol.Name, oldSymbol);
         symbolTableRedeclaredSymbol._depth++;
         symbolTableRedeclaredSymbol._scopeDisplay.Add(null);
-        
+
         yield return new object[]
         {
             newSymbol1, symbolTableRedeclaredSymbol

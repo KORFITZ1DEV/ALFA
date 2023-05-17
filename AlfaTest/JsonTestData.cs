@@ -9,6 +9,7 @@ public abstract class JsonTestData : IEnumerable<object[]>
     {
        var items = LoadJson();
        Type? exceptionType = default;
+       bool alreadyReturned = false;
 
         foreach (var item in items)
         {
@@ -39,12 +40,14 @@ public abstract class JsonTestData : IEnumerable<object[]>
                     exceptionType = typeof(NonPositiveAnimationDurationException);
                     break;
                 case "":
+                    yield return new object[] { item.Prog, item.Comment };
+                    alreadyReturned = true;
                     break;
                 default:
                     throw new Exception("Someone created a test in BuildAstThrowsException with an exception type that is not being switched on in JsonTestData.cs");
             }
-
-            yield return new object[] { item.Prog, item.Comment, exceptionType };
+            
+            if(!alreadyReturned) yield return new object[] { item.Prog, item.Comment, exceptionType };
         }
     }
     IEnumerator IEnumerable.GetEnumerator()

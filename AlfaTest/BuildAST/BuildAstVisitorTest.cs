@@ -68,7 +68,7 @@ public class BuildAstVisitorTest
     }
     [Theory]
     [ClassData(typeof(BuildAstNoExceptionTestData))]
-    public void BuildAstTestNoException(string prog, string comment, Type exceptionType)
+    public void BuildAstTestNoException(string prog, string comment)
     {
         ICharStream stream = CharStreams.fromString(prog);
         ITokenSource lexer = new ALFALexer(stream);
