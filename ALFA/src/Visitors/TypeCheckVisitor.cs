@@ -69,6 +69,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             if (actualParam is IdNode idNode)
             {
+                Visit(actualParam); //Not needed now but it is more extensible
                 Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
                 if (idSymbol != null)
                 {
@@ -100,6 +101,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
+    
+    //TODO hit
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
 }
