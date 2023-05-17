@@ -48,9 +48,10 @@ public class ProgMainTest
             }
         }
     }
+
     [Theory]
     [ClassData(typeof(ProgMainNoExceptionTestData))]
-    public void TranspilingThrowsNoExceptionAsExpected(string prog, string comment, Type exceptionType)
+    public void TranspilingThrowsNoException(string prog, string comment, Type exceptionType)
     {
         Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
         Assert.True(true);
