@@ -15,6 +15,10 @@ public abstract class JsonTestData : IEnumerable<object[]>
         {
             switch(item.ExceptionType)
             {
+                case "":
+                    yield return new object[] { item.Prog };
+                    alreadyReturned = true;
+                    break;
                 case "TypeException":
                     exceptionType = typeof(TypeException);
                     break;
@@ -39,12 +43,8 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "NonPositiveAnimationDurationException":
                     exceptionType = typeof(NonPositiveAnimationDurationException);
                     break;
-                case "":
-                    yield return new object[] { item.Prog };
-                    alreadyReturned = true;
-                    break;
                 default:
-                    throw new Exception("Someone created a test in BuildAstThrowsException with an exception type that is not being switched on in JsonTestData.cs");
+                    throw new Exception("Someone created a test in ProgMainThrowsException with an exception type that is not being switched on in JsonTestData.cs");
             }
             
             if(!alreadyReturned) yield return new object[] { item.Prog, item.Comment, exceptionType };

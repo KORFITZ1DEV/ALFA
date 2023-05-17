@@ -31,6 +31,13 @@ public class RetrieveSymbol
     {
         Assert.Equal(expectedSymbol, sut.RetrieveSymbol(expectedSymbol.Name));
     }
+
+    // [Theory]
+    // [ClassData(typeof(RetrieveSymbolIntegrationTestData))]
+    // public void RetrieveSymbolRetrievesSymbolFromALowerDepthWhenNotDeclaredAtTheCurrentDepth(Symbol expectedSymbol, SymbolTable sut)
+    // {
+    //     Assert.Equal(expectedSymbol, sut.RetrieveSymbol(expectedSymbol.Name));
+    // }
 }
 
 public class RetrieveSymbolTestData : IEnumerable<object[]>
@@ -97,6 +104,23 @@ public class RetrieveSymbolTestData : IEnumerable<object[]>
         };
         
         
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+
+public class RetrieveSymbolIntegrationTestData : IEnumerable<object[]>
+{
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        yield return new object[]
+        {
+
+        };
+
     }
 
     IEnumerator IEnumerable.GetEnumerator()

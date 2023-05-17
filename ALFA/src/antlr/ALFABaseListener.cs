@@ -20,7 +20,7 @@
 #pragma warning disable 419
 
 
-using Antlr4.Runtime.Misc;
+using System.Diagnostics.CodeAnalysis;
 using IErrorNode = Antlr4.Runtime.Tree.IErrorNode;
 using ITerminalNode = Antlr4.Runtime.Tree.ITerminalNode;
 using IToken = Antlr4.Runtime.IToken;
@@ -34,138 +34,139 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
 [System.Diagnostics.DebuggerNonUserCode]
 [System.CLSCompliant(false)]
+[ExcludeFromCodeCoverage]
 public partial class ALFABaseListener : IALFAListener {
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.program"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterProgram([NotNull] ALFAParser.ProgramContext context) { }
+	public virtual void EnterProgram([Antlr4.Runtime.Misc.NotNull] ALFAParser.ProgramContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.program"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitProgram([NotNull] ALFAParser.ProgramContext context) { }
+	public virtual void ExitProgram([Antlr4.Runtime.Misc.NotNull] ALFAParser.ProgramContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.statement"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterStatement([NotNull] ALFAParser.StatementContext context) { }
+	public virtual void EnterStatement([Antlr4.Runtime.Misc.NotNull] ALFAParser.StatementContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.statement"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitStatement([NotNull] ALFAParser.StatementContext context) { }
+	public virtual void ExitStatement([Antlr4.Runtime.Misc.NotNull] ALFAParser.StatementContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterVarDcl([NotNull] ALFAParser.VarDclContext context) { }
+	public virtual void EnterVarDcl([Antlr4.Runtime.Misc.NotNull] ALFAParser.VarDclContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitVarDcl([NotNull] ALFAParser.VarDclContext context) { }
+	public virtual void ExitVarDcl([Antlr4.Runtime.Misc.NotNull] ALFAParser.VarDclContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context) { }
+	public virtual void EnterBuiltInAnim([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context) { }
+	public virtual void ExitBuiltInAnim([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context) { }
+	public virtual void EnterBuiltInAnimCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimCallContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context) { }
+	public virtual void ExitBuiltInAnimCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimCallContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
+	public virtual void EnterBuiltInCreateShape([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
+	public virtual void ExitBuiltInCreateShape([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
+	public virtual void EnterBuiltInCreateShapeCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
+	public virtual void ExitBuiltInCreateShapeCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.args"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterArgs([NotNull] ALFAParser.ArgsContext context) { }
+	public virtual void EnterArgs([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgsContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.args"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitArgs([NotNull] ALFAParser.ArgsContext context) { }
+	public virtual void ExitArgs([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgsContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.arg"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterArg([NotNull] ALFAParser.ArgContext context) { }
+	public virtual void EnterArg([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.arg"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitArg([NotNull] ALFAParser.ArgContext context) { }
+	public virtual void ExitArg([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterType([NotNull] ALFAParser.TypeContext context) { }
+	public virtual void EnterType([Antlr4.Runtime.Misc.NotNull] ALFAParser.TypeContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitType([NotNull] ALFAParser.TypeContext context) { }
+	public virtual void ExitType([Antlr4.Runtime.Misc.NotNull] ALFAParser.TypeContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
-	public virtual void EnterEveryRule([NotNull] ParserRuleContext context) { }
+	public virtual void EnterEveryRule([Antlr4.Runtime.Misc.NotNull] ParserRuleContext context) { }
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
-	public virtual void ExitEveryRule([NotNull] ParserRuleContext context) { }
+	public virtual void ExitEveryRule([Antlr4.Runtime.Misc.NotNull] ParserRuleContext context) { }
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
-	public virtual void VisitTerminal([NotNull] ITerminalNode node) { }
+	public virtual void VisitTerminal([Antlr4.Runtime.Misc.NotNull] ITerminalNode node) { }
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
-	public virtual void VisitErrorNode([NotNull] IErrorNode node) { }
+	public virtual void VisitErrorNode([Antlr4.Runtime.Misc.NotNull] IErrorNode node) { }
 }
