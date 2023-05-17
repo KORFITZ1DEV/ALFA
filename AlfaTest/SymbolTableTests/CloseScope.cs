@@ -19,6 +19,7 @@ public class CloseScope
         }
         
     }
+    
 }
 
 public class CloseScopeTestData : IEnumerable<object[]>

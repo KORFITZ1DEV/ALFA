@@ -17,10 +17,11 @@ public class SymbolTable
         while (sym != null)
         {
             Symbol? prevSymbol = sym.PrevSymbol;
-            //_symbols.Remove(sym.Name);
+            // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
+            // it should be added to the dictionary symbols dictionary.
             if (prevSymbol != null)
             {
-                _symbols.Add(prevSymbol.Name, prevSymbol);
+                _symbols.Add(prevSymbol.Name, prevSymbol); 
             }
 
             sym = prevSymbol;
@@ -31,7 +32,7 @@ public class SymbolTable
     public void EnterSymbol(Symbol symbol)
     {
         Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
-        if (oldSymbol != null)
+        if (oldSymbol != null && oldSymbol.Depth == _depth) //
         {
             throw new RedeclaredVariableException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
@@ -41,7 +42,7 @@ public class SymbolTable
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
 
-        if (oldSymbol == null)
+        if (oldSymbol == null || oldSymbol.Depth < _depth)
         {
             if (_symbols.ContainsKey(symbol.Name))
             {
@@ -60,17 +61,19 @@ public class SymbolTable
     public Symbol? RetrieveSymbol(string name) 
     {
         Symbol? sym;
-        if (!_symbols.TryGetValue(name, out sym)) return null;
+        sym = _symbols.TryGetValue(name, out sym) ? sym : null;
+
         while (sym != null)
         {
-            if (sym.Name == name && sym.Depth == _depth) 
+            if (sym.Name == name && sym.Depth <= _depth) 
             {
                 return sym;
             }
 
             sym = sym.PrevSymbol;
         }
-        return null;
+
+        return sym;
     }
 
     public bool DeclaredLocally(string name)

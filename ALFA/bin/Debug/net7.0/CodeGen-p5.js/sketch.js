@@ -56,11 +56,17 @@ function wait(duration) {
     });
 }
 
-const Rect1 = new Rect(100,100,100,100);
+const x = 0
+const y = 0
+const length = 20
+const animDuration = 4000
+const delay = 2000
+const myRect1 = new Rect(0,0,length,length);
 
 async function main() {
-	await Rect1.move(200, 0, 4000);
-	await wait(300);
+	await myRect1.move(200, 0, animDuration);
+	await wait(delay);
+	await myRect1.move(-200, 0, animDuration);
 	}
 
 function setup() {
@@ -70,5 +76,5 @@ function setup() {
 
 function draw() {
 	background(255)
-	Rect1.draw();
+	myRect1.draw();
 }
