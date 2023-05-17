@@ -82,7 +82,7 @@ public class CodeGenVisitorTestData : IEnumerable<object[]>
     SymbolTable symbolTableCreateRect = new SymbolTable();
     yield return new object[]
     {
-      buildInAnimCallNodeCreateRect, symbolTableCreateRect, "new Rectangle(100,100,100,100);\n"
+      buildInAnimCallNodeCreateRect, symbolTableCreateRect, "new Rect(100,100,100,100);\n"
     };
 
 

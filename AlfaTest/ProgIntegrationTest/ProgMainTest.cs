@@ -53,7 +53,7 @@ public class ProgMainTest
     [ClassData(typeof(ProgMainNoExceptionTestData))]
     public void TranspilingThrowsNoException(string prog)
     {
-        Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
+        Prog.Main(new string[] {prog, "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js", "--test"});
         Assert.True(true);
     }
 }

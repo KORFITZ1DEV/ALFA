@@ -16,7 +16,7 @@ public class ProgramNodeTest
         string expectedVarOutput, string expectedSetupOutput, string expectedDrawOutput, string expectedOutput)
     {
         _sut = new CodeGenVisitor(symbolTable, "../TestOutput");
-        _sut._path = "../../../../ALFA/CodeGen-p5.js/Output/";
+        _sut._path = "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js/";
 
         _sut.Visit(node);
     
@@ -30,11 +30,12 @@ public class ProgramNodeTest
 
 public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
 {
+  private string _stdlibPath = "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js/stdlib.js";
   public IEnumerator<object[]> GetEnumerator()
   {
     //Tests the output of a program with no statements
     string path = "../../ALFA/CodeGen-p5.js/Output/stdlib.js";
-    string baseVarOutput = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js") + "\n\nconst seqAnim = new SeqAnimation([anim_0]);\n";
+    string baseVarOutput = File.ReadAllText(_stdlibPath) + "\n\nconst seqAnim = new SeqAnimation([anim_0]);\n";
 
     string baseDrawOutput = "function draw() {\n\tbackground(255)\n\tseqAnim.play();\n}";
     string baseSetupOutput = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n";
@@ -51,7 +52,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     
     //Tests the output of a program with a VarDclNode Statement with a NumNode child
     VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, "num1" ,new NumNode(300, 13,2), 25, 20);
-    string varOutputWithVarDcl = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
+    string varOutputWithVarDcl = File.ReadAllText(_stdlibPath);
     varOutputWithVarDcl += "\n\nconst num1 = 300";
     varOutputWithVarDcl += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
     string drawOutputWithVarDcl = "function draw() {\n\tbackground(255)\n\tseqAnim.play();\n}";
@@ -83,7 +84,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     
     SymbolTable symbolTableProgramRect = new SymbolTable();
     VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, "Rect1" , buildInAnimCallNodeCreateRect, 25, 20);
-    string varOutputRect = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
+    string varOutputRect = File.ReadAllText(_stdlibPath);
     varOutputRect += "\n\nconst Rect1 = new Rectangle(100,100,100,100);\n";
     varOutputRect += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
     string drawOutputRect = "function draw() {\n\tbackground(255)\n\tRect1.render();\n\tseqAnim.play();\n}";
@@ -111,7 +112,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     BuiltInAnimCallNode buildInAnimCallNodeMove = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, numNodesMove, 20, 15);
 
 
-    string varOutputRectAndMove = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
+    string varOutputRectAndMove = File.ReadAllText(_stdlibPath);
     varOutputRectAndMove += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMove += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";
     varOutputRectAndMove += "\nconst seqAnim = new SeqAnimation([anim_0]);\n";
@@ -151,7 +152,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     BuiltInAnimCallNode buildInAnimCallNodeMoveTwoFunc = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, numNodesMoveTwoFunc, 20, 15);
     BuiltInAnimCallNode builtInAnimCallNodeWait = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.wait, numNodesWaitTwoFunc, 25, 10);
 
-    string varOutputRectAndMoveTwoFunc = File.ReadAllText("../../../../ALFA/CodeGen-p5.js/Output/stdlib.js");
+    string varOutputRectAndMoveTwoFunc = File.ReadAllText(_stdlibPath);
     varOutputRectAndMoveTwoFunc += "\n\nconst Rect1 = new Rectangle(100,100,100,100);";
     varOutputRectAndMoveTwoFunc += "\n\nconst anim_0 = new MoveAnimation(Rect1,200,4000);";
     varOutputRectAndMoveTwoFunc += "\nconst anim_1 = new WaitAnimation(300);";

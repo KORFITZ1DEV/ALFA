@@ -41,7 +41,7 @@ public class VarDclCodeGenTestData : IEnumerable<object[]>
         SymbolTable symbolTableVarDclNode = new SymbolTable();
         yield return new object[]
         {
-            varDclNodeNumChild, symbolTableVarDclNode, "const rect1 = new Rectangle(100,100,100,100);\n\n", "\trect1.render();\n"
+            varDclNodeNumChild, symbolTableVarDclNode, "const rect1 = new Rect(100,100,100,100);\n", "\trect1.draw();\n"
         };
     }
 
