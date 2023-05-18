@@ -15,19 +15,24 @@ public class SymbolTable
     public void CloseScope()
     {
         Symbol? sym = _scopeDisplay[_depth];
+        bool removedSymbol = false;
+        Symbol? origSym = _scopeDisplay[_depth];
         while (sym != null)
         {
             Symbol? prevSymbol = sym.PrevSymbol;
             // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
             // it should be added to the dictionary symbols dictionary.
-            _symbols.Remove(sym.Name);
             if (prevSymbol != null)
             {
+                _symbols.Remove(sym.Name);
+                removedSymbol = true;
                 _symbols.Add(prevSymbol.Name, prevSymbol); 
             }
 
             sym = prevSymbol;
         }
+
+        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
 
         _scopeDisplay[_depth] = null;
         _depth--;

@@ -3,6 +3,7 @@ using System.Text.Json;
 using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Types;
+using Newtonsoft.Json;
 
 namespace AlfaTest.SymbolTableTests;
 
@@ -44,6 +45,23 @@ public class CloseScope
 
         /*Assert*/
         Assert.Null(actualSymbol);
+    }
+
+    [Fact]
+    public void ARedeclaredSymbolWillAddTheNearestSymbolWithSameNameTo_symbolsWhenScopeIsClosed()
+    {
+        NumNode numNode = new NumNode(20, 25, 20);
+        Symbol symbol = new Symbol("Num", numNode, ALFATypes.TypeEnum.@int, 19, 20);
+        Symbol redeclaredSymbol = new Symbol("Num", numNode, ALFATypes.TypeEnum.@int, 25, 20);
+        _sut.EnterSymbol(symbol);
+        _sut.OpenScope();
+        _sut.EnterSymbol(redeclaredSymbol);
+        _sut.CloseScope();
+
+        var serializedExpectedSymbol = JsonConvert.SerializeObject(symbol);
+        var serializedActualSymbol = JsonConvert.SerializeObject(_sut.RetrieveSymbol(symbol.Name));
+
+        Assert.Equal(serializedExpectedSymbol, serializedActualSymbol);
     }
 }
 
