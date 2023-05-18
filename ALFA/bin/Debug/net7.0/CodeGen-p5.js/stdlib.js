@@ -10,7 +10,7 @@ class Shape {
         let originalX = this.x;
         let originalY = this.y;
 
-        let animate = (resolve) => { // Added `resolve` parameter
+        let animate = (resolve) => {
             let now = Date.now();
             let progress = (now - start) / duration;
 
