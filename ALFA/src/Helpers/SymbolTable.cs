@@ -9,29 +9,39 @@ public class SymbolTable
     public void OpenScope()
     {
         _depth++;
-        _scopeDisplay.Add(null);
+        if(_scopeDisplay.Count != _depth + 1)
+            _scopeDisplay.Add(null);
     }
     public void CloseScope()
     {
         Symbol? sym = _scopeDisplay[_depth];
+        bool removedSymbol = false;
+        Symbol? origSym = _scopeDisplay[_depth];
         while (sym != null)
         {
             Symbol? prevSymbol = sym.PrevSymbol;
-            //_symbols.Remove(sym.Name);
+            // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
+            // it should be added to the dictionary symbols dictionary.
             if (prevSymbol != null)
             {
-                _symbols.Add(prevSymbol.Name, prevSymbol);
+                _symbols.Remove(sym.Name);
+                removedSymbol = true;
+                _symbols.Add(prevSymbol.Name, prevSymbol); 
             }
 
             sym = prevSymbol;
         }
+
+        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
+
+        _scopeDisplay[_depth] = null;
         _depth--;
     }
     
     public void EnterSymbol(Symbol symbol)
     {
         Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
-        if (oldSymbol != null)
+        if (oldSymbol != null && oldSymbol.Depth == _depth) //
         {
             throw new RedeclaredVariableException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
@@ -41,7 +51,8 @@ public class SymbolTable
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
 
-        if (oldSymbol == null)
+        //If there is a variable declared with the same name on a lower depth
+        if (oldSymbol == null || oldSymbol.Depth < _depth) 
         {
             if (_symbols.ContainsKey(symbol.Name))
             {
@@ -51,26 +62,27 @@ public class SymbolTable
             _symbols.Add(symbol.Name, newSymbol);
         }
 
-        //As the oldSymbol is set to previous symbol, one with the same name
-        //This could result in an issue when closing a scope as the oldsymbol
-        //may be overwritten and thus maybe lost.
+        //Sets the oldSymbol with the same name as the newSymbol to be the PrevSymbol
+        //because newSymbol is in the nearest scope with the name.
         newSymbol.PrevSymbol = oldSymbol!;
     }
 
     public Symbol? RetrieveSymbol(string name) 
     {
         Symbol? sym;
-        if (!_symbols.TryGetValue(name, out sym)) return null;
+        sym = _symbols.TryGetValue(name, out sym) ? sym : null;
+
         while (sym != null)
         {
-            if (sym.Name == name && sym.Depth == _depth) 
+            if (sym.Name == name && sym.Depth <= _depth) 
             {
                 return sym;
             }
 
             sym = sym.PrevSymbol;
         }
-        return null;
+
+        return sym;
     }
 
     public bool DeclaredLocally(string name)

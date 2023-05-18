@@ -5,11 +5,14 @@ using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Visitors;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using ALFA.Types;
 
 namespace ALFA
 {
+    
+    [ExcludeFromCodeCoverage]
     public static class Prog
     {
         public static void Main(string[] args)

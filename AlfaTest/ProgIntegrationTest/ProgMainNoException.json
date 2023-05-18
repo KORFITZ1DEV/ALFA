@@ -1,0 +1,23 @@
+[
+  {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\n\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "int x1 = 0;\nint y1 = 0;\nint x2 = 100;\nint y2 = 140;\n\nint length = 100;\nint width = 200;\nint animDuration = 1000;\nint delay = 300;\nrect myrect1 = createRect(x1, y1, width, length);\nrect myrect2 = createRect(x2, y2, length, length);\n\nmove(myrect1, 200, animDuration);\nwait(delay);\nmove(myrect2, 300, animDuration);\nmove(myrect1, -200, animDuration);\nwait(delay);\nmove(myrect2, -200, animDuration);\n\nrect myrect3 = createRect(200, 150, 20, 20);\nmove(myrect3, 400, 600);\n\nrect myrect4 = createRect(200, 350, 40, 30);\nmove(myrect4, 200, 700);",
+    "Comment": "",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "int x1 = 0;\nint y1 = 0;\n\nint length = 100;\nint width = 200;\nrect myrect1 = createRect(x1, y1, width, length);\n",
+    "Comment": "",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "int x1 = 0;\nint y1 = 0;\n\nint length = 100;\nint width = 200;\nrect myrect1 = createRect(x1, y1, width, length);\n\nmove(myrect1, 200, 3000);",
+    "Comment": "",
+    "exceptionType": ""
+  }
+  
+]

@@ -6,12 +6,6 @@ namespace AlfaTest;
 public class ProgramTreeMocker
 {
     private int _myInvokingState = 0;
-    
-    public ProgramTreeMocker()
-    {
-        _myInvokingState = 0;
-    }
-    
 
     //Generates our wanted parse tree created from the program: "int i = 2;
     public ALFAParser.ProgramContext MockProgramTreeWithIntVarDcl()
@@ -24,23 +18,17 @@ public class ProgramTreeMocker
         
         TerminalNodeImpl terminalNodeImplInt = new TerminalNodeImpl(new CommonToken(9, "int"));
  
-        //Assigning child and parent to TypeContext node
         terminalIntNode.AddChild(terminalNodeImplInt);
         terminalNodeImplInt.Parent = terminalIntNode;
         
-        //Assigning child to StatementContext node
         stmtWithVarDclNode.AddChild(varDclNode);
         
-        //Assigning child and parent to VarDclContext node
         TerminalNodeImpl identifierImpl = new TerminalNodeImpl(new CommonToken(11, "i"));
         TerminalNodeImpl equalSignImpl = new TerminalNodeImpl(new CommonToken(2, "="));
         TerminalNodeImpl rightSideAssignmentImpl = new TerminalNodeImpl(new CommonToken(12, "2"));
-        
         varDclNode.AddChild(terminalIntNode);
-
         varDclNode.AddChild(identifierImpl);
         identifierImpl.Parent = varDclNode;
-        
         varDclNode.AddChild(equalSignImpl);
         equalSignImpl.Parent = varDclNode;
         

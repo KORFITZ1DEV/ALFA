@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
@@ -9,6 +8,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     
     public string _output = string.Empty;
     public string _varOutput = string.Empty;
+    public string _mainOutput = string.Empty;
     public string _setupOutput = string.Empty;
     public string _drawOutput = string.Empty;
     
@@ -29,6 +29,9 @@ public class CodeGenVisitor : ASTVisitor<Node>
            case ALFATypes.OutputEnum.VarOutput:
                _varOutput += nodeContent;
                break;
+           case ALFATypes.OutputEnum.MainOutput:
+               _mainOutput += nodeContent;
+               break;
            case ALFATypes.OutputEnum.SetupOutput:
                _setupOutput += nodeContent;
                break;
@@ -45,29 +48,18 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         string stdLib = File.ReadAllText((_path + "/stdlib.js"));
         Emit(stdLib + "\n\n", ALFATypes.OutputEnum.VarOutput);
-        Emit("\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tstartTime = millis()\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
+        Emit("\nasync function main() {\n\t", ALFATypes.OutputEnum.MainOutput);
+        Emit("\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tmain();\n}\n\n", ALFATypes.OutputEnum.SetupOutput);
         Emit("function draw() {\n\tbackground(255)\n", ALFATypes.OutputEnum.DrawOutput);
         
         foreach (var stmt in node.Statements)
         {
             Visit(stmt);
         }
-        
-        Emit("const seqAnim = new SeqAnimation([", ALFATypes.OutputEnum.VarOutput);
-        
-        Emit("anim_0", ALFATypes.OutputEnum.VarOutput);
-        
-        for (int i = 1; i < _animationCount; i++)
-        {
-            Emit($",anim_{i}", ALFATypes.OutputEnum.VarOutput);
-        }
-        
-        Emit("]);\n", ALFATypes.OutputEnum.VarOutput);
-        
-        Emit("\tseqAnim.play();\n", ALFATypes.OutputEnum.DrawOutput);
-        
+
+        Emit("\r}\n", ALFATypes.OutputEnum.MainOutput);
         Emit("}", ALFATypes.OutputEnum.DrawOutput);
-        Emit(_varOutput + _setupOutput + _drawOutput, ALFATypes.OutputEnum.Output);
+        Emit(_varOutput + _mainOutput + _setupOutput + _drawOutput, ALFATypes.OutputEnum.Output);
         File.WriteAllText(_path + "/sketch.js", _output);
         
         return node;
@@ -80,7 +72,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
         if (child is BuiltInCreateShapeCallNode)
         {
-            Emit($"\t{node.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
+            Emit($"\t{node.Identifier}.draw();\n", ALFATypes.OutputEnum.DrawOutput);
         }
 
         Emit("\n", ALFATypes.OutputEnum.VarOutput);
@@ -92,31 +84,23 @@ public class CodeGenVisitor : ASTVisitor<Node>
         switch (node.Type)
         {
             case ALFATypes.BuiltInAnimEnum.move:
-                Emit($"const anim_{_animationCount} = new MoveAnimation(", ALFATypes.OutputEnum.VarOutput);
+                Emit("await ", ALFATypes.OutputEnum.MainOutput);
+                var child = Visit((dynamic)node.Arguments[0], ALFATypes.OutputEnum.MainOutput);
+                Emit($".move(", ALFATypes.OutputEnum.MainOutput);
                 
-                var child = Visit((dynamic)node.Arguments[0]);
-
-                if (!_drawOutput.Contains($"{child.Identifier}.render();"))
-                {
-                    Emit($"\t{child.Identifier}.render();\n", ALFATypes.OutputEnum.DrawOutput);
-                }
-                _animationCount++;
+                Visit((dynamic)node.Arguments[1], ALFATypes.OutputEnum.MainOutput);
+                Emit(", 0, ", ALFATypes.OutputEnum.MainOutput);
+                Visit((dynamic)node.Arguments[2], ALFATypes.OutputEnum.MainOutput);
+                Emit(");\n\t", ALFATypes.OutputEnum.MainOutput);
+                
                 break;
             
             case ALFATypes.BuiltInAnimEnum.wait:
-                Emit($"const anim_{_animationCount} = new WaitAnimation(", ALFATypes.OutputEnum.VarOutput);
-                Visit(node.Arguments[0]);
-                _animationCount++;
+                Emit($"await wait(", ALFATypes.OutputEnum.MainOutput);
+                Visit((dynamic)node.Arguments[0], ALFATypes.OutputEnum.MainOutput);
+                Emit(");\n\t", ALFATypes.OutputEnum.MainOutput);
                 break;
         }
-        
-        foreach (var arg in node.Arguments.Skip(1))
-        {
-            Emit(",", ALFATypes.OutputEnum.VarOutput);
-            Visit(arg);
-        }
-
-        Emit(");\n", ALFATypes.OutputEnum.VarOutput);
         
         return node;
     }
@@ -126,22 +110,34 @@ public class CodeGenVisitor : ASTVisitor<Node>
         switch (callNode.Type)
         {
             case ALFATypes.CreateShapeEnum.createRect:
-                Emit("new Rectangle(", ALFATypes.OutputEnum.VarOutput);
+                Emit("new Rect(", ALFATypes.OutputEnum.VarOutput);
                 break;
         }
 
-        Visit(callNode.Arguments[0]);
+        Visit((dynamic)callNode.Arguments[0]);
         foreach (var arg in callNode.Arguments.Skip(1))
         {
             Emit(",", ALFATypes.OutputEnum.VarOutput);
-            Visit(arg);
+            Visit((dynamic)arg);
         }
 
-        Emit(");\n", ALFATypes.OutputEnum.VarOutput);
+        Emit(");", ALFATypes.OutputEnum.VarOutput);
 
         return callNode;
     }
 
+    public IdNode Visit(IdNode node, ALFATypes.OutputEnum type)
+    {
+        Emit(node.Identifier, type);
+        return node;
+    }
+    
+    public NumNode Visit(NumNode node, ALFATypes.OutputEnum type)
+    {
+        Emit(node.Value.ToString(), type);
+        return node;
+    }
+    
     public override IdNode Visit(IdNode node)
     {
         Emit(node.Identifier, ALFATypes.OutputEnum.VarOutput);

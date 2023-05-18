@@ -1,12 +1,12 @@
 using ALFA;
 
-namespace AlfaTest.TypeChecking;
+namespace AlfaTest.ProgTest;
 
-public class TypeCheckVisitorTest
+public class ProgMainTest
 {
     [Theory]
-    [ClassData(typeof(TypeCheckingThrowsExceptionTestData))]
-    public void TypeCheckTestThrowsException(string prog, string comment, Type exceptionType)
+    [ClassData(typeof(ProgMainThrowsExceptionTestData))]
+    public void TranspilingThrowsExpectedException(string prog, string comment, Type exceptionType)
     {
         try
         {
@@ -48,11 +48,12 @@ public class TypeCheckVisitorTest
             }
         }
     }
+
     [Theory]
-    [ClassData(typeof(TypeCheckingNoExceptionTestData))]
-    public void TypeCheckTestNoException(string prog, string comment, Type exceptionType)
+    [ClassData(typeof(ProgMainNoExceptionTestData))]
+    public void TranspilingThrowsNoException(string prog)
     {
-        Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
+        Prog.Main(new string[] {prog, "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js", "--test"});
         Assert.True(true);
     }
 }

@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
 namespace ALFA;
 
+[ExcludeFromCodeCoverage]
 public class Symbol
 {
     public ALFATypes.TypeEnum Type;

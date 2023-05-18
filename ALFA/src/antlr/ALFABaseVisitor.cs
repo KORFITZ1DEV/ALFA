@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-using Antlr4.Runtime.Misc;
+using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
 using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
@@ -33,6 +33,7 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
 [System.Diagnostics.DebuggerNonUserCode]
 [System.CLSCompliant(false)]
+[ExcludeFromCodeCoverage]
 public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IALFAVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.program"/>.
@@ -43,7 +44,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitProgram([NotNull] ALFAParser.ProgramContext context) { return VisitChildren(context); }
+	public virtual Result VisitProgram([Antlr4.Runtime.Misc.NotNull] ALFAParser.ProgramContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.statement"/>.
 	/// <para>
@@ -53,7 +54,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitStatement([NotNull] ALFAParser.StatementContext context) { return VisitChildren(context); }
+	public virtual Result VisitStatement([Antlr4.Runtime.Misc.NotNull] ALFAParser.StatementContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// <para>
@@ -63,7 +64,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitVarDcl([NotNull] ALFAParser.VarDclContext context) { return VisitChildren(context); }
+	public virtual Result VisitVarDcl([Antlr4.Runtime.Misc.NotNull] ALFAParser.VarDclContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// <para>
@@ -73,7 +74,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context) { return VisitChildren(context); }
+	public virtual Result VisitBuiltInAnim([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// <para>
@@ -83,7 +84,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context) { return VisitChildren(context); }
+	public virtual Result VisitBuiltInAnimCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimCallContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
 	/// <para>
@@ -93,7 +94,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context) { return VisitChildren(context); }
+	public virtual Result VisitBuiltInCreateShape([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
 	/// <para>
@@ -103,7 +104,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { return VisitChildren(context); }
+	public virtual Result VisitBuiltInCreateShapeCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeCallContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.args"/>.
 	/// <para>
@@ -113,7 +114,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitArgs([NotNull] ALFAParser.ArgsContext context) { return VisitChildren(context); }
+	public virtual Result VisitArgs([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgsContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.arg"/>.
 	/// <para>
@@ -123,7 +124,7 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitArg([NotNull] ALFAParser.ArgContext context) { return VisitChildren(context); }
+	public virtual Result VisitArg([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// <para>
@@ -133,5 +134,5 @@ public partial class ALFABaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitType([NotNull] ALFAParser.TypeContext context) { return VisitChildren(context); }
+	public virtual Result VisitType([Antlr4.Runtime.Misc.NotNull] ALFAParser.TypeContext context) { return VisitChildren(context); }
 }

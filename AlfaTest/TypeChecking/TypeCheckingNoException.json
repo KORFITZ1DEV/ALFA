@@ -1,7 +1,0 @@
-[
-  {
-    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\n\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
-    "Comment": "This test should pass",
-    "exceptionType": ""
-  }
-]

@@ -20,15 +20,16 @@
 #pragma warning disable 419
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
-using Antlr4.Runtime.Misc;
 using DFA = Antlr4.Runtime.Dfa.DFA;
 
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
 [System.CLSCompliant(false)]
+[ExcludeFromCodeCoverage]
 public partial class ALFALexer : Lexer {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
@@ -68,7 +69,7 @@ public partial class ALFALexer : Lexer {
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
-	[NotNull]
+	[Antlr4.Runtime.Misc.NotNull]
 	public override IVocabulary Vocabulary
 	{
 		get

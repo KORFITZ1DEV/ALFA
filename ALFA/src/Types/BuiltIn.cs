@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace ALFA.Types;
 
+[ExcludeFromCodeCoverage]
 public class BuiltIn
 {
     public List<ALFATypes.TypeEnum> FormalParams;

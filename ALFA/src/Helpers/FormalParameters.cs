@@ -1,6 +1,8 @@
-﻿using ALFA.Types;
+﻿using System.Diagnostics.CodeAnalysis;
+using ALFA.Types;
 namespace ALFA;
 
+[ExcludeFromCodeCoverage]
 public static class FormalParameters
 {
     public static readonly Dictionary<string, List<ALFATypes.TypeEnum>> FormalParams = new()

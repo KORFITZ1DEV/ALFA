@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace ALFA.Types;
 
+[ExcludeFromCodeCoverage]
 public class ALFATypes
 {
     public enum TypeEnum
@@ -21,6 +24,7 @@ public class ALFATypes
     public enum OutputEnum
     {
         VarOutput,
+        MainOutput,
         SetupOutput,
         DrawOutput,
         Output

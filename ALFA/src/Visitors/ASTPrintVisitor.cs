@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using ALFA.AST_Nodes;
 
 namespace ALFA.Visitors;
 
+[ExcludeFromCodeCoverage]
 public class ASTPrintVisitor : ASTVisitor<Node>
 {
     public override ProgramNode Visit(ProgramNode node)
@@ -23,20 +25,7 @@ public class ASTPrintVisitor : ASTVisitor<Node>
         Visit((dynamic)node.Value);
         return node;
     }
-
-    /*public override FuncCallNode Visit(FuncCallNode node)
-    {
-        Console.WriteLine("\n\t\tFuncCall:");
-        Visit(node.BuiltIns);
-
-        Console.WriteLine("\t\t\t\tArgs:");
-        foreach (var arg in node.Arguments)
-        {
-            Visit(arg);
-        }
-        
-        return node;
-    }*/
+    
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
         Console.Write("\t\t\tBuiltIns: ");
