@@ -42,7 +42,8 @@ public class SymbolTable
         newSymbol.Depth = _depth;
         _scopeDisplay[_depth] = newSymbol;
 
-        if (oldSymbol == null || oldSymbol.Depth < _depth)
+        //If there is a variable declared with the same name on a lower depth
+        if (oldSymbol == null || oldSymbol.Depth < _depth) 
         {
             if (_symbols.ContainsKey(symbol.Name))
             {
@@ -52,9 +53,8 @@ public class SymbolTable
             _symbols.Add(symbol.Name, newSymbol);
         }
 
-        //As the oldSymbol is set to previous symbol, one with the same name
-        //This could result in an issue when closing a scope as the oldsymbol
-        //may be overwritten and thus maybe lost.
+        //Sets the oldSymbol with the same name as the newSymbol to be the PrevSymbol
+        //because newSymbol is in the nearest scope with the name.
         newSymbol.PrevSymbol = oldSymbol!;
     }
 

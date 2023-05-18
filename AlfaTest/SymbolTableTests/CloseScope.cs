@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text.Json;
 using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Types;
@@ -7,39 +8,65 @@ namespace AlfaTest.SymbolTableTests;
 
 public class CloseScope
 {
-    [Theory]
-    [ClassData(typeof(CloseScopeTestData))]
-    public void CloseScopeTest(SymbolTable symbolTable, int expectedDepth, List<Symbol> expectedSymbols)
+    private SymbolTable _sut;
+    public CloseScope()
     {
-        symbolTable.CloseScope();
-        Assert.Equal(expectedDepth, symbolTable._depth);
-        foreach (var symbol in expectedSymbols)
+        _sut = new SymbolTable();
+    }
+    
+    [Theory]
+    [ClassData(typeof(CloseScopeHigherDepthSymbolsData))]
+    public void CloseScopeHigherDepthSymbolsCannotBeRetrieved(SymbolTable sut, int expectedDepth, List<Symbol> expectedSymbols)
+    {
+        sut.CloseScope();
+        Assert.Equal(expectedDepth, sut._depth);
+        foreach (var higherDepthDeclaredSymbol in expectedSymbols)
         {
-            Assert.Equal(symbol, symbolTable._symbols[symbol.Name]);
+            Assert.Null(sut.RetrieveSymbol(higherDepthDeclaredSymbol.Name));
         }
         
     }
-    
+
+    [Fact]
+    public void ItIsNotPossibleToRetrieveSymbolsFromAClosedScopeThatDoesNotPersistInAnAnimationDeclaration()
+    {
+        /*Arrange*/
+        NumNode numNode = new NumNode(20, 25, 20);
+        Symbol symbol = new Symbol("Num", numNode, ALFATypes.TypeEnum.@int, 19, 20);
+        symbol.Depth = 1;
+        _sut.OpenScope();
+        _sut.EnterSymbol(symbol);
+        _sut.CloseScope();
+        _sut.OpenScope();
+        
+        /*Act*/
+        Symbol? actualSymbol = _sut.RetrieveSymbol("Num");
+
+        /*Assert*/
+        Assert.Null(actualSymbol);
+    }
 }
 
-public class CloseScopeTestData : IEnumerable<object[]>
+public class CloseScopeHigherDepthSymbolsData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
+        
+        //Tests that symbols entered on a higher depth cannot be retrieved on a lower depth.
         NumNode numNode = new NumNode(20, 25, 20);
         Symbol oldSymbol = new Symbol("Num1", numNode, ALFATypes.TypeEnum.@int, 19, 20);
+        oldSymbol.Depth = 1;
         Symbol midSymbol = new Symbol("Num2", numNode, ALFATypes.TypeEnum.@int, 15, 15);
+        midSymbol.Depth = 1;
         Symbol newSymbol1 = new Symbol("Num3", numNode, ALFATypes.TypeEnum.@int, 16, 16);
         newSymbol1.Depth = 1;
-        oldSymbol.Depth = 1;
-        midSymbol.Depth = 1;
-        newSymbol1.PrevSymbol = midSymbol;
-        midSymbol.PrevSymbol = oldSymbol;
+
         SymbolTable symbolTable = new SymbolTable();
-        symbolTable._depth = 1;
-        symbolTable._symbols.Add(newSymbol1.Name, newSymbol1);
-        symbolTable._scopeDisplay.Add(null);
-        symbolTable._scopeDisplay[1] = newSymbol1;
+        symbolTable.OpenScope();
+        symbolTable.EnterSymbol(oldSymbol);
+        symbolTable.EnterSymbol(midSymbol);
+        symbolTable.EnterSymbol(newSymbol1);
+        
         int expectedDepth = 0;
         var _symbols = new List<Symbol>()
         {
