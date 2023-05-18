@@ -1,8 +1,9 @@
 using System.Collections;
-using System.Text.Json;
 using ALFA;
 using ALFA.AST_Nodes;
 using ALFA.Types;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AlfaTest.SymbolTableTests;
 
@@ -32,8 +33,8 @@ public class RetrieveSymbol
     public void RetrieveSymbolRetrievesSymbol(Symbol expectedSymbol, SymbolTable sut)
     {
         //Serialized to avoid asserting equality on the reference.
-        var serializedExpectedSymbol = JsonSerializer.Serialize(expectedSymbol);
-        var serializedActualSymbol = JsonSerializer.Serialize(sut.RetrieveSymbol(expectedSymbol.Name));
+        var serializedExpectedSymbol = JsonConvert.SerializeObject(expectedSymbol);
+        var serializedActualSymbol = JsonConvert.SerializeObject(sut.RetrieveSymbol(expectedSymbol.Name));
         Assert.Equal(serializedExpectedSymbol, serializedActualSymbol);
     }
 
@@ -82,6 +83,8 @@ public class RetrieveSymbolTestData : IEnumerable<object[]>
         
         NumNode numNodeRedeclaredLetters = new NumNode(500, 15, 40);
         Symbol redeclaredLetters = new Symbol("Num", numNodeRedeclaredLetters, ALFATypes.TypeEnum.@int, 60, 10);
+        redeclaredLetters.PrevSymbol = letters1;
+        redeclaredLetters.Depth = 1;
         symbolTableLetters1.OpenScope();
         symbolTableLetters1.EnterSymbol(redeclaredLetters);
         

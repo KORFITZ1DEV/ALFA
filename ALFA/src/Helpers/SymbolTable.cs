@@ -9,7 +9,8 @@ public class SymbolTable
     public void OpenScope()
     {
         _depth++;
-        _scopeDisplay.Add(null);
+        if(_scopeDisplay.Count != _depth + 1)
+            _scopeDisplay.Add(null);
     }
     public void CloseScope()
     {
@@ -19,6 +20,7 @@ public class SymbolTable
             Symbol? prevSymbol = sym.PrevSymbol;
             // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
             // it should be added to the dictionary symbols dictionary.
+            _symbols.Remove(sym.Name);
             if (prevSymbol != null)
             {
                 _symbols.Add(prevSymbol.Name, prevSymbol); 
@@ -26,6 +28,8 @@ public class SymbolTable
 
             sym = prevSymbol;
         }
+
+        _scopeDisplay[_depth] = null;
         _depth--;
     }
     
