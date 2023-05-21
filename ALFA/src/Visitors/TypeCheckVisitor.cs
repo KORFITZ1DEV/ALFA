@@ -12,7 +12,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         _symbolTable = symbolTable;
     }
-    
+
     public override ProgramNode Visit(ProgramNode node)
     {
         foreach (var stmt in node.Statements)
@@ -21,11 +21,16 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         }
         return node;
     }
-    
+
+    public override Node Visit(VarDclNode node)
+    {
+        throw new NotImplementedException();
+    }
+
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
         List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
-        
+
         if (node.Arguments.Count != nodeFormalParameters.Count)
         {
             throw new InvalidNumberOfArgumentsException(
@@ -45,10 +50,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 }
             }
             else if (actualParam is NumNode numNode)
-            { 
-                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int) 
+            {
+                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
                     throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
-            } 
+            }
             i++;
         }
         return node;
@@ -57,7 +62,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
     {
         List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[callNode.Type.ToString()];
-        
+
         if (callNode.Arguments.Count != nodeFormalParameters.Count)
         {
             throw new InvalidNumberOfArgumentsException(
@@ -81,28 +86,161 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         }
         return callNode;
     }
-    
-    //Typecheck not needed for VarDcl as they are covered in the BuildASTVisitor, and for some reason it cant be wirtten in => node format
-    public override VarDclNode Visit(VarDclNode node)
-    {
-        var visitedNode = Visit((dynamic)node.Value);
 
-        if (visitedNode is BuiltInCreateShapeCallNode)
+    public override AssignStmtNode Visit(AssignStmtNode assNode)
+    {
+        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
+        Node assNodeVal = Visit(assNode.Value);
+
+        if (idSymbol != null)
         {
-            if (node.Type != ALFATypes.TypeEnum.rect)
-                throw new TypeException($"Invalid type {node.Type}, expected type {ALFATypes.TypeEnum.rect} on line {node.Line}:{node.Col}");
+            if (idSymbol.Type != assNodeVal is )
+                throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
         }
-        else if (visitedNode is NumNode)
+
+        return assNode;
+    }
+
+    public override IfStmtNode Visit(IfStmtNode ifNode)
+    {
+        foreach (var expr in ifNode.Expressions)
         {
-            if (node.Type != ALFATypes.TypeEnum.@int)
-                throw new TypeException($"Invalid type {node.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {node.Line}:{node.Col}");
+            //Maybe no
+            var exprChild = Visit((dynamic)expr);
+        }
+
+        return ifNode;
+    }
+
+    public override LoopStmtNode Visit(LoopStmtNode node)
+    {
+        AssignStmtNode assigStmt = Visit(node.AssignStmt);
+        Visit(node.To);
+        Visit(node.Block);
+
+        return node;
+    }
+
+    public override ParalStmtNode Visit(ParalStmtNode node)
+    {
+        foreach (var statement in node.Block.Statements)
+        {
+            Visit(statement);
         }
 
         return node;
     }
 
-    
-    //TODO hit
+    public override ExprNode Visit(ExprNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public void EvaluateExpression(ExprNode node)
+    {
+        var leftValue = node.Left;
+        var rightValue = node.Right;
+
+        //Visit left and right value when they are expressions
+        if (leftValue is ExprNode leftValueExpr)
+        {
+            EvaluateExpression(leftValueExpr);
+        }
+        if (rightValue is ExprNode rightValueExpr)
+        {
+            EvaluateExpression(rightValueExpr);
+        }
+
+        //Evaluate the expressions.
+
+
+        if (leftValue is NumNode leftNum && rightValue is NumNode rightNum)
+        {
+            EvaluateArithmeticExpression(leftNum.Value, rightNum.Value, node.Operator);
+        }
+        else if (leftValue is BoolNode leftBool && rightValue is BoolNode rightBool)
+        {
+            EvaluateBooleanExpression(leftBool.Value, rightBool.Value, node.Operator);
+        }
+        else if (leftValue is IdNode leftId && rightValue is NumNode rightNumb)
+        {
+
+        }
+        else if (leftValue is NumNode leftNumb && rightValue is IdNode rightId)
+        {
+
+        }
+        else if (leftValue is IdNode leftIdentifier && rightValue is IdNode rightIdentifier)
+        {
+
+        }
+        else
+        {
+            throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
+             $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
+        }
+    }
+
+    public int EvaluateArithmeticExpression(int leftVal, int rightVal, string op)
+    {
+
+        switch (op)
+        {
+            case "+":
+                return leftVal + rightVal;
+            case "-":
+                return leftVal - rightVal;
+            case "*":
+                return leftVal * rightVal;
+            case "/":
+                return leftVal / rightVal;
+            case "%":
+                return leftVal % rightVal;
+
+            default:
+                throw new Exception("You used an arithmetic operator that is not being switched on");
+        }
+    }
+
+    public bool EvaluateBooleanRelationalExpression(NumNode leftVal, NumNode rightVal, string op)
+    {
+        switch (op)
+        {
+            case "<":
+                return leftVal.Value < rightVal.Value;
+            case ">":
+                return leftVal.Value > rightVal.Value;
+            case "<=":
+                return leftVal.Value <= rightVal.Value;
+            case ">=":
+                return leftVal.Value >= rightVal.Value;
+            default:
+                throw new Exception("You used an arithmetic operator that is not being switched on");
+        }
+    }
+
+    public bool EvaluateBooleanExpression(bool leftVal, bool rightVal, string op)
+    {
+
+        switch (op)
+        {
+            case "and":
+                return leftVal && rightVal;
+            case "or":
+                return leftVal || rightVal;
+            case "!":
+                return leftVal
+            default:
+                throw new Exception("You used an arithmetic operator that is not being switched on");
+        }
+    }
+
+    public override BoolNode Visit(BoolNode node)
+    {
+        throw new NotImplementedException();
+    }
+
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
 }

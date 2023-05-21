@@ -19,7 +19,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         List<Node> childList = new List<Node>();
         
-        foreach (var stmt in context.statement())
+        foreach (var stmt in context.stmt())
         {
             childList.Add(Visit(stmt));
         }
@@ -27,29 +27,34 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return new ProgramNode(childList!);
     }
     
-    public override Node VisitStatement(ALFAParser.StatementContext context)
+    public override Node VisitStmt(ALFAParser.StmtContext context)
     {
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
+        
+        if (context.assignStmt() != null)
+            return VisitAssignStmt(context.assignStmt());
+        
         if (context.builtInAnimCall() != null)
-        {
             return VisitBuiltInAnimCall(context.builtInAnimCall());
-        }
 
+        if (context.ifStmt() != null)
+            return VisitIfStmt(context.ifStmt());
+
+        if (context.loopStmt() != null)
+            return VisitLoopStmt(context.loopStmt());
+
+        if (context.paralStmt() != null)
+            return VisitParalStmt(context.paralStmt());
+        
         throw new Exception("Invalid statement");
     }
     
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
-        string id = context.ID().GetText();
+        VarDclNode newVarDclNode = new VarDclNode(context.Start.Line, context.Start.Column);
+        //TODO program should throw an exception if one of the children is a ErrorNodeImpl.
         
-        var retrievedSymbol = _symbolTable.RetrieveSymbol(id);
-            
-        if (retrievedSymbol != null)
-        {
-            throw new RedeclaredVariableException("Redeclared variable on line " + retrievedSymbol.LineNumber + ":" + retrievedSymbol.ColumnNumber);
-        }
-
         ALFATypes.TypeEnum typeEnum;
         
         switch (context.type().GetText())
@@ -57,49 +62,61 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             case "int":
                 typeEnum = ALFATypes.TypeEnum.@int;
                 break;
+            case "bool":
+                typeEnum = ALFATypes.TypeEnum.@bool;
+                break;
             case "rect":
                 typeEnum = ALFATypes.TypeEnum.rect;
                 break;
             default:
                 throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
-
+        
+        ALFAParser.AssignStmtContext assignStmtContext = context.assignStmt();
+        if (assignStmtContext != null)
+        {
+            AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
+            newVarDclNode.AssignStmt = assignStmtNode;
+        }
+        
+        string id = newVarDclNode.AssignStmt.Identifier;
+        var symbol = _symbolTable.RetrieveSymbol(id);
+        if (symbol != null)
+            throw new VariableAlreadyDeclaredException($"Variable {id} already declared on line {symbol.LineNumber}:{symbol.ColumnNumber}");
+        
+        _symbolTable.EnterSymbol(new Symbol(id, newVarDclNode.AssignStmt, typeEnum, context.Start.Line, context.Start.Column));
+        
+        return newVarDclNode;
+    }
+    
+    public override AssignStmtNode VisitAssignStmt(ALFAParser.AssignStmtContext context)
+    {
+        AssignStmtNode newAssignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
+        newAssignStmtNode.Identifier = context.ID().GetText();
         if (context.builtInCreateShapeCall() != null)
         {
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
+            newAssignStmtNode.Value = builtInCreateShapeCall;
 
-           
-            _symbolTable.EnterSymbol(new Symbol(id, builtInCreateShapeCall, typeEnum, context.Start.Line, context.Start.Column));
-            return new VarDclNode(typeEnum, id, builtInCreateShapeCall, context.Start.Line, 0);
-        }
-        
-        if (context.NUM() == null)
+        } else if (context.expr() != null)
         {
-            throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
+            var expr = Visit((dynamic)context.expr());
+            
+            //TODO something about constant folding here - evaluate!
+            
+            newAssignStmtNode.Value = expr;
         }
         
+        string id = newAssignStmtNode.Identifier;
+        var symbol = _symbolTable.RetrieveSymbol(id);
+        if (symbol != null)
+            symbol.Value = newAssignStmtNode.Value;
         
-        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
-
-        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
-        {
-            throw new SyntacticException($"Something is syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
-        }
-        
-        NumNode num = new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
-        
-        _symbolTable.EnterSymbol(new Symbol(id, num, typeEnum, context.Start.Line, context.Start.Column));
-        
-
-        
-        return new VarDclNode(typeEnum,id, num, context.Start.Line, 0);
+        return newAssignStmtNode;
     }
     
     public override BuiltInAnimCallNode VisitBuiltInAnimCall(ALFAParser.BuiltInAnimCallContext context)
     {
-        //TODO maybe check for context's parent.
-
-        string? identifier = null;
         var type = context.builtInAnim().GetText();
         ALFATypes.BuiltInAnimEnum builtInAnimEnum;
         
@@ -107,117 +124,277 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             case "move":
                 builtInAnimEnum = ALFATypes.BuiltInAnimEnum.move;
-                if (context.args().arg()[0].ID() == null) throw new ArgumentTypeException("You are trying to move something that isn't a rect");
-                identifier = context.args().arg()[0].ID().GetText();
                 break;
             case "wait":
                 builtInAnimEnum = ALFATypes.BuiltInAnimEnum.wait;
                 break;
             default:
-                throw new UnknownBuiltinException("Invalid built-in function");
+                throw new UnknownBuiltinException("Unknown built-in animation");
         }
         
-        BuiltInAnimCallNode builtInAnimCallNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+        BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
 
-        if (context.args() != null)
+        if (context.actualParams() != null)
         {
-            int i = 0;
-            foreach (var argCtx in context.args().arg())
+            foreach (var exprCtx in context.actualParams().expr())
             {
-                var id = argCtx.ID();
-                var num = argCtx.NUM();
-
-                if (id != null)
-                {
-                    Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
-                    if (sym == null) 
-                        throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
-
-                    if (i == FormalParameters.FormalParams[type].Count() - 1 && sym.Value is NumNode locNumNode)
-                    {
-                        if(locNumNode.Value == 0) throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {id.Symbol.Line} column {id.Symbol.Column}");
-                    }
-                    
-                    IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
-                    builtInAnimCallNode.Arguments.Add(idNode);
-                    i++;
-                    continue;
-                }
+                var expr = Visit((dynamic)exprCtx);
                 
-                NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                builtInAnimCallNode.Arguments.Add(numNode);
-                if (i == FormalParameters.FormalParams[type].Count() - 1)
+                switch (expr)
                 {
-                    if (numNode.Value <= 0)
-                    {
-                        throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {num.Symbol.Line} column {num.Symbol.Column}");
-                    }
+                    case IdNode idNode:
+                        string id = idNode.Identifier;
+                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
+                        if (sym == null)
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                        builtInAnimCallNodeNode.Arguments.Add(idNode);
+                        break;
+                    case NumNode numNode:
+                        builtInAnimCallNodeNode.Arguments.Add(numNode);
+                        break;
+                    case BoolNode boolNode:
+                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInAnimCallNodeNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
+                    default:
+                        builtInAnimCallNodeNode.Arguments.Add(expr);
+                        break;
                 }
-
-                i++;
             }
         }
-
-
         
-        return builtInAnimCallNode;
+        return builtInAnimCallNodeNode;
     }
     
-    public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
+    public override BuiltInParalAnimCallNode VisitBuiltInParalAnimCall(ALFAParser.BuiltInParalAnimCallContext context)
+    {
+        var type = context.builtInParalAnim().GetText();
+        ALFATypes.BuiltInParalAnimEnum builtInParalAnimEnum;
+        
+        switch (type)
+        {
+            case "move":
+                builtInParalAnimEnum = ALFATypes.BuiltInParalAnimEnum.move;
+                break;
+            default:
+                throw new UnknownBuiltinException("Unknown built-in animation");
+        }
+        
+        BuiltInParalAnimCallNode builtInParalAnimCallNodeNode = new BuiltInParalAnimCallNode(builtInParalAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+
+        if (context.actualParams() != null)
+        {
+            foreach (var exprCtx in context.actualParams().expr())
+            {
+                var expr = Visit((dynamic)exprCtx);
+                
+                switch (expr)
+                {
+                    case IdNode idNode:
+                        string id = idNode.Identifier;
+                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
+                        if (sym == null)
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                        builtInParalAnimCallNodeNode.Arguments.Add(idNode);
+                        break;
+                    case NumNode numNode:
+                        builtInParalAnimCallNodeNode.Arguments.Add(numNode);
+                        break;
+                    case BoolNode boolNode:
+                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInParalAnimCallNodeNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
+                    default:
+                        builtInParalAnimCallNodeNode.Arguments.Add(expr);
+                        break;
+                }
+            }
+        }
+        
+        return builtInParalAnimCallNodeNode;
+    }
+    
+   public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
     {
         string? identifier = null;
-        var type = context.builtInCreateShape().GetText();
+        string type = context.builtInCreateShape().GetText();
         ALFATypes.CreateShapeEnum createShapeEnum;
 
+        var parent = (ALFAParser.AssignStmtContext)context.Parent;
+        identifier = parent.ID().GetText();
         
         switch (type)
         {
             case "createRect":
                 createShapeEnum = ALFATypes.CreateShapeEnum.createRect;
-                var parent = (ALFAParser.VarDclContext)context.Parent;
-                parent.ID().GetText();
-                
                 break;
-            
             default:
-                throw new UnknownBuiltinException("Invalid built-in function");
+                throw new UnknownBuiltinException($"Cannot assign {identifier} to unknown built-in function on line {context.Start.Line}:{context.Start.Column}");
         }
+
+        BuiltInCreateShapeCallNode builtInCreateShapeCallNode = new BuiltInCreateShapeCallNode(createShapeEnum, new List<Node>(), context.Start.Line, context.Start.Column);
         
-        BuiltInCreateShapeCallNode builtInAnimCallCallNodeCallNode = new BuiltInCreateShapeCallNode(createShapeEnum,new List<Node>(), context.Start.Line, context.Start.Column);
-
-        if (context.args() != null)
+        if (context.actualParams() != null)
         {
-            foreach (var argCtx in context.args().arg())
+            foreach (var exprCtx in context.actualParams().expr())
             {
-                var id = argCtx.ID();
-                var num = argCtx.NUM();
-
-                if (id != null)
+                var expr = Visit((dynamic)exprCtx);
+                
+                switch (expr)
                 {
-                    Symbol? sym = _symbolTable.RetrieveSymbol(id.GetText());
-                    if (sym == null) 
-                        throw new UndeclaredVariableException($"Variable {id.GetText()} not declared at line {id.Symbol.Line}:{id.Symbol.Column}");
-            
-                    IdNode idNode = new IdNode(id.GetText(), context.Start.Line, context.Start.Column);
-                    builtInAnimCallCallNodeCallNode.Arguments.Add(idNode);
-                    continue;
+                    case IdNode idNode:
+                        string id = idNode.Identifier;
+                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
+                        if (sym == null)
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                    
+                        builtInCreateShapeCallNode.Arguments.Add(idNode);
+                        break;
+                    case NumNode numNode:
+                        int value = numNode.Value;
+                        builtInCreateShapeCallNode.Arguments.Add(numNode);
+                        break;
+                    case BoolNode boolNode:
+                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInCreateShapeCallNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
+                    default:
+                        builtInCreateShapeCallNode.Arguments.Add(expr);
+                        break;
                 }
-                
-                if (argCtx.NUM() == null)
-                    throw new TypeException("expected int on line " + context.Start.Line + ":" + context.Start.Column);
-                
-                NumNode numNode = new NumNode(int.Parse(num.GetText()), context.Start.Line, context.Start.Column);
-                builtInAnimCallCallNodeCallNode.Arguments.Add((numNode));
             }
         }
-        
-        var errorNodeImplChild = context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl));
 
-        if (context.children.ToList().Find(child => child.GetType() == typeof(ErrorNodeImpl)) != null)
-        {
-            throw new SyntacticException($"Something is Syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
-        }
-
-        return builtInAnimCallCallNodeCallNode;
+        return builtInCreateShapeCallNode;
     }
+   
+    public override IfStmtNode VisitIfStmt(ALFAParser.IfStmtContext context)
+    {
+        List<Node> expressions = new List<Node>();
+        List<BlockNode> blocks = new List<BlockNode>();
+        
+        int i = 0;
+        foreach (var exprCtx in context.expr()) // if and else-ifs
+        {
+            var expr = Visit((dynamic)exprCtx);
+            expressions.Add(expr);
+            
+            BlockNode block = new BlockNode();
+            foreach (var stmtCtx in context.block(i).stmt())
+            {
+                block.Statements.Add(Visit(stmtCtx));
+            }
+            blocks.Add(block);
+            i++;
+        }
+        if (context.block().Length > context.expr().Length) // else
+        {
+            BlockNode block = new BlockNode();
+            foreach (var stmtCtx in context.block().Last().stmt())
+            {
+                block.Statements.Add(Visit(stmtCtx));
+            }
+            blocks.Add(block);
+        }
+        
+        return new IfStmtNode(expressions, blocks, context.Start.Line, context.Start.Column);
+    }
+    
+    public override LoopStmtNode VisitLoopStmt(ALFAParser.LoopStmtContext context)
+    {
+        AssignStmtNode assignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
+        assignStmtNode.Identifier = context.ID().GetText();
+        assignStmtNode.Value = Visit(context.expr(0));
+        
+        Node to = Visit(context.expr(1));
+        
+        BlockNode block = new BlockNode();
+        foreach (var stmtCtx in context.block().stmt())
+        {
+            block.Statements.Add(Visit(stmtCtx));
+        }
+        
+        return new LoopStmtNode(assignStmtNode, to, block, context.Start.Line, context.Start.Column);
+    }
+    
+    public override ParalStmtNode VisitParalStmt(ALFAParser.ParalStmtContext context)
+    {
+        ParalBlockNode paralBlock = new ParalBlockNode();
+        foreach (var builtInParalAnimCallCtx in context.paralBlock().builtInParalAnimCall())
+        {
+            paralBlock.Statements.Add(VisitBuiltInParalAnimCall(builtInParalAnimCallCtx));
+        }
+        
+        return new ParalStmtNode(paralBlock, context.Start.Line, context.Start.Column);
+    }
+    
+    public override ExprNode VisitParens(ALFAParser.ParensContext context)
+    {
+        var expr = Visit((dynamic)context.expr());
+        return new ExprNode("()", expr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitNot(ALFAParser.NotContext context)
+    {
+        var expr = Visit((dynamic)context.expr());
+        return new ExprNode("!", expr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitUnaryMinus(ALFAParser.UnaryMinusContext context)
+    {
+        var expr = Visit((dynamic)context.expr());
+        return new ExprNode("u-", expr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitMulDiv(ALFAParser.MulDivContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        var op = context.op.Text;
+        
+        return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitAddSub(ALFAParser.AddSubContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        var op = context.op.Text;
+
+        return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitRelational(ALFAParser.RelationalContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        var op = context.op.Text;
+        
+        return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitEquality(ALFAParser.EqualityContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        var op = context.op.Text;
+        
+        return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitAnd(ALFAParser.AndContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        
+        return new ExprNode("and", leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override ExprNode VisitOr(ALFAParser.OrContext context)
+    {
+        var leftExpr = Visit((dynamic)context.expr(0));
+        var rightExpr = Visit((dynamic)context.expr(1));
+        
+        return new ExprNode("or", leftExpr, rightExpr, context.Start.Line, context.Start.Column);
+    }
+    public override IdNode VisitId(ALFAParser.IdContext context)
+    {
+        return new IdNode(context.ID().GetText(), context.Start.Line, context.Start.Column);
+    }
+    public override NumNode VisitNum(ALFAParser.NumContext context)
+    {
+        return new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
+    }
+    public override BoolNode VisitBoolean(ALFAParser.BooleanContext context)
+    {
+        return new BoolNode(Boolean.Parse(context.@bool().GetText()), context.Start.Line, context.Start.Column);
+    }
+   
+   
 }

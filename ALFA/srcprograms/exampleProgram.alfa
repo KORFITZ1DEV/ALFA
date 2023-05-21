@@ -1,24 +1,31 @@
 int x1 = 0;
 int y1 = 0;
-int x2 = 100;
-int y2 = 140;
 
 int length = 100;
-int width = 200;
+int width = length + 100;
 int animDuration = 1000;
 int delay = 300;
 rect myrect1 = createRect(x1, y1, width, length);
-rect myrect2 = createRect(x2, y2, length, length);
 
-move(myrect1, 200, animDuration);
-wait(delay);
-move(myrect2, 300, animDuration);
-move(myrect1, -200, animDuration);
-wait(delay);
-move(myrect2, -200, animDuration);
+wait(delay / 5);
 
-rect myrect3 = createRect(200, 150, 20, 20);
-move(myrect3, 400, 600);
+animDuration = 1000 / 2;
 
-rect myrect4 = createRect(200, 350, 40, 30);
-move(myrect4, 200, 700);
+paral {
+    move(myrect1, 206, 105, animDuration+200);
+}
+
+loop (int i from 1 .. 10) {
+    if(i < 4) {
+        paral {
+            move(myrect1, 101, 201, animDuration); 
+        }
+    }
+    else if(i == 4) {
+        move(myrect1, 50, 50, 4000);
+    }
+    else {
+        move(myrect1, 200, 100, animDuration);
+    }
+}
+

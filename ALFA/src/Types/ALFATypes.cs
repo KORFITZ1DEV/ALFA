@@ -8,13 +8,18 @@ public class ALFATypes
     public enum TypeEnum
     {
         @int,
-        rect
+        rect,
+        @bool
     }
-    
+
     public enum BuiltInAnimEnum
     {
         move,
         wait
+    }
+    public enum BuiltInParalAnimEnum
+    {
+        move
     }
 
     public enum CreateShapeEnum
@@ -29,6 +34,4 @@ public class ALFATypes
         DrawOutput,
         Output
     }
-    
-
 }

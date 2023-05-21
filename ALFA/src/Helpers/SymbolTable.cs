@@ -43,7 +43,7 @@ public class SymbolTable
         Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
         if (oldSymbol != null && oldSymbol.Depth == _depth) //
         {
-            throw new RedeclaredVariableException(
+            throw new VariableAlreadyDeclaredException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
 

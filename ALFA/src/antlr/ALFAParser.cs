@@ -24,41 +24,54 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using DFA = Antlr4.Runtime.Dfa.DFA;
 
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
 [System.CLSCompliant(false)]
-[ExcludeFromCodeCoverage]
 public partial class ALFAParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, ID=11, NUM=12, WS=13;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
+		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, COMMENT=37, ID=38, NUM=39, 
+		WS=40;
 	public const int
-		RULE_program = 0, RULE_statement = 1, RULE_varDcl = 2, RULE_builtInAnim = 3, 
-		RULE_builtInAnimCall = 4, RULE_builtInCreateShape = 5, RULE_builtInCreateShapeCall = 6, 
-		RULE_args = 7, RULE_arg = 8, RULE_type = 9;
+		RULE_program = 0, RULE_stmt = 1, RULE_varDcl = 2, RULE_assignStmt = 3, 
+		RULE_ifStmt = 4, RULE_loopStmt = 5, RULE_paralStmt = 6, RULE_expr = 7, 
+		RULE_block = 8, RULE_paralBlock = 9, RULE_builtInAnim = 10, RULE_builtInAnimCall = 11, 
+		RULE_builtInCreateShape = 12, RULE_builtInCreateShapeCall = 13, RULE_builtInParalAnim = 14, 
+		RULE_builtInParalAnimCall = 15, RULE_actualParams = 16, RULE_type = 17, 
+		RULE_bool = 18;
 	public static readonly string[] ruleNames = {
-		"program", "statement", "varDcl", "builtInAnim", "builtInAnimCall", "builtInCreateShape", 
-		"builtInCreateShapeCall", "args", "arg", "type"
+		"program", "stmt", "varDcl", "assignStmt", "ifStmt", "loopStmt", "paralStmt", 
+		"expr", "block", "paralBlock", "builtInAnim", "builtInAnimCall", "builtInCreateShape", 
+		"builtInCreateShapeCall", "builtInParalAnim", "builtInParalAnimCall", 
+		"actualParams", "type", "bool"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'='", "';'", "'move'", "'wait'", "'('", "')'", "'createRect'", 
-		"','", "'int'", "'rect'"
+		null, "';'", "'='", "'if'", "'('", "')'", "'else if'", "'else'", "'loop'", 
+		"'int'", "'from'", "'..'", "'paral'", "'!'", "'-'", "'*'", "'/'", "'%'", 
+		"'+'", "'<'", "'>'", "'<='", "'>='", "'=='", "'!='", "'and'", "'or'", 
+		"'{'", "'}'", "'move'", "'wait'", "'createRect'", "','", "'bool'", "'rect'", 
+		"'true'", "'false'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, null, null, null, null, null, "ID", 
-		"NUM", "WS"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, "COMMENT", "ID", "NUM", "WS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
-	[Antlr4.Runtime.Misc.NotNull]
+	[NotNull]
 	public override IVocabulary Vocabulary
 	{
 		get
@@ -90,11 +103,11 @@ public partial class ALFAParser : Parser {
 
 	public partial class ProgramContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Eof() { return GetToken(ALFAParser.Eof, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public StatementContext[] statement() {
-			return GetRuleContexts<StatementContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public StmtContext[] stmt() {
+			return GetRuleContexts<StmtContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public StatementContext statement(int i) {
-			return GetRuleContext<StatementContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public StmtContext stmt(int i) {
+			return GetRuleContext<StmtContext>(i);
 		}
 		public ProgramContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -127,21 +140,21 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 21;
+			State = 39;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 20;
-				statement();
+				State = 38;
+				stmt();
 				}
 				}
-				State = 23;
+				State = 41;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1560L) != 0) );
-			State = 25;
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 302258328328L) != 0) );
+			State = 43;
 			Match(Eof);
 			}
 		}
@@ -156,58 +169,103 @@ public partial class ALFAParser : Parser {
 		return _localctx;
 	}
 
-	public partial class StatementContext : ParserRuleContext {
+	public partial class StmtContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public VarDclContext varDcl() {
 			return GetRuleContext<VarDclContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public AssignStmtContext assignStmt() {
+			return GetRuleContext<AssignStmtContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public BuiltInAnimCallContext builtInAnimCall() {
 			return GetRuleContext<BuiltInAnimCallContext>(0);
 		}
-		public StatementContext(ParserRuleContext parent, int invokingState)
+		[System.Diagnostics.DebuggerNonUserCode] public IfStmtContext ifStmt() {
+			return GetRuleContext<IfStmtContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public LoopStmtContext loopStmt() {
+			return GetRuleContext<LoopStmtContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ParalStmtContext paralStmt() {
+			return GetRuleContext<ParalStmtContext>(0);
+		}
+		public StmtContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_statement; } }
+		public override int RuleIndex { get { return RULE_stmt; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.EnterStatement(this);
+			if (typedListener != null) typedListener.EnterStmt(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.ExitStatement(this);
+			if (typedListener != null) typedListener.ExitStmt(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitStatement(this);
+			if (typedVisitor != null) return typedVisitor.VisitStmt(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public StatementContext statement() {
-		StatementContext _localctx = new StatementContext(Context, State);
-		EnterRule(_localctx, 2, RULE_statement);
+	public StmtContext stmt() {
+		StmtContext _localctx = new StmtContext(Context, State);
+		EnterRule(_localctx, 2, RULE_stmt);
 		try {
-			State = 29;
+			State = 55;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case T__8:
-			case T__9:
+			case T__32:
+			case T__33:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 27;
+				State = 45;
 				varDcl();
+				State = 46;
+				Match(T__0);
+				}
+				break;
+			case ID:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 48;
+				assignStmt();
+				State = 49;
+				Match(T__0);
+				}
+				break;
+			case T__28:
+			case T__29:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 51;
+				builtInAnimCall();
 				}
 				break;
 			case T__2:
-			case T__3:
-				EnterOuterAlt(_localctx, 2);
+				EnterOuterAlt(_localctx, 4);
 				{
-				State = 28;
-				builtInAnimCall();
+				State = 52;
+				ifStmt();
+				}
+				break;
+			case T__7:
+				EnterOuterAlt(_localctx, 5);
+				{
+				State = 53;
+				loopStmt();
+				}
+				break;
+			case T__11:
+				EnterOuterAlt(_localctx, 6);
+				{
+				State = 54;
+				paralStmt();
 				}
 				break;
 			default:
@@ -229,11 +287,9 @@ public partial class ALFAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public TypeContext type() {
 			return GetRuleContext<TypeContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public BuiltInCreateShapeCallContext builtInCreateShapeCall() {
-			return GetRuleContext<BuiltInCreateShapeCallContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public AssignStmtContext assignStmt() {
+			return GetRuleContext<AssignStmtContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(ALFAParser.NUM, 0); }
 		public VarDclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -264,32 +320,972 @@ public partial class ALFAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 31;
+			State = 57;
 			type();
-			State = 32;
+			State = 58;
+			assignStmt();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class AssignStmtContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInCreateShapeCallContext builtInCreateShapeCall() {
+			return GetRuleContext<BuiltInCreateShapeCallContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
+			return GetRuleContext<ExprContext>(0);
+		}
+		public AssignStmtContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_assignStmt; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterAssignStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitAssignStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAssignStmt(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public AssignStmtContext assignStmt() {
+		AssignStmtContext _localctx = new AssignStmtContext(Context, State);
+		EnterRule(_localctx, 6, RULE_assignStmt);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 60;
 			Match(ID);
-			State = 33;
-			Match(T__0);
-			State = 36;
+			State = 61;
+			Match(T__1);
+			State = 64;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__6:
+			case T__30:
 				{
-				State = 34;
+				State = 62;
 				builtInCreateShapeCall();
 				}
 				break;
+			case T__3:
+			case T__12:
+			case T__13:
+			case T__34:
+			case T__35:
+			case ID:
 			case NUM:
 				{
-				State = 35;
-				Match(NUM);
+				State = 63;
+				expr(0);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 38;
-			Match(T__1);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class IfStmtContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BlockContext[] block() {
+			return GetRuleContexts<BlockContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block(int i) {
+			return GetRuleContext<BlockContext>(i);
+		}
+		public IfStmtContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_ifStmt; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterIfStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitIfStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitIfStmt(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public IfStmtContext ifStmt() {
+		IfStmtContext _localctx = new IfStmtContext(Context, State);
+		EnterRule(_localctx, 8, RULE_ifStmt);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 66;
+			Match(T__2);
+			State = 67;
+			Match(T__3);
+			State = 68;
+			expr(0);
+			State = 69;
+			Match(T__4);
+			State = 70;
+			block();
+			State = 79;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==T__5) {
+				{
+				{
+				State = 71;
+				Match(T__5);
+				State = 72;
+				Match(T__3);
+				State = 73;
+				expr(0);
+				State = 74;
+				Match(T__4);
+				State = 75;
+				block();
+				}
+				}
+				State = 81;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 84;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==T__6) {
+				{
+				State = 82;
+				Match(T__6);
+				State = 83;
+				block();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class LoopStmtContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
+		}
+		public LoopStmtContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_loopStmt; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterLoopStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitLoopStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitLoopStmt(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public LoopStmtContext loopStmt() {
+		LoopStmtContext _localctx = new LoopStmtContext(Context, State);
+		EnterRule(_localctx, 10, RULE_loopStmt);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 86;
+			Match(T__7);
+			State = 87;
+			Match(T__3);
+			State = 88;
+			Match(T__8);
+			State = 89;
+			Match(ID);
+			State = 90;
+			Match(T__9);
+			State = 91;
+			expr(0);
+			State = 92;
+			Match(T__10);
+			State = 93;
+			expr(0);
+			State = 94;
+			Match(T__4);
+			State = 95;
+			block();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ParalStmtContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ParalBlockContext paralBlock() {
+			return GetRuleContext<ParalBlockContext>(0);
+		}
+		public ParalStmtContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_paralStmt; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterParalStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitParalStmt(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitParalStmt(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ParalStmtContext paralStmt() {
+		ParalStmtContext _localctx = new ParalStmtContext(Context, State);
+		EnterRule(_localctx, 12, RULE_paralStmt);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 97;
+			Match(T__11);
+			State = 98;
+			paralBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ExprContext : ParserRuleContext {
+		public ExprContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_expr; } }
+	 
+		public ExprContext() { }
+		public virtual void CopyFrom(ExprContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class NotContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
+			return GetRuleContext<ExprContext>(0);
+		}
+		public NotContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterNot(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitNot(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNot(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class OrContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public OrContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterOr(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitOr(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitOr(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class MulDivContext : ExprContext {
+		public IToken op;
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public MulDivContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterMulDiv(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitMulDiv(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMulDiv(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class AddSubContext : ExprContext {
+		public IToken op;
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public AddSubContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterAddSub(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitAddSub(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAddSub(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class ParensContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
+			return GetRuleContext<ExprContext>(0);
+		}
+		public ParensContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterParens(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitParens(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitParens(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class AndContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public AndContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterAnd(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitAnd(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAnd(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class NumContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(ALFAParser.NUM, 0); }
+		public NumContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterNum(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitNum(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNum(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class RelationalContext : ExprContext {
+		public IToken op;
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public RelationalContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterRelational(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitRelational(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitRelational(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class UnaryMinusContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr() {
+			return GetRuleContext<ExprContext>(0);
+		}
+		public UnaryMinusContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterUnaryMinus(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitUnaryMinus(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitUnaryMinus(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class IdContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
+		public IdContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterId(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitId(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitId(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class EqualityContext : ExprContext {
+		public IToken op;
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public EqualityContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterEquality(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitEquality(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEquality(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class BooleanContext : ExprContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BoolContext @bool() {
+			return GetRuleContext<BoolContext>(0);
+		}
+		public BooleanContext(ExprContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBoolean(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBoolean(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBoolean(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ExprContext expr() {
+		return expr(0);
+	}
+
+	private ExprContext expr(int _p) {
+		ParserRuleContext _parentctx = Context;
+		int _parentState = State;
+		ExprContext _localctx = new ExprContext(Context, _parentState);
+		ExprContext _prevctx = _localctx;
+		int _startState = 14;
+		EnterRecursionRule(_localctx, 14, RULE_expr, _p);
+		int _la;
+		try {
+			int _alt;
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 112;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case T__3:
+				{
+				_localctx = new ParensContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+
+				State = 101;
+				Match(T__3);
+				State = 102;
+				expr(0);
+				State = 103;
+				Match(T__4);
+				}
+				break;
+			case T__12:
+				{
+				_localctx = new NotContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 105;
+				Match(T__12);
+				State = 106;
+				expr(11);
+				}
+				break;
+			case T__13:
+				{
+				_localctx = new UnaryMinusContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 107;
+				Match(T__13);
+				State = 108;
+				expr(10);
+				}
+				break;
+			case ID:
+				{
+				_localctx = new IdContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 109;
+				Match(ID);
+				}
+				break;
+			case NUM:
+				{
+				_localctx = new NumContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 110;
+				Match(NUM);
+				}
+				break;
+			case T__34:
+			case T__35:
+				{
+				_localctx = new BooleanContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 111;
+				@bool();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			Context.Stop = TokenStream.LT(-1);
+			State = 134;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,7,Context);
+			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					if ( ParseListeners!=null )
+						TriggerExitRuleEvent();
+					_prevctx = _localctx;
+					{
+					State = 132;
+					ErrorHandler.Sync(this);
+					switch ( Interpreter.AdaptivePredict(TokenStream,6,Context) ) {
+					case 1:
+						{
+						_localctx = new MulDivContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 114;
+						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
+						State = 115;
+						((MulDivContext)_localctx).op = TokenStream.LT(1);
+						_la = TokenStream.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 229376L) != 0)) ) {
+							((MulDivContext)_localctx).op = ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 116;
+						expr(10);
+						}
+						break;
+					case 2:
+						{
+						_localctx = new AddSubContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 117;
+						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
+						State = 118;
+						((AddSubContext)_localctx).op = TokenStream.LT(1);
+						_la = TokenStream.LA(1);
+						if ( !(_la==T__13 || _la==T__17) ) {
+							((AddSubContext)_localctx).op = ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 119;
+						expr(9);
+						}
+						break;
+					case 3:
+						{
+						_localctx = new RelationalContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 120;
+						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
+						State = 121;
+						((RelationalContext)_localctx).op = TokenStream.LT(1);
+						_la = TokenStream.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 7864320L) != 0)) ) {
+							((RelationalContext)_localctx).op = ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 122;
+						expr(8);
+						}
+						break;
+					case 4:
+						{
+						_localctx = new EqualityContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 123;
+						if (!(Precpred(Context, 6))) throw new FailedPredicateException(this, "Precpred(Context, 6)");
+						State = 124;
+						((EqualityContext)_localctx).op = TokenStream.LT(1);
+						_la = TokenStream.LA(1);
+						if ( !(_la==T__22 || _la==T__23) ) {
+							((EqualityContext)_localctx).op = ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 125;
+						expr(7);
+						}
+						break;
+					case 5:
+						{
+						_localctx = new AndContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 126;
+						if (!(Precpred(Context, 5))) throw new FailedPredicateException(this, "Precpred(Context, 5)");
+						State = 127;
+						Match(T__24);
+						State = 128;
+						expr(6);
+						}
+						break;
+					case 6:
+						{
+						_localctx = new OrContext(new ExprContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expr);
+						State = 129;
+						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
+						State = 130;
+						Match(T__25);
+						State = 131;
+						expr(5);
+						}
+						break;
+					}
+					} 
+				}
+				State = 136;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,7,Context);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			UnrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
+	public partial class BlockContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public StmtContext[] stmt() {
+			return GetRuleContexts<StmtContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public StmtContext stmt(int i) {
+			return GetRuleContext<StmtContext>(i);
+		}
+		public BlockContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_block; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBlock(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBlock(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBlock(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BlockContext block() {
+		BlockContext _localctx = new BlockContext(Context, State);
+		EnterRule(_localctx, 16, RULE_block);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 137;
+			Match(T__26);
+			State = 141;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 302258328328L) != 0)) {
+				{
+				{
+				State = 138;
+				stmt();
+				}
+				}
+				State = 143;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 144;
+			Match(T__27);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ParalBlockContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInParalAnimCallContext[] builtInParalAnimCall() {
+			return GetRuleContexts<BuiltInParalAnimCallContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInParalAnimCallContext builtInParalAnimCall(int i) {
+			return GetRuleContext<BuiltInParalAnimCallContext>(i);
+		}
+		public ParalBlockContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_paralBlock; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterParalBlock(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitParalBlock(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitParalBlock(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ParalBlockContext paralBlock() {
+		ParalBlockContext _localctx = new ParalBlockContext(Context, State);
+		EnterRule(_localctx, 18, RULE_paralBlock);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 146;
+			Match(T__26);
+			State = 150;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==T__28) {
+				{
+				{
+				State = 147;
+				builtInParalAnimCall();
+				}
+				}
+				State = 152;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 153;
+			Match(T__27);
 			}
 		}
 		catch (RecognitionException re) {
@@ -330,14 +1326,14 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public BuiltInAnimContext builtInAnim() {
 		BuiltInAnimContext _localctx = new BuiltInAnimContext(Context, State);
-		EnterRule(_localctx, 6, RULE_builtInAnim);
+		EnterRule(_localctx, 20, RULE_builtInAnim);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 40;
+			State = 155;
 			_la = TokenStream.LA(1);
-			if ( !(_la==T__2 || _la==T__3) ) {
+			if ( !(_la==T__28 || _la==T__29) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -361,8 +1357,8 @@ public partial class ALFAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BuiltInAnimContext builtInAnim() {
 			return GetRuleContext<BuiltInAnimContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArgsContext args() {
-			return GetRuleContext<ArgsContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ActualParamsContext actualParams() {
+			return GetRuleContext<ActualParamsContext>(0);
 		}
 		public BuiltInAnimCallContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -390,20 +1386,20 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public BuiltInAnimCallContext builtInAnimCall() {
 		BuiltInAnimCallContext _localctx = new BuiltInAnimCallContext(Context, State);
-		EnterRule(_localctx, 8, RULE_builtInAnimCall);
+		EnterRule(_localctx, 22, RULE_builtInAnimCall);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 42;
+			State = 157;
 			builtInAnim();
-			State = 43;
+			State = 158;
+			Match(T__3);
+			State = 159;
+			actualParams();
+			State = 160;
 			Match(T__4);
-			State = 44;
-			args();
-			State = 45;
-			Match(T__5);
-			State = 46;
-			Match(T__1);
+			State = 161;
+			Match(T__0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -444,12 +1440,12 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public BuiltInCreateShapeContext builtInCreateShape() {
 		BuiltInCreateShapeContext _localctx = new BuiltInCreateShapeContext(Context, State);
-		EnterRule(_localctx, 10, RULE_builtInCreateShape);
+		EnterRule(_localctx, 24, RULE_builtInCreateShape);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 48;
-			Match(T__6);
+			State = 163;
+			Match(T__30);
 			}
 		}
 		catch (RecognitionException re) {
@@ -467,8 +1463,8 @@ public partial class ALFAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BuiltInCreateShapeContext builtInCreateShape() {
 			return GetRuleContext<BuiltInCreateShapeContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArgsContext args() {
-			return GetRuleContext<ArgsContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ActualParamsContext actualParams() {
+			return GetRuleContext<ActualParamsContext>(0);
 		}
 		public BuiltInCreateShapeCallContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -496,18 +1492,18 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public BuiltInCreateShapeCallContext builtInCreateShapeCall() {
 		BuiltInCreateShapeCallContext _localctx = new BuiltInCreateShapeCallContext(Context, State);
-		EnterRule(_localctx, 12, RULE_builtInCreateShapeCall);
+		EnterRule(_localctx, 26, RULE_builtInCreateShapeCall);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 50;
+			State = 165;
 			builtInCreateShape();
-			State = 51;
+			State = 166;
+			Match(T__3);
+			State = 167;
+			actualParams();
+			State = 168;
 			Match(T__4);
-			State = 52;
-			args();
-			State = 53;
-			Match(T__5);
 			}
 		}
 		catch (RecognitionException re) {
@@ -521,118 +1517,176 @@ public partial class ALFAParser : Parser {
 		return _localctx;
 	}
 
-	public partial class ArgsContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ArgContext[] arg() {
-			return GetRuleContexts<ArgContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArgContext arg(int i) {
-			return GetRuleContext<ArgContext>(i);
-		}
-		public ArgsContext(ParserRuleContext parent, int invokingState)
+	public partial class BuiltInParalAnimContext : ParserRuleContext {
+		public BuiltInParalAnimContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_args; } }
+		public override int RuleIndex { get { return RULE_builtInParalAnim; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.EnterArgs(this);
+			if (typedListener != null) typedListener.EnterBuiltInParalAnim(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.ExitArgs(this);
+			if (typedListener != null) typedListener.ExitBuiltInParalAnim(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitArgs(this);
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInParalAnim(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public ArgsContext args() {
-		ArgsContext _localctx = new ArgsContext(Context, State);
-		EnterRule(_localctx, 14, RULE_args);
+	public BuiltInParalAnimContext builtInParalAnim() {
+		BuiltInParalAnimContext _localctx = new BuiltInParalAnimContext(Context, State);
+		EnterRule(_localctx, 28, RULE_builtInParalAnim);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 170;
+			Match(T__28);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BuiltInParalAnimCallContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BuiltInParalAnimContext builtInParalAnim() {
+			return GetRuleContext<BuiltInParalAnimContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ActualParamsContext actualParams() {
+			return GetRuleContext<ActualParamsContext>(0);
+		}
+		public BuiltInParalAnimCallContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_builtInParalAnimCall; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBuiltInParalAnimCall(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBuiltInParalAnimCall(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBuiltInParalAnimCall(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BuiltInParalAnimCallContext builtInParalAnimCall() {
+		BuiltInParalAnimCallContext _localctx = new BuiltInParalAnimCallContext(Context, State);
+		EnterRule(_localctx, 30, RULE_builtInParalAnimCall);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 172;
+			builtInParalAnim();
+			State = 173;
+			Match(T__3);
+			State = 174;
+			actualParams();
+			State = 175;
+			Match(T__4);
+			State = 176;
+			Match(T__0);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ActualParamsContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext[] expr() {
+			return GetRuleContexts<ExprContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExprContext expr(int i) {
+			return GetRuleContext<ExprContext>(i);
+		}
+		public ActualParamsContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_actualParams; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterActualParams(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitActualParams(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitActualParams(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ActualParamsContext actualParams() {
+		ActualParamsContext _localctx = new ActualParamsContext(Context, State);
+		EnterRule(_localctx, 32, RULE_actualParams);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 55;
-			arg();
-			State = 60;
+			State = 186;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__7) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 927712960528L) != 0)) {
 				{
-				{
-				State = 56;
-				Match(T__7);
-				State = 57;
-				arg();
-				}
-				}
-				State = 62;
+				State = 178;
+				expr(0);
+				State = 183;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
+				while (_la==T__31) {
+					{
+					{
+					State = 179;
+					Match(T__31);
+					State = 180;
+					expr(0);
+					}
+					}
+					State = 185;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				}
 			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
 
-	public partial class ArgContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUM() { return GetToken(ALFAParser.NUM, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ALFAParser.ID, 0); }
-		public ArgContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_arg; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.EnterArg(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IALFAListener typedListener = listener as IALFAListener;
-			if (typedListener != null) typedListener.ExitArg(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitArg(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public ArgContext arg() {
-		ArgContext _localctx = new ArgContext(Context, State);
-		EnterRule(_localctx, 16, RULE_arg);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 63;
-			_la = TokenStream.LA(1);
-			if ( !(_la==ID || _la==NUM) ) {
-			ErrorHandler.RecoverInline(this);
-			}
-			else {
-				ErrorHandler.ReportMatch(this);
-			    Consume();
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -673,14 +1727,14 @@ public partial class ALFAParser : Parser {
 	[RuleVersion(0)]
 	public TypeContext type() {
 		TypeContext _localctx = new TypeContext(Context, State);
-		EnterRule(_localctx, 18, RULE_type);
+		EnterRule(_localctx, 34, RULE_type);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 65;
+			State = 188;
 			_la = TokenStream.LA(1);
-			if ( !(_la==T__8 || _la==T__9) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 25769804288L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -700,25 +1754,138 @@ public partial class ALFAParser : Parser {
 		return _localctx;
 	}
 
+	public partial class BoolContext : ParserRuleContext {
+		public BoolContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_bool; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.EnterBool(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IALFAListener typedListener = listener as IALFAListener;
+			if (typedListener != null) typedListener.ExitBool(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IALFAVisitor<TResult> typedVisitor = visitor as IALFAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBool(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BoolContext @bool() {
+		BoolContext _localctx = new BoolContext(Context, State);
+		EnterRule(_localctx, 36, RULE_bool);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 190;
+			_la = TokenStream.LA(1);
+			if ( !(_la==T__34 || _la==T__35) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
+		switch (ruleIndex) {
+		case 7: return expr_sempred((ExprContext)_localctx, predIndex);
+		}
+		return true;
+	}
+	private bool expr_sempred(ExprContext _localctx, int predIndex) {
+		switch (predIndex) {
+		case 0: return Precpred(Context, 9);
+		case 1: return Precpred(Context, 8);
+		case 2: return Precpred(Context, 7);
+		case 3: return Precpred(Context, 6);
+		case 4: return Precpred(Context, 5);
+		case 5: return Precpred(Context, 4);
+		}
+		return true;
+	}
+
 	private static int[] _serializedATN = {
-		4,1,13,68,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-		7,7,2,8,7,8,2,9,7,9,1,0,4,0,22,8,0,11,0,12,0,23,1,0,1,0,1,1,1,1,3,1,30,
-		8,1,1,2,1,2,1,2,1,2,1,2,3,2,37,8,2,1,2,1,2,1,3,1,3,1,4,1,4,1,4,1,4,1,4,
-		1,4,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,5,7,59,8,7,10,7,12,7,62,9,
-		7,1,8,1,8,1,9,1,9,1,9,0,0,10,0,2,4,6,8,10,12,14,16,18,0,3,1,0,3,4,1,0,
-		11,12,1,0,9,10,61,0,21,1,0,0,0,2,29,1,0,0,0,4,31,1,0,0,0,6,40,1,0,0,0,
-		8,42,1,0,0,0,10,48,1,0,0,0,12,50,1,0,0,0,14,55,1,0,0,0,16,63,1,0,0,0,18,
-		65,1,0,0,0,20,22,3,2,1,0,21,20,1,0,0,0,22,23,1,0,0,0,23,21,1,0,0,0,23,
-		24,1,0,0,0,24,25,1,0,0,0,25,26,5,0,0,1,26,1,1,0,0,0,27,30,3,4,2,0,28,30,
-		3,8,4,0,29,27,1,0,0,0,29,28,1,0,0,0,30,3,1,0,0,0,31,32,3,18,9,0,32,33,
-		5,11,0,0,33,36,5,1,0,0,34,37,3,12,6,0,35,37,5,12,0,0,36,34,1,0,0,0,36,
-		35,1,0,0,0,37,38,1,0,0,0,38,39,5,2,0,0,39,5,1,0,0,0,40,41,7,0,0,0,41,7,
-		1,0,0,0,42,43,3,6,3,0,43,44,5,5,0,0,44,45,3,14,7,0,45,46,5,6,0,0,46,47,
-		5,2,0,0,47,9,1,0,0,0,48,49,5,7,0,0,49,11,1,0,0,0,50,51,3,10,5,0,51,52,
-		5,5,0,0,52,53,3,14,7,0,53,54,5,6,0,0,54,13,1,0,0,0,55,60,3,16,8,0,56,57,
-		5,8,0,0,57,59,3,16,8,0,58,56,1,0,0,0,59,62,1,0,0,0,60,58,1,0,0,0,60,61,
-		1,0,0,0,61,15,1,0,0,0,62,60,1,0,0,0,63,64,7,1,0,0,64,17,1,0,0,0,65,66,
-		7,2,0,0,66,19,1,0,0,0,4,23,29,36,60
+		4,1,40,193,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
+		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,4,0,40,8,0,11,0,12,0,41,1,
+		0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,56,8,1,1,2,1,2,1,2,1,
+		3,1,3,1,3,1,3,3,3,65,8,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,5,
+		4,78,8,4,10,4,12,4,81,9,4,1,4,1,4,3,4,85,8,4,1,5,1,5,1,5,1,5,1,5,1,5,1,
+		5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,
+		1,7,1,7,3,7,113,8,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,
+		7,1,7,1,7,1,7,1,7,1,7,5,7,133,8,7,10,7,12,7,136,9,7,1,8,1,8,5,8,140,8,
+		8,10,8,12,8,143,9,8,1,8,1,8,1,9,1,9,5,9,149,8,9,10,9,12,9,152,9,9,1,9,
+		1,9,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,11,1,12,1,12,1,13,1,13,1,13,1,
+		13,1,13,1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,15,1,16,1,16,1,16,5,16,182,
+		8,16,10,16,12,16,185,9,16,3,16,187,8,16,1,17,1,17,1,18,1,18,1,18,0,1,14,
+		19,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,7,1,0,15,17,2,
+		0,14,14,18,18,1,0,19,22,1,0,23,24,1,0,29,30,2,0,9,9,33,34,1,0,35,36,197,
+		0,39,1,0,0,0,2,55,1,0,0,0,4,57,1,0,0,0,6,60,1,0,0,0,8,66,1,0,0,0,10,86,
+		1,0,0,0,12,97,1,0,0,0,14,112,1,0,0,0,16,137,1,0,0,0,18,146,1,0,0,0,20,
+		155,1,0,0,0,22,157,1,0,0,0,24,163,1,0,0,0,26,165,1,0,0,0,28,170,1,0,0,
+		0,30,172,1,0,0,0,32,186,1,0,0,0,34,188,1,0,0,0,36,190,1,0,0,0,38,40,3,
+		2,1,0,39,38,1,0,0,0,40,41,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,43,1,
+		0,0,0,43,44,5,0,0,1,44,1,1,0,0,0,45,46,3,4,2,0,46,47,5,1,0,0,47,56,1,0,
+		0,0,48,49,3,6,3,0,49,50,5,1,0,0,50,56,1,0,0,0,51,56,3,22,11,0,52,56,3,
+		8,4,0,53,56,3,10,5,0,54,56,3,12,6,0,55,45,1,0,0,0,55,48,1,0,0,0,55,51,
+		1,0,0,0,55,52,1,0,0,0,55,53,1,0,0,0,55,54,1,0,0,0,56,3,1,0,0,0,57,58,3,
+		34,17,0,58,59,3,6,3,0,59,5,1,0,0,0,60,61,5,38,0,0,61,64,5,2,0,0,62,65,
+		3,26,13,0,63,65,3,14,7,0,64,62,1,0,0,0,64,63,1,0,0,0,65,7,1,0,0,0,66,67,
+		5,3,0,0,67,68,5,4,0,0,68,69,3,14,7,0,69,70,5,5,0,0,70,79,3,16,8,0,71,72,
+		5,6,0,0,72,73,5,4,0,0,73,74,3,14,7,0,74,75,5,5,0,0,75,76,3,16,8,0,76,78,
+		1,0,0,0,77,71,1,0,0,0,78,81,1,0,0,0,79,77,1,0,0,0,79,80,1,0,0,0,80,84,
+		1,0,0,0,81,79,1,0,0,0,82,83,5,7,0,0,83,85,3,16,8,0,84,82,1,0,0,0,84,85,
+		1,0,0,0,85,9,1,0,0,0,86,87,5,8,0,0,87,88,5,4,0,0,88,89,5,9,0,0,89,90,5,
+		38,0,0,90,91,5,10,0,0,91,92,3,14,7,0,92,93,5,11,0,0,93,94,3,14,7,0,94,
+		95,5,5,0,0,95,96,3,16,8,0,96,11,1,0,0,0,97,98,5,12,0,0,98,99,3,18,9,0,
+		99,13,1,0,0,0,100,101,6,7,-1,0,101,102,5,4,0,0,102,103,3,14,7,0,103,104,
+		5,5,0,0,104,113,1,0,0,0,105,106,5,13,0,0,106,113,3,14,7,11,107,108,5,14,
+		0,0,108,113,3,14,7,10,109,113,5,38,0,0,110,113,5,39,0,0,111,113,3,36,18,
+		0,112,100,1,0,0,0,112,105,1,0,0,0,112,107,1,0,0,0,112,109,1,0,0,0,112,
+		110,1,0,0,0,112,111,1,0,0,0,113,134,1,0,0,0,114,115,10,9,0,0,115,116,7,
+		0,0,0,116,133,3,14,7,10,117,118,10,8,0,0,118,119,7,1,0,0,119,133,3,14,
+		7,9,120,121,10,7,0,0,121,122,7,2,0,0,122,133,3,14,7,8,123,124,10,6,0,0,
+		124,125,7,3,0,0,125,133,3,14,7,7,126,127,10,5,0,0,127,128,5,25,0,0,128,
+		133,3,14,7,6,129,130,10,4,0,0,130,131,5,26,0,0,131,133,3,14,7,5,132,114,
+		1,0,0,0,132,117,1,0,0,0,132,120,1,0,0,0,132,123,1,0,0,0,132,126,1,0,0,
+		0,132,129,1,0,0,0,133,136,1,0,0,0,134,132,1,0,0,0,134,135,1,0,0,0,135,
+		15,1,0,0,0,136,134,1,0,0,0,137,141,5,27,0,0,138,140,3,2,1,0,139,138,1,
+		0,0,0,140,143,1,0,0,0,141,139,1,0,0,0,141,142,1,0,0,0,142,144,1,0,0,0,
+		143,141,1,0,0,0,144,145,5,28,0,0,145,17,1,0,0,0,146,150,5,27,0,0,147,149,
+		3,30,15,0,148,147,1,0,0,0,149,152,1,0,0,0,150,148,1,0,0,0,150,151,1,0,
+		0,0,151,153,1,0,0,0,152,150,1,0,0,0,153,154,5,28,0,0,154,19,1,0,0,0,155,
+		156,7,4,0,0,156,21,1,0,0,0,157,158,3,20,10,0,158,159,5,4,0,0,159,160,3,
+		32,16,0,160,161,5,5,0,0,161,162,5,1,0,0,162,23,1,0,0,0,163,164,5,31,0,
+		0,164,25,1,0,0,0,165,166,3,24,12,0,166,167,5,4,0,0,167,168,3,32,16,0,168,
+		169,5,5,0,0,169,27,1,0,0,0,170,171,5,29,0,0,171,29,1,0,0,0,172,173,3,28,
+		14,0,173,174,5,4,0,0,174,175,3,32,16,0,175,176,5,5,0,0,176,177,5,1,0,0,
+		177,31,1,0,0,0,178,183,3,14,7,0,179,180,5,32,0,0,180,182,3,14,7,0,181,
+		179,1,0,0,0,182,185,1,0,0,0,183,181,1,0,0,0,183,184,1,0,0,0,184,187,1,
+		0,0,0,185,183,1,0,0,0,186,178,1,0,0,0,186,187,1,0,0,0,187,33,1,0,0,0,188,
+		189,7,5,0,0,189,35,1,0,0,0,190,191,7,6,0,0,191,37,1,0,0,0,12,41,55,64,
+		79,84,112,132,134,141,150,183,186
 	};
 
 	public static readonly ATN _ATN =

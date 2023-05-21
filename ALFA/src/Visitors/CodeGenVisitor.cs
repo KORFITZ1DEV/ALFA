@@ -64,7 +64,12 @@ public class CodeGenVisitor : ASTVisitor<Node>
         
         return node;
     }
-    public override VarDclNode Visit(VarDclNode node)
+
+    public override Node Visit(VarDclNode node)
+    {
+        throw new NotImplementedException();
+    }
+    /*public override VarDclNode Visit(VarDclNode node)
     {
         Emit($"const {node.Identifier} = ", ALFATypes.OutputEnum.VarOutput);
         
@@ -77,7 +82,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
         Emit("\n", ALFATypes.OutputEnum.VarOutput);
         return node;
-    }
+    }*/
 
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {

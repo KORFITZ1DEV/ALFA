@@ -38,9 +38,9 @@ public class UndeclaredVariableException : Exception
 }
 
 [ExcludeFromCodeCoverage]
-public class RedeclaredVariableException : Exception
+public class VariableAlreadyDeclaredException : Exception
 {
-    public RedeclaredVariableException(string message) : base(message){}
+    public VariableAlreadyDeclaredException(string message) : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
