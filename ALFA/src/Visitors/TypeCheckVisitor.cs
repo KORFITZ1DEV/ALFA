@@ -142,7 +142,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         var leftValue = node.Left;
         var rightValue = node.Right;
 
-        //Visit left and right value when they are expressions
+        //Visit left and right value recursively when they are expressions
         if (leftValue is ExprNode leftValueExpr)
         {
             EvaluateExpression(leftValueExpr);
@@ -152,72 +152,81 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             EvaluateExpression(rightValueExpr);
         }
 
-        //Evaluate the expressions.
 
-
-        if (leftValue is NumNode leftNum && rightValue is NumNode rightNum)
+        switch (node.Operator)
         {
-            EvaluateArithmeticExpression(leftNum.Value, rightNum.Value, node.Operator);
-        }
-        else if (leftValue is BoolNode leftBool && rightValue is BoolNode rightBool)
-        {
-            EvaluateBooleanExpression(leftBool.Value, rightBool.Value, node.Operator);
-        }
-        else if (leftValue is IdNode leftId && rightValue is NumNode rightNumb)
-        {
-
-        }
-        else if (leftValue is NumNode leftNumb && rightValue is IdNode rightId)
-        {
-
-        }
-        else if (leftValue is IdNode leftIdentifier && rightValue is IdNode rightIdentifier)
-        {
-
-        }
-        else
-        {
-            throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
-             $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
-        }
-    }
-
-    public int EvaluateArithmeticExpression(int leftVal, int rightVal, string op)
-    {
-
-        switch (op)
-        {
+            case "<":
+            case ">":
+            case "<=":
+            case ">=":
             case "+":
-                return leftVal + rightVal;
             case "-":
-                return leftVal - rightVal;
             case "*":
-                return leftVal * rightVal;
             case "/":
-                return leftVal / rightVal;
             case "%":
-                return leftVal % rightVal;
-
+                EvaluateArithmeticExpression(leftValue, rightValue, node.Operator, node);
+                break;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");
         }
+
+        throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
+            $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
+
     }
 
-    public bool EvaluateBooleanRelationalExpression(NumNode leftVal, NumNode rightVal, string op)
+    // Node -> BoolNode, IdNode, NumNode
+    public void EvaluateArithmeticExpression(Node left, Node right, string op, ExprNode parent)
     {
+        NumNode? leftNumNode = left is NumNode leftNum ? leftNum : null;
+        NumNode? rightNumNode = right is NumNode rightNum ? rightNum : null;
+
+        if (left is IdNode idNode) leftNumNode = VisitSymbol<NumNode>(idNode);
+        if (right is IdNode idNode1) rightNumNode = VisitSymbol<NumNode>(idNode1);
+
+        //This is true when left or rightNumNode is a BooleanNode.
+        if (leftNumNode == null) throw new ArgumentTypeException($"Trying to use something that is a boolean in an addition on line {left.Line} column {left.Col}");
+        if (rightNumNode == null) throw new ArgumentTypeException($"Trying to use something that is a boolean in an addition on line {right.Line} column {right.Col}");
+
         switch (op)
         {
             case "<":
-                return leftVal.Value < rightVal.Value;
+                parent.Value = new BoolNode(leftNumNode.Value < rightNumNode.Value);
+                break;
             case ">":
-                return leftVal.Value > rightVal.Value;
+                parent.Value = new BoolNode(leftNumNode.Value > rightNumNode.Value);
+                break;
             case "<=":
-                return leftVal.Value <= rightVal.Value;
+                parent.Value = new BoolNode(leftNumNode.Value <= rightNumNode.Value);
+                break;
             case ">=":
-                return leftVal.Value >= rightVal.Value;
-            default:
-                throw new Exception("You used an arithmetic operator that is not being switched on");
+                parent.Value = new BoolNode(leftNumNode.Value >= rightNumNode.Value);
+                break;
+            case "+":
+                parent.Value = new NumNode(leftNumNode.Value + rightNumNode.Value);
+                break;
+            case "-":
+                parent.Value = new NumNode(leftNumNode.Value - rightNumNode.Value);
+                break;
+            case "*":
+                parent.Value = new NumNode(leftNumNode.Value * rightNumNode.Value);
+                break;
+            case "/":
+                parent.Value = new NumNode(leftNumNode.Value / rightNumNode.Value);
+                break;
+            case "%":
+                parent.Value = new NumNode(leftNumNode.Value % rightNumNode.Value);
+                break;
         }
+    }
+
+    //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
+    //whether the identifier's value is a boolean or an integer
+    public T VisitSymbol<T>(IdNode idNode) where T : Node
+    {
+        var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+
+        return (T)symbol.Value;
     }
 
     public bool EvaluateBooleanExpression(bool leftVal, bool rightVal, string op)
@@ -230,7 +239,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case "or":
                 return leftVal || rightVal;
             case "!":
-                return leftVal
+                return leftVal;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");
         }

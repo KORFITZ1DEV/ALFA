@@ -8,4 +8,9 @@ public class NumNode : Node
     {
         Value = value;
     }
+
+    public NumNode(int value)
+    {
+        Value = value;
+    }
 }

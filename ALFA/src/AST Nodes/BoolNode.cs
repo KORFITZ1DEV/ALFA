@@ -8,4 +8,9 @@ public class BoolNode : Node
     {
         Value = value;
     }
+
+    public BoolNode(bool value)
+    {
+        Value = value;
+    }
 }
