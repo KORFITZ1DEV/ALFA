@@ -69,6 +69,11 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         throw new NotImplementedException();
     }
+
+    public override Node Visit(AssignStmtNode node)
+    {
+        throw new NotImplementedException();
+    }
     /*public override VarDclNode Visit(VarDclNode node)
     {
         Emit($"const {node.Identifier} = ", ALFATypes.OutputEnum.VarOutput);
@@ -108,6 +113,31 @@ public class CodeGenVisitor : ASTVisitor<Node>
         }
         
         return node;
+    }
+
+    public override Node Visit(IfStmtNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Node Visit(LoopStmtNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Node Visit(ParalStmtNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Node Visit(ExprNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Node Visit(BoolNode node)
+    {
+        throw new NotImplementedException();
     }
 
     public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)

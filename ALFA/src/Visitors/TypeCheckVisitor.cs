@@ -24,7 +24,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override Node Visit(VarDclNode node)
     {
-        throw new NotImplementedException();
+        Visit(node.AssignStmt);
+
+        return node;
     }
 
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
@@ -90,12 +92,23 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
-        Node assNodeVal = Visit(assNode.Value);
+        Visit(assNode.Value);
 
         if (idSymbol != null)
         {
-            if (idSymbol.Type != assNodeVal is )
-                throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+            if (idSymbol.Value is ExprNode exprValue)
+            {
+                EvaluateExpression(exprValue);
+                switch (exprValue.Value.GetType().ToString())
+                {
+                    case "NumNode":
+                        if (idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                        break;
+                    case "BoolNode":
+                        if (idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                        break;
+                }
+            }
         }
 
         return assNode;
@@ -103,10 +116,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override IfStmtNode Visit(IfStmtNode ifNode)
     {
+
         foreach (var expr in ifNode.Expressions)
         {
-            //Maybe no
-            var exprChild = Visit((dynamic)expr);
+            Visit((dynamic)expr);
         }
 
         return ifNode;
@@ -114,7 +127,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override LoopStmtNode Visit(LoopStmtNode node)
     {
-        AssignStmtNode assigStmt = Visit(node.AssignStmt);
+        Visit(node.AssignStmt);
         Visit(node.To);
         Visit(node.Block);
 
@@ -133,7 +146,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override ExprNode Visit(ExprNode node)
     {
-        throw new NotImplementedException();
+        EvaluateExpression(node);
+        Console.WriteLine("Test");
+
+        return node;
     }
 
 
@@ -142,16 +158,24 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         var leftValue = node.Left;
         var rightValue = node.Right;
 
+        ExprNode? leftValueExpr = leftValue as ExprNode;
+        ExprNode? rightValueExpr = rightValue as ExprNode;
+
         //Visit left and right value recursively when they are expressions
-        if (leftValue is ExprNode leftValueExpr)
+        if (leftValueExpr != null)
         {
             EvaluateExpression(leftValueExpr);
+            leftValue = leftValueExpr.Value;
+
+            if (node.Operator == "()") node.Value = leftValue;
         }
-        if (rightValue is ExprNode rightValueExpr)
+        if (rightValueExpr != null)
         {
             EvaluateExpression(rightValueExpr);
+            rightValue = rightValueExpr.Value;
         }
 
+        //If both are not an expresion then we must retrieve values from id.
 
         switch (node.Operator)
         {
@@ -170,79 +194,91 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case "!=":
             case "and":
             case "or":
-
+            case "!":
+                EvaluateBooleanExpression(leftValue, rightValue, node.Operator, node);
+                break;
+            case "()":
                 break;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");
         }
 
-        throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
-            $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
+
+        Node leftTypeToCompare = leftValue, rightTypeToCompare = rightValue;
+
+        if (leftValue is IdNode assNodeL)
+        {
+            Symbol leftSym = _symbolTable.RetrieveSymbol(assNodeL.Identifier);
+            leftTypeToCompare = leftSym.Value;
+        }
+        if (rightValue is IdNode assNodeR)
+        {
+            Symbol rightSym = _symbolTable.RetrieveSymbol(assNodeR.Identifier);
+            rightTypeToCompare = rightSym.Value;
+        }
+
+        if (leftValue != null && rightValue != null
+        && (leftTypeToCompare.GetType() != rightTypeToCompare.GetType())) throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
+        $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
+
 
     }
 
     // Node -> BoolNode, IdNode, NumNode
     public void EvaluateArithmeticExpression(Node left, Node right, string op, ExprNode parent)
     {
-        NumNode? leftNumNode = left is NumNode leftNum ? leftNum : null;
-        NumNode? rightNumNode = right is NumNode rightNum ? rightNum : null;
-
-        if (left is IdNode idNode) leftNumNode = VisitSymbol<NumNode>(idNode);
-        if (right is IdNode idNode1) rightNumNode = VisitSymbol<NumNode>(idNode1);
-
-        //This is true when left or rightNumNode is a BooleanNode.
-        if (leftNumNode == null) throw new ArgumentTypeException($"Trying to use something that is a boolean in an addition on line {left.Line} column {left.Col}");
-        if (rightNumNode == null) throw new ArgumentTypeException($"Trying to use something that is a boolean in an addition on line {right.Line} column {right.Col}");
+        Tuple<NumNode, NumNode> expectedNodes = EvaluateIdNode<NumNode>(left, right, op, right == null);
 
         switch (op)
         {
             case "<":
-                parent.Value = new BoolNode(leftNumNode.Value < rightNumNode.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value < expectedNodes.Item1.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case ">":
-                parent.Value = new BoolNode(leftNumNode.Value > rightNumNode.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value > expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "<=":
-                parent.Value = new BoolNode(leftNumNode.Value <= rightNumNode.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value <= expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case ">=":
-                parent.Value = new BoolNode(leftNumNode.Value >= rightNumNode.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value >= expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "+":
-                parent.Value = new NumNode(leftNumNode.Value + rightNumNode.Value);
+                parent.Value = new NumNode(expectedNodes.Item1.Value + expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "-":
-                parent.Value = new NumNode(leftNumNode.Value - rightNumNode.Value);
+                parent.Value = new NumNode(expectedNodes.Item1.Value - expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "*":
-                parent.Value = new NumNode(leftNumNode.Value * rightNumNode.Value);
+                parent.Value = new NumNode(expectedNodes.Item1.Value * expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "/":
-                parent.Value = new NumNode(leftNumNode.Value / rightNumNode.Value);
+                parent.Value = new NumNode(expectedNodes.Item1.Value / expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "%":
-                parent.Value = new NumNode(leftNumNode.Value % rightNumNode.Value);
+                parent.Value = new NumNode(expectedNodes.Item1.Value % expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
-
-                //Todo also needs unary minus.
+            case "u-":
+                parent.Value = new NumNode(-expectedNodes.Item1.Value, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
+                break;
         }
+        
     }
 
     public void EvaluateBooleanExpression(Node left, Node right, string op, ExprNode parent)
     {
-        Tuple<BoolNode, BoolNode> expectedNodes = EvaluateIdNode<BoolNode>(left, right, op, right == null);
-
+        Tuple<BoolNode, BoolNode> expectedNodes = EvaluateIdNode<BoolNode>(left, right, op, right != null);
 
         switch (op)
         {
             case "and":
-                parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "or":
-                parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value);
+                parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "!":
-                parent.Value = new BoolNode(!expectedNodes.Item1.Value);
+                parent.Value = new BoolNode(!expectedNodes.Item1.Value, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
                 break;
             default:
                 throw new Exception("You used a boolean operator that is not being switched on");
@@ -257,10 +293,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
         if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
 
-        if (leftTNode == null) throw new ArgumentTypeException($"Incompatible type {leftTNode?.GetType()} in expression {op} on line {left.Line} column {left.Col}");
-        if (rightTNode == null && isBinary) throw new ArgumentTypeException($"Incompatible type {rightTNode?.GetType()} in expression {op} on line {right.Line} column {right.Col}");
+        if (leftTNode == null) throw new ArgumentTypeException($"Incompatible type {left.GetType()} in '{op}' expression on line {left.Line} column {left.Col}");
+        if (rightTNode == null && isBinary) throw new ArgumentTypeException($"Incompatible type {right.GetType()} in '{op}' expression on line {right.Line} column {right.Col}");
 
-        return new Tuple<T, T>(leftTNode, rightTNode);
+        return new Tuple<T, T>(leftTNode, rightTNode!);
     }
 
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
@@ -269,14 +305,15 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
 
+        if (symbol.Value is AssignStmtNode assNode)
+        {
+            return (T)assNode.Value;
+        }
+        
         return (T)symbol.Value;
     }
 
-    public override BoolNode Visit(BoolNode node)
-    {
-        throw new NotImplementedException();
-    }
-
+    public override BoolNode Visit(BoolNode node) => node;
     public override IdNode Visit(IdNode node) => node;
     public override NumNode Visit(NumNode node) => node;
 }

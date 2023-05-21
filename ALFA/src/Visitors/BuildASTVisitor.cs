@@ -14,27 +14,27 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         _symbolTable = symbolTable;
     }
-    
+
     public override ProgramNode VisitProgram(ALFAParser.ProgramContext context)
     {
         List<Node> childList = new List<Node>();
-        
+
         foreach (var stmt in context.stmt())
         {
             childList.Add(Visit(stmt));
         }
-        
+
         return new ProgramNode(childList!);
     }
-    
+
     public override Node VisitStmt(ALFAParser.StmtContext context)
     {
         if (context.varDcl() != null)
             return VisitVarDcl(context.varDcl());
-        
+
         if (context.assignStmt() != null)
             return VisitAssignStmt(context.assignStmt());
-        
+
         if (context.builtInAnimCall() != null)
             return VisitBuiltInAnimCall(context.builtInAnimCall());
 
@@ -46,17 +46,17 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         if (context.paralStmt() != null)
             return VisitParalStmt(context.paralStmt());
-        
+
         throw new Exception("Invalid statement");
     }
-    
+
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
         VarDclNode newVarDclNode = new VarDclNode(context.Start.Line, context.Start.Column);
         //TODO program should throw an exception if one of the children is a ErrorNodeImpl.
-        
+
         ALFATypes.TypeEnum typeEnum;
-        
+
         switch (context.type().GetText())
         {
             case "int":
@@ -71,24 +71,26 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             default:
                 throw new TypeException("Invalid type on line " + context.Start.Line + ":" + context.Start.Column);
         }
-        
+
+        newVarDclNode.Type = typeEnum;
+
         ALFAParser.AssignStmtContext assignStmtContext = context.assignStmt();
         if (assignStmtContext != null)
         {
             AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
             newVarDclNode.AssignStmt = assignStmtNode;
         }
-        
+
         string id = newVarDclNode.AssignStmt.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null)
             throw new VariableAlreadyDeclaredException($"Variable {id} already declared on line {symbol.LineNumber}:{symbol.ColumnNumber}");
-        
+
         _symbolTable.EnterSymbol(new Symbol(id, newVarDclNode.AssignStmt, typeEnum, context.Start.Line, context.Start.Column));
-        
+
         return newVarDclNode;
     }
-    
+
     public override AssignStmtNode VisitAssignStmt(ALFAParser.AssignStmtContext context)
     {
         AssignStmtNode newAssignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
@@ -98,28 +100,29 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
             newAssignStmtNode.Value = builtInCreateShapeCall;
 
-        } else if (context.expr() != null)
+        }
+        else if (context.expr() != null)
         {
             var expr = Visit((dynamic)context.expr());
-            
+
             //TODO something about constant folding here - evaluate!
-            
+
             newAssignStmtNode.Value = expr;
         }
-        
+
         string id = newAssignStmtNode.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null)
             symbol.Value = newAssignStmtNode.Value;
-        
+
         return newAssignStmtNode;
     }
-    
+
     public override BuiltInAnimCallNode VisitBuiltInAnimCall(ALFAParser.BuiltInAnimCallContext context)
     {
         var type = context.builtInAnim().GetText();
         ALFATypes.BuiltInAnimEnum builtInAnimEnum;
-        
+
         switch (type)
         {
             case "move":
@@ -131,15 +134,15 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             default:
                 throw new UnknownBuiltinException("Unknown built-in animation");
         }
-        
-        BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+
+        BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum, new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.actualParams() != null)
         {
             foreach (var exprCtx in context.actualParams().expr())
             {
                 var expr = Visit((dynamic)exprCtx);
-                
+
                 switch (expr)
                 {
                     case IdNode idNode:
@@ -160,15 +163,15 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 }
             }
         }
-        
+
         return builtInAnimCallNodeNode;
     }
-    
+
     public override BuiltInParalAnimCallNode VisitBuiltInParalAnimCall(ALFAParser.BuiltInParalAnimCallContext context)
     {
         var type = context.builtInParalAnim().GetText();
         ALFATypes.BuiltInParalAnimEnum builtInParalAnimEnum;
-        
+
         switch (type)
         {
             case "move":
@@ -177,15 +180,15 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             default:
                 throw new UnknownBuiltinException("Unknown built-in animation");
         }
-        
-        BuiltInParalAnimCallNode builtInParalAnimCallNodeNode = new BuiltInParalAnimCallNode(builtInParalAnimEnum,new List<Node>(), context.Start.Line, context.Start.Column);
+
+        BuiltInParalAnimCallNode builtInParalAnimCallNodeNode = new BuiltInParalAnimCallNode(builtInParalAnimEnum, new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.actualParams() != null)
         {
             foreach (var exprCtx in context.actualParams().expr())
             {
                 var expr = Visit((dynamic)exprCtx);
-                
+
                 switch (expr)
                 {
                     case IdNode idNode:
@@ -206,11 +209,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 }
             }
         }
-        
+
         return builtInParalAnimCallNodeNode;
     }
-    
-   public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
+
+    public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
     {
         string? identifier = null;
         string type = context.builtInCreateShape().GetText();
@@ -218,7 +221,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         var parent = (ALFAParser.AssignStmtContext)context.Parent;
         identifier = parent.ID().GetText();
-        
+
         switch (type)
         {
             case "createRect":
@@ -229,13 +232,13 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         }
 
         BuiltInCreateShapeCallNode builtInCreateShapeCallNode = new BuiltInCreateShapeCallNode(createShapeEnum, new List<Node>(), context.Start.Line, context.Start.Column);
-        
+
         if (context.actualParams() != null)
         {
             foreach (var exprCtx in context.actualParams().expr())
             {
                 var expr = Visit((dynamic)exprCtx);
-                
+
                 switch (expr)
                 {
                     case IdNode idNode:
@@ -243,7 +246,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         Symbol? sym = _symbolTable.RetrieveSymbol(id);
                         if (sym == null)
                             throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
-                    
+
                         builtInCreateShapeCallNode.Arguments.Add(idNode);
                         break;
                     case NumNode numNode:
@@ -261,18 +264,18 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         return builtInCreateShapeCallNode;
     }
-   
+
     public override IfStmtNode VisitIfStmt(ALFAParser.IfStmtContext context)
     {
         List<Node> expressions = new List<Node>();
         List<BlockNode> blocks = new List<BlockNode>();
-        
+
         int i = 0;
         foreach (var exprCtx in context.expr()) // if and else-ifs
         {
             var expr = Visit((dynamic)exprCtx);
             expressions.Add(expr);
-            
+
             BlockNode block = new BlockNode();
             foreach (var stmtCtx in context.block(i).stmt())
             {
@@ -290,27 +293,27 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             }
             blocks.Add(block);
         }
-        
+
         return new IfStmtNode(expressions, blocks, context.Start.Line, context.Start.Column);
     }
-    
+
     public override LoopStmtNode VisitLoopStmt(ALFAParser.LoopStmtContext context)
     {
         AssignStmtNode assignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
         assignStmtNode.Identifier = context.ID().GetText();
         assignStmtNode.Value = Visit(context.expr(0));
-        
+
         Node to = Visit(context.expr(1));
-        
+
         BlockNode block = new BlockNode();
         foreach (var stmtCtx in context.block().stmt())
         {
             block.Statements.Add(Visit(stmtCtx));
         }
-        
+
         return new LoopStmtNode(assignStmtNode, to, block, context.Start.Line, context.Start.Column);
     }
-    
+
     public override ParalStmtNode VisitParalStmt(ALFAParser.ParalStmtContext context)
     {
         ParalBlockNode paralBlock = new ParalBlockNode();
@@ -318,10 +321,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             paralBlock.Statements.Add(VisitBuiltInParalAnimCall(builtInParalAnimCallCtx));
         }
-        
+
         return new ParalStmtNode(paralBlock, context.Start.Line, context.Start.Column);
     }
-    
+
     public override ExprNode VisitParens(ALFAParser.ParensContext context)
     {
         var expr = Visit((dynamic)context.expr());
@@ -342,7 +345,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         var leftExpr = Visit((dynamic)context.expr(0));
         var rightExpr = Visit((dynamic)context.expr(1));
         var op = context.op.Text;
-        
+
         return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
     }
     public override ExprNode VisitAddSub(ALFAParser.AddSubContext context)
@@ -358,7 +361,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         var leftExpr = Visit((dynamic)context.expr(0));
         var rightExpr = Visit((dynamic)context.expr(1));
         var op = context.op.Text;
-        
+
         return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
     }
     public override ExprNode VisitEquality(ALFAParser.EqualityContext context)
@@ -366,21 +369,21 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         var leftExpr = Visit((dynamic)context.expr(0));
         var rightExpr = Visit((dynamic)context.expr(1));
         var op = context.op.Text;
-        
+
         return new ExprNode(op, leftExpr, rightExpr, context.Start.Line, context.Start.Column);
     }
     public override ExprNode VisitAnd(ALFAParser.AndContext context)
     {
         var leftExpr = Visit((dynamic)context.expr(0));
         var rightExpr = Visit((dynamic)context.expr(1));
-        
+
         return new ExprNode("and", leftExpr, rightExpr, context.Start.Line, context.Start.Column);
     }
     public override ExprNode VisitOr(ALFAParser.OrContext context)
     {
         var leftExpr = Visit((dynamic)context.expr(0));
         var rightExpr = Visit((dynamic)context.expr(1));
-        
+
         return new ExprNode("or", leftExpr, rightExpr, context.Start.Line, context.Start.Column);
     }
     public override IdNode VisitId(ALFAParser.IdContext context)
@@ -395,6 +398,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         return new BoolNode(Boolean.Parse(context.@bool().GetText()), context.Start.Line, context.Start.Column);
     }
-   
-   
+
+
 }

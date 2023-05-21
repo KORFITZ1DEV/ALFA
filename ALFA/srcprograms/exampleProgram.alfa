@@ -1,31 +1,7 @@
-int x1 = 0;
-int y1 = 0;
-
 int length = 100;
 int width = length + 100;
-int animDuration = 1000;
-int delay = 300;
-rect myrect1 = createRect(x1, y1, width, length);
 
-wait(delay / 5);
+loop(int i from 1 .. 10) {
+   i = i + 10;
 
-animDuration = 1000 / 2;
-
-paral {
-    move(myrect1, 206, 105, animDuration+200);
 }
-
-loop (int i from 1 .. 10) {
-    if(i < 4) {
-        paral {
-            move(myrect1, 101, 201, animDuration); 
-        }
-    }
-    else if(i == 4) {
-        move(myrect1, 50, 50, 4000);
-    }
-    else {
-        move(myrect1, 200, 100, animDuration);
-    }
-}
-

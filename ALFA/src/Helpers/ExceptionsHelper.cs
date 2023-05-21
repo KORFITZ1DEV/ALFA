@@ -46,7 +46,8 @@ public class VariableAlreadyDeclaredException : Exception
 [ExcludeFromCodeCoverage]
 public class SyntacticException : Exception
 {
-    public SyntacticException(string message) : base(message){}
+    public SyntacticException(string message) : base(message){
+    }
 }
 
 [ExcludeFromCodeCoverage]
@@ -54,3 +55,4 @@ public class NonPositiveAnimationDurationException : Exception
 {
     public NonPositiveAnimationDurationException(string message) : base(message){}
 }
+

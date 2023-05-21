@@ -86,9 +86,9 @@ namespace ALFA
             SymbolTable symbolTable = new();
             BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
-            /*TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
+            TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
             typeCheckVisitor.Visit(ast);
-            CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
+            /*CodeGenVisitor codeGenVisitor = new CodeGenVisitor(symbolTable, _output);
             codeGenVisitor.Visit(ast);*/
 
             if (args.Contains("--test")) return;
