@@ -39,11 +39,13 @@ public class VarDclNodeTestData : IEnumerable<object[]>
         };
         var buildInNode1 = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, args1, 50, 25);
 
-        var varDclNode1 = new VarDclNode(ALFATypes.TypeEnum.@int, "test1", buildInNode1, 25, 25);
+        AssignStmtNode assStmt1 = new AssignStmtNode("test1", buildInNode1, 25, 25);
+        var varDclNode1 = new VarDclNode(ALFATypes.TypeEnum.@int, assStmt1, 25, 25);
 
         var symbolTable2 = new SymbolTable();
         var varDclValueNode2 = new NumNode(25, 20, 10);
-        var varDclNode2 = new VarDclNode(ALFATypes.TypeEnum.rect, "test2", varDclValueNode2, 25, 30);
+        AssignStmtNode assStmt2 = new AssignStmtNode("test2", varDclValueNode2, 25, 25);
+        var varDclNode2 = new VarDclNode(ALFATypes.TypeEnum.rect, assStmt2, 25, 30);
         yield return new object[]{varDclNode1, new TypeException($"Invalid type {varDclNode1.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {varDclNode1.Line}:{varDclNode1.Col}"), symbolTable1};
         yield return new object[]{varDclNode2, new TypeException($"Invalid type {varDclNode2.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {varDclNode2.Line}:{varDclNode2.Col}"), symbolTable2};
     }

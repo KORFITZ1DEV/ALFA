@@ -109,6 +109,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                         break;
                 }
             }
+
+            if (idSymbol.Value is AssignStmtNode assNodeChild && assNodeChild.Value is IdNode idChildNode)
+            {
+                Symbol? idSymbolChild = _symbolTable.RetrieveSymbol(idChildNode.Identifier);
+                if (idSymbolChild.Type != idSymbol.Type)
+                    throw new TypeException("Invalid type on line " + assNodeChild.Line + ": " + "column: " + assNodeChild.Col);
+            }
         }
 
         return assNode;

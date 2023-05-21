@@ -34,8 +34,8 @@ public abstract class JsonTestData : IEnumerable<object[]>
                 case "UndeclaredVariableException":
                     exceptionType = typeof(UndeclaredVariableException);
                     break;
-                case "RedeclaredVariableException":
-                    exceptionType = typeof(RedeclaredVariableException);
+                case "VariableAlreadyDeclaredException":
+                    exceptionType = typeof(VariableAlreadyDeclaredException);
                     break;
                 case "SyntacticException":
                     exceptionType = typeof(SyntacticException);

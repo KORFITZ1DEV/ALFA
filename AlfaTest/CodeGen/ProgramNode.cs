@@ -55,7 +55,8 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     
     
     //Tests the output of a program with a VarDclNode Statement with a NumNode child
-    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, "num1" ,new NumNode(300, 13,2), 25, 20);
+    AssignStmtNode assStmtNode = new AssignStmtNode("num1", new NumNode(300, 13, 2), 25, 20);
+    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int ,assStmtNode, 25, 20);
     string varOutputWithVarDcl = File.ReadAllText(_stdlibPath);
     varOutputWithVarDcl += "\n\nconst num1 = 300\n";
     string drawOutputWithVarDcl = "function draw() {\n\tbackground(255)\n}";
@@ -88,7 +89,8 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
 
     
     SymbolTable symbolTableProgramRect = new SymbolTable();
-    VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, "Rect1" , buildInAnimCallNodeCreateRect, 25, 20);
+    AssignStmtNode assStmtNodeRect = new AssignStmtNode("Rect1", buildInAnimCallNodeCreateRect, 25, 20);
+    VarDclNode varDclNodeRect = new VarDclNode(ALFATypes.TypeEnum.rect, assStmtNodeRect, 25, 20);
     string varOutputRect = File.ReadAllText(_stdlibPath);
     varOutputRect += "\n\nconst Rect1 = new Rect(100,100,100,100);\n";
     string drawOutputRect = "function draw() {\n\tbackground(255)\n\tRect1.draw();\n}";

@@ -37,7 +37,8 @@ public class VarDclCodeGenTestData : IEnumerable<object[]>
             new NumNode(100, 60, 20)
         };
         BuiltInCreateShapeCallNode buildInAnimCallNodeCreateRect = new BuiltInCreateShapeCallNode(ALFATypes.CreateShapeEnum.createRect, numNodesCreateRect, 15, 10);
-        VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.rect, "rect1" ,buildInAnimCallNodeCreateRect, 25, 20);
+        AssignStmtNode assStmtNodeRect = new AssignStmtNode("Rect1", buildInAnimCallNodeCreateRect, 25, 20);
+        VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.rect, assStmtNodeRect, 25, 20);
         SymbolTable symbolTableVarDclNode = new SymbolTable();
         string expectedVarOutput = "const rect1 = new Rect(100,100,100,100);\n";
         string expectedDrawOutput = "\trect1.draw();\n";

@@ -42,10 +42,11 @@ public class CodeGenVisitorTestData : IEnumerable<object[]>
     {
       idNode1, symbolTable2, "Rect1"
     };
+
+    AssignStmtNode assnmt = new AssignStmtNode(idNode1.Identifier, numNode1, 25, 20);
  
     
-
-    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, "num1" ,numNode1, 25, 20);
+    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, assnmt, 25, 20);
     SymbolTable symbolTableVarDclNode = new SymbolTable();
     yield return new object[]
     {

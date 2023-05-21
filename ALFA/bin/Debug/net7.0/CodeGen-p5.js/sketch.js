@@ -10,7 +10,7 @@ class Shape {
         let originalX = this.x;
         let originalY = this.y;
 
-        let animate = (resolve) => { // Added `resolve` parameter
+        let animate = (resolve) => {
             let now = Date.now();
             let progress = (now - start) / duration;
 
@@ -56,17 +56,8 @@ function wait(duration) {
     });
 }
 
-const x = 0
-const y = 0
-const length = 20
-const animDuration = 4000
-const delay = 2000
-const myRect1 = new Rect(0,0,length,length);
 
 async function main() {
-	await myRect1.move(200, 0, animDuration);
-	await wait(delay);
-	await myRect1.move(-200, 0, animDuration);
 	}
 
 function setup() {
@@ -76,5 +67,4 @@ function setup() {
 
 function draw() {
 	background(255)
-	myRect1.draw();
 }

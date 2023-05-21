@@ -50,8 +50,8 @@ public class BuildAstVisitorTest
                 case UndeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
                     break;
-                case RedeclaredVariableException:
-                    Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
+                case VariableAlreadyDeclaredException:
+                    Assert.Equal(exceptionType, typeof(VariableAlreadyDeclaredException));
                     break;
                 case SyntacticException:
                     Assert.Equal(exceptionType, typeof(SyntacticException));

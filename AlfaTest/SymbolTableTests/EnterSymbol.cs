@@ -28,7 +28,7 @@ public class EnterSymbol
         {
             sut.EnterSymbol(expectedSymbol);
         }
-        catch (RedeclaredVariableException rve )
+        catch (VariableAlreadyDeclaredException rve )
         {
             Assert.True(true);
         }
