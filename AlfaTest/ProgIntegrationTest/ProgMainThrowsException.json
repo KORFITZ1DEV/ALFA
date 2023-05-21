@@ -5,6 +5,41 @@
     "ExceptionType": "InvalidNumberOfArgumentsException"
   },
   {
+    "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5fuck = createRect(0, 0, length, length);\n\nmove(200 , myRect1, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Invalid type in move, should be int",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "int k = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
+    "Comment": "Invalid type parsing rect to int",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int length = 20; rect myCoolRect = createCoolRect(0, 0, length, length);",
+    "Comment": "Unknown builtins",
+    "ExceptionType": "SyntacticException"
+  },
+  {
+    "Prog": "int xtest8 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test8Error = createRect(rect, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
+    "Comment": "Invalid type in create rect, input of type rect, should maybe be moved to ASTbuild testdata",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
+    "Comment": "Invalid type in move, rect should be first argument, give num",
+    "ExceptionType": "ArgumentTypeException"
+  },
+  {
+    "Prog": "wait(0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
+    "Prog": "int duration = 0; wait(duration);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with a duration saved in the symboltable under an id that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
     "Prog": "int xtest2 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test2 = createRect(0, 0, 0 length, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
     "Comment": "Invalid number of arguments create rect, given 5 arguments og 4",
     "ExceptionType": "InvalidNumberOfArgumentsException"
@@ -33,5 +68,10 @@
     "Prog": "int length = 20;\nrect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;",
     "Comment": "Invalid typed parsing rect to int, this throws nullException in the buildASTVisitor, but should actually be caught by the parser and should be in ASTbuild testdata",
     "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0);",
+    "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
+    "ExceptionType": "NonPositiveAnimationDurationException"
   }
 ]

@@ -105,8 +105,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             var expr = Visit((dynamic)context.expr());
 
-            //TODO something about constant folding here - evaluate!
-
             newAssignStmtNode.Value = expr;
         }
 
@@ -139,6 +137,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         if (context.actualParams() != null)
         {
+            int i = 0;
             foreach (var exprCtx in context.actualParams().expr())
             {
                 var expr = Visit((dynamic)exprCtx);
@@ -149,7 +148,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         string id = idNode.Identifier;
                         Symbol? sym = _symbolTable.RetrieveSymbol(id);
                         if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {exprCtx.Start.Line}:{exprCtx.Start.Column}");
                         builtInAnimCallNodeNode.Arguments.Add(idNode);
                         break;
                     case NumNode numNode:
@@ -161,6 +160,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         builtInAnimCallNodeNode.Arguments.Add(expr);
                         break;
                 }
+
+                i++;
             }
         }
 
@@ -245,7 +246,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         string id = idNode.Identifier;
                         Symbol? sym = _symbolTable.RetrieveSymbol(id);
                         if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {exprCtx.Start.Line}:{exprCtx.Start.Column}");
 
                         builtInCreateShapeCallNode.Arguments.Add(idNode);
                         break;
@@ -254,7 +255,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         builtInCreateShapeCallNode.Arguments.Add(numNode);
                         break;
                     case BoolNode boolNode:
-                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInCreateShapeCallNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
+                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInCreateShapeCallNode.Type.ToString()} on line " + exprCtx.Start.Line + ":" + exprCtx.Start.Column);
                     default:
                         builtInCreateShapeCallNode.Arguments.Add(expr);
                         break;

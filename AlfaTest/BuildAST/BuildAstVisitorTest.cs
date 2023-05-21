@@ -17,7 +17,7 @@ public class BuildAstVisitorTest
     
     [Theory]
     [ClassData(typeof(BuildAstThrowsExceptionTestData))]
-    public void BuildAstTestThrowsException(string prog, string comment, Type exceptionType)
+    public void BuildAstTestThrowsException(string prog, string comment, Type expectedExceptionType)
     {
         ICharStream stream = CharStreams.fromString(prog);
         ITokenSource lexer = new ALFALexer(stream);
@@ -36,32 +36,31 @@ public class BuildAstVisitorTest
             switch (actualException)
             {
                 case TypeException:
-                    Assert.Equal(exceptionType, typeof(TypeException));
+                    Assert.Equal(expectedExceptionType, typeof(TypeException));
                     break;
                 case ArgumentTypeException:
-                    Assert.Equal(exceptionType, typeof(ArgumentTypeException));
+                    Assert.Equal(expectedExceptionType, typeof(ArgumentTypeException));
                     break;
                 case InvalidNumberOfArgumentsException:
-                    Assert.Equal(exceptionType, typeof(InvalidNumberOfArgumentsException));
+                    Assert.Equal(expectedExceptionType, typeof(InvalidNumberOfArgumentsException));
                     break;
                 case UnknownBuiltinException:
-                    Assert.Equal(exceptionType, typeof(UnknownBuiltinException));
+                    Assert.Equal(expectedExceptionType, typeof(UnknownBuiltinException));
                     break;
                 case UndeclaredVariableException:
-                    Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
+                    Assert.Equal(expectedExceptionType, typeof(UndeclaredVariableException));
                     break;
                 case VariableAlreadyDeclaredException:
-                    Assert.Equal(exceptionType, typeof(VariableAlreadyDeclaredException));
+                    Assert.Equal(expectedExceptionType, typeof(VariableAlreadyDeclaredException));
                     break;
                 case SyntacticException:
-                    Assert.Equal(exceptionType, typeof(SyntacticException));
+                    Assert.Equal(expectedExceptionType, typeof(SyntacticException));
                     break;
                 case NonPositiveAnimationDurationException:
-                    Assert.Equal(exceptionType, typeof(NonPositiveAnimationDurationException));
+                    Assert.Equal(expectedExceptionType, typeof(NonPositiveAnimationDurationException));
                     break;
                 default:
-                    Assert.Equal(new Exception("" +
-                                               "randomstuff"), actualException);
+                    Assert.Equal(actualException, new Exception("look at actual"));
                     break;
             }
         }
