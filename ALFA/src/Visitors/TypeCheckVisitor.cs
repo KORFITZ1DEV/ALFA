@@ -166,6 +166,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case "%":
                 EvaluateArithmeticExpression(leftValue, rightValue, node.Operator, node);
                 break;
+            case "==":
+            case "!=":
+            case "and":
+            case "or":
+
+                break;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");
         }
@@ -217,7 +223,44 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case "%":
                 parent.Value = new NumNode(leftNumNode.Value % rightNumNode.Value);
                 break;
+
+                //Todo also needs unary minus.
         }
+    }
+
+    public void EvaluateBooleanExpression(Node left, Node right, string op, ExprNode parent)
+    {
+        Tuple<BoolNode, BoolNode> expectedNodes = EvaluateIdNode<BoolNode>(left, right, op, right == null);
+
+
+        switch (op)
+        {
+            case "and":
+                parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value);
+                break;
+            case "or":
+                parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value);
+                break;
+            case "!":
+                parent.Value = new BoolNode(!expectedNodes.Item1.Value);
+                break;
+            default:
+                throw new Exception("You used a boolean operator that is not being switched on");
+        }
+    }
+
+    public Tuple<T, T> EvaluateIdNode<T>(Node left, Node right, string op, bool isBinary) where T : Node
+    {
+        T? leftTNode = left is T leftNum ? leftNum : null;
+        T? rightTNode = right is T rightNum ? rightNum : null;
+
+        if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
+        if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
+
+        if (leftTNode == null) throw new ArgumentTypeException($"Incompatible type {leftTNode?.GetType()} in expression {op} on line {left.Line} column {left.Col}");
+        if (rightTNode == null && isBinary) throw new ArgumentTypeException($"Incompatible type {rightTNode?.GetType()} in expression {op} on line {right.Line} column {right.Col}");
+
+        return new Tuple<T, T>(leftTNode, rightTNode);
     }
 
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
@@ -227,22 +270,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
 
         return (T)symbol.Value;
-    }
-
-    public bool EvaluateBooleanExpression(bool leftVal, bool rightVal, string op)
-    {
-
-        switch (op)
-        {
-            case "and":
-                return leftVal && rightVal;
-            case "or":
-                return leftVal || rightVal;
-            case "!":
-                return leftVal;
-            default:
-                throw new Exception("You used an arithmetic operator that is not being switched on");
-        }
     }
 
     public override BoolNode Visit(BoolNode node)
