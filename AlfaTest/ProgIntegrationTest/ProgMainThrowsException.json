@@ -20,9 +20,9 @@
      "ExceptionType": "SyntacticException"
    },
    {
-     "Prog": "int xtest8 = 0;\n int length = 20;\n int y = 0;\n int animDuration = 4000;\n int delay = 2000;\n rect test8ErrorRect = createRect(0, 0, 10, length);\nrect test8Error = createRect(test8ErrorRect, 0, 0, length);\nmove(test8 , 200, animDuration);\nwait(delay);\nmove(test8 , -200, animDuration);",
+     "Prog": "int xtest8 = 0;\nint length = 20;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nrect test8ErrorRect = createRect(0, 0, 10, length);\nrect test8Error = createRect(test8ErrorRect, 0, 0, length);\nmove(test8Error , 200, animDuration);\nwait(delay);\nmove(test8Error , -200, animDuration);",
      "Comment": "Invalid type in create rect, input of type rect, should maybe be moved to ASTbuild testdata",
-     "ExceptionType": "TypeException"
+     "ExceptionType": "ArgumentTypeException"
    },
    {
      "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
@@ -45,7 +45,7 @@
      "ExceptionType": "InvalidNumberOfArgumentsException"
    },
    {
-     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length)\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",
+     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length);\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",
      "Comment": "Invalid type in create rect, input of type rect as id",
      "ExceptionType": "ArgumentTypeException"
    },

@@ -1,11 +1,10 @@
-int xtest2 = 0;
- int y = 0;
- 
- int length = 20; 
- int animDuration = 4000;
- int delay = 2000;
- rect test2 = createRect(0, 0, 0 length, length);
- 
- move(test2 , 200, animDuration);
- wait(delay);
- move(test2 , -200, animDuration);
+int xtest8 = 0;
+int length = 20;
+int y = 0;
+int animDuration = 4000;
+int delay = 2000;
+rect test8ErrorRect = createRect(0, 0, 10, length);
+rect test8Error = createRect(test8ErrorRect, 0, 0, length);
+move(test8Error , 200, animDuration);
+wait(delay);
+move(test8Error , -200, animDuration);

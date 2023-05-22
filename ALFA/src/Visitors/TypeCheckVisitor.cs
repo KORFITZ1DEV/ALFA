@@ -54,6 +54,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     {
                         if(idSymbol.Value is AssignStmtNode assStmt && assStmt.Value is NumNode numNode && numNode.Value <= 0) 
                             throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
+                        
                     }
                 }
             }
@@ -61,6 +62,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             {
                 if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
                     throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+                if(i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1 && numNode.Value <= 0) 
+                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {numNode.Line} column {numNode.Col}");
+
             }
             else if (actualParam is ExprNode exprNode)
             {
