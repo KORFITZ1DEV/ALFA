@@ -15,6 +15,7 @@ namespace ALFA
     [ExcludeFromCodeCoverage]
     public static class Prog
     {
+        
         public static void Main(string[] args)
         {
             string input = String.Empty;
@@ -77,10 +78,10 @@ namespace ALFA
             parser.BuildParseTree = true;
             IParseTree tree = parser.program();
 
-            var errorNodeImplChild = findErrorNode(tree);
-            if (errorNodeImplChild != null)
+            ErrorNodeImpl? syntacticErrorNode = findErrorNode(tree);
+            if (syntacticErrorNode != null)
             {
-                throw new SyntacticException($"Something is syntactically incorrect: {errorNodeImplChild.GetText()} on line {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[0]} column {errorNodeImplChild.Payload.ToString().Split(",")[3].Split(":")[1]}");
+                throw new SyntacticException($"Something is syntactically incorrect: {syntacticErrorNode.GetText()} on line {syntacticErrorNode.Payload?.ToString()?.Split(",")[3].Split(":")[0]} column {syntacticErrorNode.Payload.ToString().Split(",")[3].Split(":")[1]}");
             }
 
             SymbolTable symbolTable = new();
@@ -98,6 +99,7 @@ namespace ALFA
 
         private static ErrorNodeImpl? findErrorNode(IParseTree context)
         {
+            
             for (int i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
@@ -105,6 +107,10 @@ namespace ALFA
                 {
                     return errorNodeChild;
                 }
+
+                ErrorNodeImpl? returnedErrorNode = findErrorNode(child);
+                if (returnedErrorNode != null) return returnedErrorNode;
+
             }
 
             return null;

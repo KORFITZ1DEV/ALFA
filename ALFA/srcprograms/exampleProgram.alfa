@@ -1,7 +1,11 @@
-int length = 100;
-int width = length + 100;
-
-loop(int i from 1 .. 10) {
-   i = i + 10;
-
-}
+int xtest2 = 0;
+ int y = 0;
+ 
+ int length = 20; 
+ int animDuration = 4000;
+ int delay = 2000;
+ rect test2 = createRect(0, 0, 0 length, length);
+ 
+ move(test2 , 200, animDuration);
+ wait(delay);
+ move(test2 , -200, animDuration);

@@ -49,12 +49,22 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 {
                     if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+
+                    if (i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1)
+                    {
+                        if(idSymbol.Value is AssignStmtNode assStmt && assStmt.Value is NumNode numNode && numNode.Value <= 0) 
+                            throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
+                    }
                 }
             }
             else if (actualParam is NumNode numNode)
             {
                 if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
                     throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+            }
+            else if (actualParam is ExprNode exprNode)
+            {
+                Visit(exprNode);
             }
             i++;
         }
@@ -113,7 +123,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             if (idSymbol.Value is AssignStmtNode assNodeChild && assNodeChild.Value is IdNode idChildNode)
             {
                 Symbol? idSymbolChild = _symbolTable.RetrieveSymbol(idChildNode.Identifier);
-                if (idSymbolChild.Type != idSymbol.Type)
+                if (idSymbolChild?.Type != idSymbol.Type)
                     throw new TypeException("Invalid type on line " + assNodeChild.Line + ": " + "column: " + assNodeChild.Col);
             }
         }
@@ -154,7 +164,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override ExprNode Visit(ExprNode node)
     {
         EvaluateExpression(node);
-        Console.WriteLine("Test");
 
         return node;
     }
