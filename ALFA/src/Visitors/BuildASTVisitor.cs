@@ -13,33 +13,33 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     //A function that replaces an id in an expression with the value from the symbol table.
     //int offset = 100; offset = -offset; The value of offset in the symbol table must assume an integer value when this is executed in the same scope
     //otherwise the value can never be retrieved
-    private void replaceIdWithValue(ExprNode expr, string identifier)
+    private void addLocalValueToIdInExpr(ExprNode expr, string identifier)
     {
         if (expr.Left is ExprNode leftExpr)
         {
-            replaceIdWithValue(leftExpr, identifier);
+            addLocalValueToIdInExpr(leftExpr, identifier);
         }
 
         if (expr.Right is ExprNode rightExpr)
         {
-            replaceIdWithValue(rightExpr, identifier);
+            addLocalValueToIdInExpr(rightExpr, identifier);
         }
 
         if (expr.Left is IdNode idNodeLeft)
         {
             var symbol = _symbolTable.RetrieveSymbol(idNodeLeft.Identifier);
-            if (symbol.Depth == _symbolTable._depth && symbol.Name == identifier)
+            if (symbol?.Name == identifier)
             {
-                expr.Left = symbol.Value;
+                idNodeLeft.LocalValue = symbol.Value;
             }
         }
 
         if (expr.Right is IdNode idNodeRight)
         {
             var symbol = _symbolTable.RetrieveSymbol(idNodeRight.Identifier);
-            if (symbol.Depth == _symbolTable._depth && symbol.Name == identifier)
+            if (symbol?.Name == identifier)
             {
-                expr.Right = symbol.Value;
+                idNodeRight.LocalValue = symbol.Value;
             }
         }
         
@@ -139,7 +139,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         else if (context.expr() != null)
         {
             var expr = Visit((dynamic)context.expr());
-            if(expr is ExprNode exprNode) replaceIdWithValue(exprNode, newAssignStmtNode.Identifier);
+            if(expr is ExprNode exprNode) addLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
             
 
             newAssignStmtNode.Value = expr;

@@ -399,29 +399,22 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
         var nodeToCast = symbol.Value;
-
-        while (nodeToCast is IdNode nodeToLookup)
+        if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
+        {
+            EvaluateExpression(locValExpr);
+            return (T)idNode.LocalValue;
+        }
+        else if (idNode.LocalValue is not ExprNode)
+        {
+            return (T)idNode.LocalValue!;
+        }
+        
+        if (nodeToCast is IdNode nodeToLookup)
         {
             var idSymbol = _symbolTable.RetrieveSymbol(nodeToLookup.Identifier);
             nodeToCast = idSymbol!.Value;
         }
 
-        if (nodeToCast is ExprNode node)
-        {
-            if (node.Value != null) return (T)node.Value;
-            if (node.Left is IdNode leftIdNode)
-            {
-                var idSymbol = _symbolTable.RetrieveSymbol(leftIdNode.Identifier);
-                nodeToCast = idSymbol!.Value;
-            }
-
-            if (node.Right is IdNode rightIdNode)
-            {
-                var idSymbol = _symbolTable.RetrieveSymbol(rightIdNode.Identifier);
-                nodeToCast = idSymbol!.Value;
-            }
-        }
-        
         return (T)nodeToCast;
     }
 

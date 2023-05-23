@@ -1,12 +1,7 @@
 ﻿#Two rects moving on x-axis
 
+int offsetX1 = 100;
+offsetX1 = offsetX1 + 300 + 400;
+offsetX1 = -offsetX1;
 
-if(true) {
-    int offsetX1 = 102;
-}
-else if (false) {
-    int offsetX1 = 102;
-}
-else {
-    int offsetX1 = 102;
-}
+
