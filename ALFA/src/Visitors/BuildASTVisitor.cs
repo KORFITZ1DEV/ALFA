@@ -10,6 +10,41 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 {
     private SymbolTable _symbolTable;
 
+    //A function that replaces an id in an expression with the value from the symbol table.
+    //int offset = 100; offset = -offset; The value of offset in the symbol table must assume an integer value when this is executed in the same scope
+    //otherwise the value can never be retrieved
+    private void replaceIdWithValue(ExprNode expr, string identifier)
+    {
+        if (expr.Left is ExprNode leftExpr)
+        {
+            replaceIdWithValue(leftExpr, identifier);
+        }
+
+        if (expr.Right is ExprNode rightExpr)
+        {
+            replaceIdWithValue(rightExpr, identifier);
+        }
+
+        if (expr.Left is IdNode idNodeLeft)
+        {
+            var symbol = _symbolTable.RetrieveSymbol(idNodeLeft.Identifier);
+            if (symbol.Depth == _symbolTable._depth && symbol.Name == identifier)
+            {
+                expr.Left = symbol.Value;
+            }
+        }
+
+        if (expr.Right is IdNode idNodeRight)
+        {
+            var symbol = _symbolTable.RetrieveSymbol(idNodeRight.Identifier);
+            if (symbol.Depth == _symbolTable._depth && symbol.Name == identifier)
+            {
+                expr.Right = symbol.Value;
+            }
+        }
+        
+    }
+
     public BuildASTVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
@@ -104,6 +139,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         else if (context.expr() != null)
         {
             var expr = Visit((dynamic)context.expr());
+            if(expr is ExprNode exprNode) replaceIdWithValue(exprNode, newAssignStmtNode.Identifier);
+            
 
             newAssignStmtNode.Value = expr;
         }
@@ -275,6 +312,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         int i = 0;
         foreach (var exprCtx in context.expr()) // if and else-ifs
         {
+            _symbolTable.OpenScope();
+
             var expr = Visit((dynamic)exprCtx);
             expressions.Add(expr);
 
@@ -282,17 +321,21 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             foreach (var stmtCtx in context.block(i).stmt())
             {
                 block.Statements.Add(Visit(stmtCtx));
+                
             }
             blocks.Add(block);
+            _symbolTable.CloseScope();
             i++;
         }
         if (context.block().Length > context.expr().Length) // else
         {
+            _symbolTable.OpenScope();
             BlockNode block = new BlockNode();
             foreach (var stmtCtx in context.block().Last().stmt())
             {
                 block.Statements.Add(Visit(stmtCtx));
             }
+            _symbolTable.CloseScope();
             blocks.Add(block);
         }
 
@@ -402,6 +445,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         return new BoolNode(Boolean.Parse(context.@bool().GetText()), context.Start.Line, context.Start.Column);
     }
+    
 
 
 }

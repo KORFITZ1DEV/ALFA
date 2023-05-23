@@ -165,7 +165,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override IfStmtNode Visit(IfStmtNode ifNode)
     {
-
         foreach (var expr in ifNode.Expressions)
         {
             Visit((dynamic)expr);
@@ -176,19 +175,23 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override LoopStmtNode Visit(LoopStmtNode node)
     {
+        _symbolTable.OpenScope();
         Visit(node.AssignStmt);
         Visit(node.To);
         Visit(node.Block);
+        _symbolTable.CloseScope();
 
         return node;
     }
 
     public override ParalStmtNode Visit(ParalStmtNode node)
     {
+        _symbolTable.OpenScope();
         foreach (var statement in node.Block.Statements)
         {
             Visit(statement);
         }
+        _symbolTable.CloseScope();
 
         return node;
     }
@@ -274,37 +277,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 throw new Exception("You used an arithmetic operator that is not being switched on");
         }
 
-
-        /*
-        Node leftTypeToCompare = leftValue, rightTypeToCompare = rightValue;
-
-        if (leftValue is IdNode assNodeL)
-        {
-            Symbol leftSym = _symbolTable.RetrieveSymbol(assNodeL.Identifier);
-            leftTypeToCompare = leftSym.Value;
-        }
-        if (rightValue is IdNode assNodeR)
-        {
-            Symbol rightSym = _symbolTable.RetrieveSymbol(assNodeR.Identifier);
-            rightTypeToCompare = rightSym.Value;
-        }
-
-        if (leftValue != null && rightValue != null
-        && (leftTypeToCompare.GetType() != rightTypeToCompare.GetType())) throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
-        $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
-        */
-        
-        /*
-        if (leftValue != null && rightValue != null
-                              && (leftValue.GetType() != node.Value.GetType() || rightValue.GetType() != node.Value.GetType())) throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
-            $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
-        */
     }
 
-    // Node -> BoolNode, IdNode, NumNode
     public void EvaluateArithmeticExpression(Node left, Node right, string op, ExprNode parent)
     {
-        Tuple<NumNode, NumNode> expectedNodes = EvaluateIdNode<NumNode>(left, right, op, right == null);
+        Tuple<NumNode, NumNode> expectedNodes = EvaluateIdNode<NumNode>(left, right, op, right != null);
 
         switch (op)
         {
@@ -431,7 +408,18 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (nodeToCast is ExprNode node)
         {
-            
+            if (node.Value != null) return (T)node.Value;
+            if (node.Left is IdNode leftIdNode)
+            {
+                var idSymbol = _symbolTable.RetrieveSymbol(leftIdNode.Identifier);
+                nodeToCast = idSymbol!.Value;
+            }
+
+            if (node.Right is IdNode rightIdNode)
+            {
+                var idSymbol = _symbolTable.RetrieveSymbol(rightIdNode.Identifier);
+                nodeToCast = idSymbol!.Value;
+            }
         }
         
         return (T)nodeToCast;
