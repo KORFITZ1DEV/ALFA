@@ -1,7 +1,10 @@
+const shapesToDraw = [];
+
 class Shape {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        shapesToDraw.push(this);
     }
 
     move(offsetX, offsetY, duration) {
@@ -54,4 +57,9 @@ function wait(duration) {
             resolve();
         }, duration)
     });
+}
+
+async function moveParal(animations) {
+    const promises = animations.map(animation => animation());
+    return Promise.all(promises);
 }

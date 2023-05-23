@@ -75,6 +75,34 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
+    public override Node Visit(BuiltInParalAnimCallNode node)
+    {
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
+
+        if (node.Arguments.Count != nodeFormalParameters.Count)
+        {
+            throw new InvalidNumberOfArgumentsException(
+                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
+        }
+
+        int i = 0;
+        foreach (var actualParam in node.Arguments)
+        {
+            if (actualParam is IdNode idNode)
+            {
+                Visit(actualParam); //Not needed now but it is more extensible
+                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                if (idSymbol != null)
+                {
+                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
+                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+                }
+            }
+            i++;
+        }
+        return node;
+    }
+
     public override BuiltInCreateShapeCallNode Visit(BuiltInCreateShapeCallNode callNode)
     {
         List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[callNode.Type.ToString()];
@@ -172,6 +200,26 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
+    public override Node Visit(BlockNode node)
+    {
+        foreach (var stmt in node.Statements)
+        {
+            Visit((dynamic)stmt);
+        }
+
+        return node;
+    }
+
+    public override Node Visit(ParalBlockNode node)
+    {
+        foreach (var stmt in node.Statements)
+        {
+            Visit((dynamic)stmt);
+        }
+
+        return node;
+    }
+
 
     public void EvaluateExpression(ExprNode node)
     {
@@ -208,10 +256,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case "*":
             case "/":
             case "%":
+            case "u-":
                 EvaluateArithmeticExpression(leftValue, rightValue, node.Operator, node);
                 break;
             case "==":
             case "!=":
+                EvaluateEqualityExpression(leftValue, rightValue, node.Operator, node);
+                break;
             case "and":
             case "or":
             case "!":
@@ -224,6 +275,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         }
 
 
+        /*
         Node leftTypeToCompare = leftValue, rightTypeToCompare = rightValue;
 
         if (leftValue is IdNode assNodeL)
@@ -240,8 +292,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (leftValue != null && rightValue != null
         && (leftTypeToCompare.GetType() != rightTypeToCompare.GetType())) throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
         $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
-
-
+        */
+        
+        /*
+        if (leftValue != null && rightValue != null
+                              && (leftValue.GetType() != node.Value.GetType() || rightValue.GetType() != node.Value.GetType())) throw new ArgumentTypeException("You tried to evaluate an expression with invalid type compability," +
+            $"left side type is {leftValue.GetType()}, right side type is {rightValue.GetType()}");
+        */
     }
 
     // Node -> BoolNode, IdNode, NumNode
@@ -285,6 +342,33 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         
     }
 
+    public void EvaluateEqualityExpression(Node left, Node right, string op, ExprNode parent)
+    {
+        var expectedNodes = EvaluateEqualityType(left, right, op);
+        dynamic leftDyn = new { }, rightDyn = new { };
+
+        if (expectedNodes.Item1 is NumNode numNodeLeft && expectedNodes.Item2 is NumNode numNodeRight)
+        {
+            leftDyn = numNodeLeft;
+            rightDyn = numNodeRight;
+        }
+        else if (expectedNodes.Item1  is BoolNode boolNodeLeft && expectedNodes.Item2 is BoolNode boolNodeRight)
+        {
+            leftDyn = boolNodeLeft;
+            rightDyn = boolNodeRight;
+        }
+        
+        switch (op)
+        {
+            case "==":
+                parent.Value = new BoolNode(leftDyn == rightDyn, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
+                break;
+            case "!=":
+                parent.Value = new BoolNode(leftDyn != rightDyn, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
+                break;
+        }
+    }
+
     public void EvaluateBooleanExpression(Node left, Node right, string op, ExprNode parent)
     {
         Tuple<BoolNode, BoolNode> expectedNodes = EvaluateIdNode<BoolNode>(left, right, op, right != null);
@@ -292,9 +376,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         switch (op)
         {
             case "and":
+                parent.Operator = "&&";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "or":
+                parent.Operator = "||";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "!":
@@ -305,11 +391,22 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         }
     }
 
+    public Tuple<Node, Node> EvaluateEqualityType(Node left, Node right, string op)
+    {
+        if (left is IdNode idNode) left = VisitSymbol<NumNode>(idNode);
+        if (right is IdNode idNode1) left = VisitSymbol<NumNode>(idNode1);
+
+        if (left.GetType() != right.GetType()) throw new ArgumentTypeException($"Incompatible type {left.GetType()} in '{op}' expression on line {left.Line} column {left.Col}");
+        return new Tuple<Node, Node>(left, right);
+    }
+
     public Tuple<T, T> EvaluateIdNode<T>(Node left, Node right, string op, bool isBinary) where T : Node
     {
-        T? leftTNode = left is T leftNum ? leftNum : null;
-        T? rightTNode = right is T rightNum ? rightNum : null;
+        T? leftTNode = null, rightTNode = null;
 
+        if (left is T leftT) leftTNode = leftT;
+        if (right is T rightT) rightTNode = rightT;
+        
         if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
         if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
 
@@ -324,13 +421,20 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public T VisitSymbol<T>(IdNode idNode) where T : Node
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+        var nodeToCast = symbol.Value;
 
-        if (symbol.Value is AssignStmtNode assNode)
+        while (nodeToCast is IdNode nodeToLookup)
         {
-            return (T)assNode.Value;
+            var idSymbol = _symbolTable.RetrieveSymbol(nodeToLookup.Identifier);
+            nodeToCast = idSymbol!.Value;
+        }
+
+        if (nodeToCast is ExprNode node)
+        {
+            
         }
         
-        return (T)symbol.Value;
+        return (T)nodeToCast;
     }
 
     public override BoolNode Visit(BoolNode node) => node;

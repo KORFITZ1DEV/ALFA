@@ -35,10 +35,6 @@
       <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\sketch.js" />
       <None Include="bin\Debug\net7.0\CodeGen-p5.js\Output\style.css" />
       <None Include="bin\Debug\net7.0\CodeGen-p5.js\stdlib.js" />
-      <None Include="bin\Release\net7.0\CodeGen-p5.js\Output\index.html" />
-      <None Include="bin\Release\net7.0\CodeGen-p5.js\Output\p5.min.js" />
-      <None Include="bin\Release\net7.0\CodeGen-p5.js\Output\style.css" />
-      <None Include="bin\Release\net7.0\CodeGen-p5.js\stdlib.js" />
     </ItemGroup>
 
 </Project>

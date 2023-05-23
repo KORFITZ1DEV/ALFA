@@ -86,7 +86,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (symbol != null)
             throw new VariableAlreadyDeclaredException($"Variable {id} already declared on line {symbol.LineNumber}:{symbol.ColumnNumber}");
 
-        _symbolTable.EnterSymbol(new Symbol(id, newVarDclNode.AssignStmt, typeEnum, context.Start.Line, context.Start.Column));
+        _symbolTable.EnterSymbol(new Symbol(id, newVarDclNode.AssignStmt.Value, typeEnum, context.Start.Line, context.Start.Column));
 
         return newVarDclNode;
     }
@@ -108,6 +108,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             newAssignStmtNode.Value = expr;
         }
 
+        
         string id = newAssignStmtNode.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null)
@@ -303,6 +304,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         AssignStmtNode assignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
         assignStmtNode.Identifier = context.ID().GetText();
         assignStmtNode.Value = Visit(context.expr(0));
+
+        _symbolTable.EnterSymbol(new Symbol(assignStmtNode.Identifier, assignStmtNode.Value, ALFATypes.TypeEnum.@int, context.Start.Line, context.Start.Column));
 
         Node to = Visit(context.expr(1));
 
