@@ -67,27 +67,20 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
     public override Node Visit(VarDclNode node)
     {
-        throw new NotImplementedException();
+        Emit("const ", ALFATypes.OutputEnum.VarOutput);
+        Visit(node.AssignStmt);
+
+        return (node);
     }
 
     public override Node Visit(AssignStmtNode node)
     {
-        throw new NotImplementedException();
-    }
-    /*public override VarDclNode Visit(VarDclNode node)
-    {
-        Emit($"const {node.Identifier} = ", ALFATypes.OutputEnum.VarOutput);
-        
-        Node child = Visit((dynamic)node.Value);
+        Emit(node.Identifier + "=", ALFATypes.OutputEnum.VarOutput);
+        Visit((dynamic) node.Value);
+        Emit(";\n", ALFATypes.OutputEnum.VarOutput);
 
-        if (child is BuiltInCreateShapeCallNode)
-        {
-            Emit($"\t{node.Identifier}.draw();\n", ALFATypes.OutputEnum.DrawOutput);
-        }
-
-        Emit("\n", ALFATypes.OutputEnum.VarOutput);
         return node;
-    }*/
+    }
 
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
