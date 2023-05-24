@@ -7,7 +7,8 @@ namespace ALFA.Visitors;
 public class TypeCheckVisitor : ASTVisitor<Node>
 {
     private SymbolTable _symbolTable;
-
+    
+//TODO move typecheck vardcl here
     public TypeCheckVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
@@ -26,6 +27,23 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         Visit(node.AssignStmt);
 
+        if (node.AssignStmt.Value is ExprNode exprNode)
+        {
+            switch (exprNode.Value.GetType().ToString())
+            { 
+                case "ALFA.AST_Nodes.NumNode":
+                    if (node.Type != ALFATypes.TypeEnum.@int)
+                        throw new TypeException(
+                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a number");
+                    break;
+                case "ALFA.AST_Nodes.BoolNode":
+                    if (node.Type != ALFATypes.TypeEnum.@bool)
+                        throw new TypeException(
+                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a Boolean");
+                    break;
+            }
+        }
+        
         return node;
     }
 
@@ -424,10 +442,15 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             return (T)exprNode.Value;
         }
+        else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
+        {
+            return VisitSymbol<T>(exprIdNode);
+        }
         else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
             return (T)idNode.LocalValue!;
         }
+        
         
         if (nodeToCast is IdNode nodeToLookup)
         {

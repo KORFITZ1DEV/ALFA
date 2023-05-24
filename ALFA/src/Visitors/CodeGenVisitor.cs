@@ -91,7 +91,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     public override Node Visit(VarDclNode node)
     {
         AddTabs();
-        Emit("let var_");
+        Emit("let ");
         Visit(node.AssignStmt);
 
         return (node);
@@ -99,7 +99,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
     public override Node Visit(AssignStmtNode node)
     {
-        Emit(node.Identifier + "=");
+        Emit($"var_{node.Identifier}" + "=");
         Visit((dynamic) node.Value);
         Emit("\n");
         return node;

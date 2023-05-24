@@ -1,26 +1,12 @@
-﻿#Rect also moving in y-direction
+﻿int offset1 = 100;
+int offset2 = -offset1;
+int offset3 = offset1;
+int offset4 = offset2;
+int duration = 200;
 
-int len = 60;
-rect myRect1 = createRect(0,0,len,len);
-rect myRect2 = createRect(50,100,len,len);
-
-
-int offsetX = 100;
-int offsetY = 100;
-offsetY = offsetY + 200;
-bool loopRecurTing = 100 + 200;
-bool loopTing = -loopRecurTing;
-int duration = 1500;
-
-loop(int i from 1 .. loopTing ) {
-    move(myRect1, offsetX, 0, duration);
-    move(myRect1, 0, offsetY, duration);
-    if(i <= 2) {
-        paral {
-            move(myRect2, offsetX, 0, duration);
-            move(myRect2, 0, 100, duration);
-        }
-    }
-    move(myRect1, -offsetX, 0, duration);
-    move(myRect1, 0, -offsetY, duration);
+loop (int i from 1 .. 4) {
+    offset1 = -offset1;
+    offset2 = -offset2;
+    offset3 = -offset3;
+    offset4 = -offset4;
 }
