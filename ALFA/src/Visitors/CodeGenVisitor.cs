@@ -197,7 +197,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         Emit("\n");
         AddTabs();
-        Emit("for (let var_");
+        Emit("for (let ");
         var child = Visit(node.AssignStmt);
         // ExprNode, NumNod
         // node.AssignStmt.Value
