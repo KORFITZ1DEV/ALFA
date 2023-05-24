@@ -437,12 +437,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
         {
-            nodeToCast = (T)exprNode.Value;
+            nodeToCast = exprNode.Value;
         }
         else if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
         {
             EvaluateExpression(locValExpr);
-            nodeToCast = (T)locValExpr.Value;
+            nodeToCast = locValExpr.Value;
         }
         else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
         {
@@ -453,7 +453,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             nodeToCast = idNode.LocalValue!;
         }
         
-
         return (T)nodeToCast;
     }
 
