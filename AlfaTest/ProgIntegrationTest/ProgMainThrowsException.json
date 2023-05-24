@@ -73,5 +73,15 @@
      "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0);",
      "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
      "ExceptionType": "NonPositiveAnimationDurationException"
+   },  
+   {
+     "Prog": "int len = 20;\nrect myRect1 = createRect(0,0,len,len);\nrect myRect2 = createRect(40,40,len,len);\n\nint offsetX = 100;\nint offsetY = 100;\nint duration = 1500;\n\nloop(int i from 1 .. 4) {\n    paral {\n        if (i == 1) {\n            move(myRect1, offsetX, 0, duration);\n        }\n        move(myRect1, offsetX, 0, duration);\n        move(myRect2, offsetX, 0, duration);\n    }\n}",
+     "Comment": "Using an if-statement inside a paral that is inside a loop",
+     "ExceptionType": "SyntacticException"
+   },  
+   {
+     "Prog": "int len = 20;\nrect myRect1 = createRect(0,0,len,len);\nrect myRect2 = createRect(40,40,len,len);\n\nint offsetX = 100;\nint offsetY = 100;\nint duration = 1500;\n\nparal {\n    loop (int i from 0 .. 6) {\n        move(myRect1, offsetX, offsetY, duration);\n    }\n}",
+     "Comment": "Using a loop inside a paral",
+     "ExceptionType": "SyntacticException"
    }
  ]
