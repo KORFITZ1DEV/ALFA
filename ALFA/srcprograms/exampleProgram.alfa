@@ -14,10 +14,8 @@ loop(int i from 1 .. 4) {
     move(myRect1, 0, offsetY, duration);
     if(i <= 2) {
         paral {
-            move(myRect2, 100, 0, duration);
+            move(myRect2, offsetX, 0, duration);
             move(myRect2, 0, 100, duration);
-            move(myRect2, -100, 0, duration);
-            move(myRect2, 0, -100, duration);
         }
     }
     move(myRect1, -offsetX, 0, duration);

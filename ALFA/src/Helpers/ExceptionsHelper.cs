@@ -56,3 +56,9 @@ public class NonPositiveAnimationDurationException : Exception
     public NonPositiveAnimationDurationException(string message) : base(message){}
 }
 
+[ExcludeFromCodeCoverage]
+public class AttemptingToChangePropertyOfSameShapeInParalException: Exception
+{
+    public AttemptingToChangePropertyOfSameShapeInParalException(string message) : base(message){}
+}
+

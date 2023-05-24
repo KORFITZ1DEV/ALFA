@@ -364,12 +364,48 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override ParalStmtNode VisitParalStmt(ALFAParser.ParalStmtContext context)
     {
         ParalBlockNode paralBlock = new ParalBlockNode();
+
         foreach (var builtInParalAnimCallCtx in context.paralBlock().builtInParalAnimCall())
         {
-            paralBlock.Statements.Add(VisitBuiltInParalAnimCall(builtInParalAnimCallCtx));
+            BuiltInParalAnimCallNode builtInParalAnimCallNode = VisitBuiltInParalAnimCall(builtInParalAnimCallCtx);
+
+            paralBlock.Statements.Add(builtInParalAnimCallNode);
         }
 
+        PropertyMerge(paralBlock);
+
         return new ParalStmtNode(paralBlock, context.Start.Line, context.Start.Column);
+    }
+
+    private void PropertyMerge(ParalBlockNode paralBlock) {
+        Dictionary<string, List<Node>> shapesToCompare = new Dictionary<string, List<Node>>();
+        
+        foreach(BuiltInParalAnimCallNode callNode in paralBlock.Statements) {
+            if (callNode.Arguments[0] is IdNode idArg) {
+                if (!shapesToCompare.ContainsKey(idArg.Identifier)) {
+                    shapesToCompare.Add(idArg.Identifier, callNode.Arguments);
+                }
+                else {
+                    TryMergeProperties(shapesToCompare, callNode.Arguments);
+                }
+            }
+        }
+    }
+
+    private void TryMergeProperties(Dictionary<string, List<Node>> shapesToCompare, List<Node> newCallNodeArgs) {
+        if (newCallNodeArgs[0] is IdNode idArg) {
+            int i = 1;
+            foreach(var arg in shapesToCompare[idArg.Identifier].Skip(1))
+            {
+                if (i == newCallNodeArgs.Count - 1) continue;
+                //If one of the args is a NumNode with value 0 then we know the builtInParalAnimCall is allowed 
+                if (!(arg is NumNode numArg && numArg.Value == 0 || 
+                (newCallNodeArgs[i] is NumNode newNumArg && newNumArg.Value == 0))) {
+                    throw new AttemptingToChangePropertyOfSameShapeInParalException($"Attempting to change the same property in a shape is not allowed. Error on line {newCallNodeArgs[i].Line} column {newCallNodeArgs[i].Col}");
+                }
+                i++;
+            }
+        }
     }
 
     public override ExprNode VisitParens(ALFAParser.ParensContext context)
