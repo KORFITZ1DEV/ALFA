@@ -4,4 +4,6 @@ int offsetX1 = 100;
 offsetX1 = offsetX1 + 300 + 400;
 offsetX1 = -offsetX1;
 
-
+loop(int i from 1 .. 4) {
+    offsetX1 = -offsetX1;
+}

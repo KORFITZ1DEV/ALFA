@@ -402,7 +402,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
         {
             EvaluateExpression(locValExpr);
-            return (T)idNode.LocalValue;
+            return (T)locValExpr.Value;
         }
         else if (idNode.LocalValue is not ExprNode)
         {
