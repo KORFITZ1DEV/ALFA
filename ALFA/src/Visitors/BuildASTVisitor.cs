@@ -234,7 +234,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                         string id = idNode.Identifier;
                         Symbol? sym = _symbolTable.RetrieveSymbol(id);
                         if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Column}");
+                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Col}");
                         builtInParalAnimCallNodeNode.Arguments.Add(idNode);
                         break;
                     case NumNode numNode:
