@@ -344,6 +344,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
     public override LoopStmtNode VisitLoopStmt(ALFAParser.LoopStmtContext context)
     {
+        _symbolTable.OpenScope();
         AssignStmtNode assignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
         assignStmtNode.Identifier = context.ID().GetText();
         assignStmtNode.Value = Visit(context.expr(0));
@@ -357,7 +358,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             block.Statements.Add(Visit(stmtCtx));
         }
-
+        _symbolTable.CloseScope();
         return new LoopStmtNode(assignStmtNode, to, block, context.Start.Line, context.Start.Column);
     }
 
