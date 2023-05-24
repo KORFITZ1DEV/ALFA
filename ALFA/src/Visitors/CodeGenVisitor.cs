@@ -198,14 +198,14 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         Emit("\n");
         AddTabs();
-        Emit("for (let ");
+        Emit("for (let var_");
         var child = Visit(node.AssignStmt);
         
-        Emit($"; {node.AssignStmt.Identifier} < ");
-        Visit(node.To);
+        Emit($"; var_{node.AssignStmt.Identifier} < ");
+        var toNode = Visit(node.To);
         
         // TODO: fix i++. If cond is '<' i++ else if '>' i--
-        Emit("; i++)");
+        Emit($"; var_{node.AssignStmt.Identifier}++)");
         
         OpenScope();
 
@@ -241,11 +241,20 @@ public class CodeGenVisitor : ASTVisitor<Node>
     // TODO: Use evalated expression value (dont replace loop variable tho)
     public override Node Visit(ExprNode node)
     {
-        //TODO Unaries should be handled differently op before emitting left.
-        EmitValue(node.Left);
-        //Need to fix unary minus
-        Emit($" {node.Operator} ");
-        EmitValue(node.Right);
+        if (node.Right == null)
+        {
+            if (node.Operator == "u-") node.Operator = "-";
+            Emit($" {node.Operator}");
+            EmitValue(node.Left);
+        }
+        else
+        {
+            //TODO Unaries should be handled differently op before emitting left.
+            EmitValue(node.Left);
+            Emit($" {node.Operator} ");
+            EmitValue(node.Right);    
+        }
+        
         return node;
     }
     
@@ -261,7 +270,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
         }
         else if (value is IdNode idNode)
         {
-            Emit(idNode.Identifier);
+            Emit($"var_{idNode.Identifier}");
         }
         else if (value is BoolNode boolNode)
         {

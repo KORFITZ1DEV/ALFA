@@ -404,7 +404,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             EvaluateExpression(locValExpr);
             return (T)locValExpr.Value;
         }
-        else if (idNode.LocalValue is not ExprNode)
+        else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
             return (T)idNode.LocalValue!;
         }

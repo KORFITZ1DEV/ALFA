@@ -1,9 +1,25 @@
-﻿#Two rects moving on x-axis
+﻿#Rect also moving in y-direction
 
-int offsetX1 = 100;
-offsetX1 = offsetX1 + 300 + 400;
-offsetX1 = -offsetX1;
+int len = 60;
+rect myRect1 = createRect(0,0,len,len);
+rect myRect2 = createRect(50,100,len,len);
+
+
+int offsetX = 100;
+int offsetY = 100;
+int duration = 1500;
 
 loop(int i from 1 .. 4) {
-    offsetX1 = -offsetX1;
+    move(myRect1, offsetX, 0, duration);
+    move(myRect1, 0, offsetY, duration);
+    if(i <= 2) {
+        paral {
+            move(myRect2, 100, 0, duration);
+            move(myRect2, 0, 100, duration);
+            move(myRect2, -100, 0, duration);
+            move(myRect2, 0, -100, duration);
+        }
+    }
+    move(myRect1, -offsetX, 0, duration);
+    move(myRect1, 0, -offsetY, duration);
 }

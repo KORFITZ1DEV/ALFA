@@ -94,7 +94,7 @@ namespace ALFA
 
             if (args.Contains("--test")) return;
 
-            //Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
         }
 
         private static ErrorNodeImpl? findErrorNode(IParseTree context)
