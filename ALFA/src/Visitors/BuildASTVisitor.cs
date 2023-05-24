@@ -395,12 +395,15 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     private void TryMergeProperties(Dictionary<string, List<Node>> shapesToCompare, List<Node> newCallNodeArgs) {
         if (newCallNodeArgs[0] is IdNode idArg) {
             int i = 1;
-            foreach(var arg in shapesToCompare[idArg.Identifier].Skip(1))
+            foreach(var dictArg in shapesToCompare[idArg.Identifier].Skip(1))
             {
                 if (i == newCallNodeArgs.Count - 1) continue;
+                if(dictArg is NumNode numArg && numArg.Value == 0) {}
                 //If one of the args is a NumNode with value 0 then we know the builtInParalAnimCall is allowed 
-                if (!(arg is NumNode numArg && numArg.Value == 0 || 
-                (newCallNodeArgs[i] is NumNode newNumArg && newNumArg.Value == 0))) {
+                else if (newCallNodeArgs[i] is NumNode newNumArg && newNumArg.Value == 0) {
+                    newCallNodeArgs[i] = dictArg;
+                }
+                else {
                     throw new AttemptingToChangePropertyOfSameShapeInParalException($"Attempting to change the same property in a shape is not allowed. Error on line {newCallNodeArgs[i].Line} column {newCallNodeArgs[i].Col}");
                 }
                 i++;

@@ -134,13 +134,14 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
-        Visit(assNode.Value);
-
+        bool visitedChild = false;
+        
         if (idSymbol != null)
         {
             if (idSymbol.Value is ExprNode exprValue)
             {
                 EvaluateExpression(exprValue);
+                visitedChild = true;
                 switch (exprValue.Value.GetType().ToString())
                 {
                     case "NumNode":
@@ -159,6 +160,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     throw new TypeException("Invalid type on line " + assNodeChild.Line + ": " + "column: " + assNodeChild.Col);
             }
         }
+        if(!visitedChild) Visit(assNode.Value);
 
         return assNode;
     }
@@ -178,6 +180,22 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
         Visit(node.To);
+
+        if (node.To is ExprNode exprTo)
+        {
+            node.To = Visit(exprTo);
+        }
+        if (node.To is IdNode idNode) {
+            Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+
+            Visit((dynamic)symbol.Value);
+
+            if (symbol.Value is BoolNode || (symbol.Value is ExprNode exprNode && exprNode.Value is BoolNode))
+                throw new TypeException(
+                    $"The 'to' value cannot be a boolean in loop on line {symbol.LineNumber} column{symbol.ColumnNumber}");
+            // else if (symbol.Value is ExprNode exprNode1 && exprNode1.Value is not BoolNode)
+            //     evaledTo = exprNode1.Value as NumNode;
+        }
         Visit(node.Block);
         _symbolTable.CloseScope();
 
@@ -403,6 +421,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             EvaluateExpression(locValExpr);
             return (T)locValExpr.Value;
+        }
+        else if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
+        {
+            return (T)exprNode.Value;
         }
         else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
