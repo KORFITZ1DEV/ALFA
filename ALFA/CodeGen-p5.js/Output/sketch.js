@@ -79,16 +79,17 @@ async function main() {
 	let var_offset3=500
 	let var_offset4=600
 	let var_offset5=700
-	let var_offset6=800
+	let var_offset6=800 + 300 - 200
+var_offset6=var_offset5 - var_offset3
 	let var_duration=300
 
 	for (let var_i=0
 ; var_i < 4; var_i++){
 		
 		await moveParal([			
-			() => var_myRect1.move(0,var_offset1,var_duration),
-			() => var_myRect2.move(0,var_offset2,var_duration),
-			() => var_myRect3.move(0,var_offset3,var_duration),
+			() => var_myRect1.move(0,var_offset1 + 200,var_duration),
+			() => var_myRect2.move(0,var_offset2 + var_offset1,var_duration),
+			() => var_myRect3.move(0,var_offset3 - var_offset2 + var_offset1,var_duration),
 			() => var_myRect4.move(0,var_offset4,var_duration),
 			() => var_myRect5.move(0,var_offset5,var_duration),
 			() => var_myRect6.move(0,var_offset6,var_duration),		

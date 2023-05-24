@@ -13,14 +13,15 @@ int offset2 = 400;
 int offset3 = 500;
 int offset4 = 600;
 int offset5 = 700;
-int offset6 = 800;
+int offset6 = 800 + 300 - 200;
+offset6 = offset5-offset3;
 int duration = 300;
 
 loop (int i from 0 .. 4) {
     paral {
-        move(myRect1, 0, offset1, duration);
-        move(myRect2, 0, offset2, duration);
-        move(myRect3, 0, offset3, duration);
+        move(myRect1, 0, offset1+200, duration);
+        move(myRect2, 0, offset2+offset1, duration);
+        move(myRect3, 0, offset3-offset2+offset1, duration);
         move(myRect4, 0, offset4, duration);
         move(myRect5, 0, offset5, duration);
         move(myRect6, 0, offset6, duration);

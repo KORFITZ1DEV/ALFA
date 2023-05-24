@@ -29,6 +29,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (node.AssignStmt.Value is ExprNode exprNode)
         {
+            if (exprNode.Value == null) Visit(exprNode); // This is necessary:(
             switch (exprNode.Value.GetType().ToString())
             { 
                 case "ALFA.AST_Nodes.NumNode":
@@ -433,30 +434,25 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
         var nodeToCast = symbol.Value;
-        if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
+
+        if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
+        {
+            nodeToCast = (T)exprNode.Value;
+        }
+        else if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
         {
             EvaluateExpression(locValExpr);
-            return (T)locValExpr.Value;
-        }
-        else if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
-        {
-            return (T)exprNode.Value;
+            nodeToCast = (T)locValExpr.Value;
         }
         else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
         {
-            return VisitSymbol<T>(exprIdNode);
+            nodeToCast = VisitSymbol<T>(exprIdNode);
         }
         else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
-            return (T)idNode.LocalValue!;
+            nodeToCast = idNode.LocalValue!;
         }
         
-        
-        if (nodeToCast is IdNode nodeToLookup)
-        {
-            var idSymbol = _symbolTable.RetrieveSymbol(nodeToLookup.Identifier);
-            nodeToCast = idSymbol!.Value;
-        }
 
         return (T)nodeToCast;
     }
