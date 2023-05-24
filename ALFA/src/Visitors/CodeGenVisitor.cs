@@ -93,7 +93,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
         AddTabs();
         Emit("let var_");
         Visit(node.AssignStmt);
-        Emit("\n");
 
         return (node);
     }
@@ -200,12 +199,26 @@ public class CodeGenVisitor : ASTVisitor<Node>
         AddTabs();
         Emit("for (let var_");
         var child = Visit(node.AssignStmt);
+        // ExprNode, NumNod
+        // node.AssignStmt.Value
         
-        Emit($"; var_{node.AssignStmt.Identifier} < ");
-        var toNode = Visit(node.To);
-        
-        // TODO: fix i++. If cond is '<' i++ else if '>' i--
-        Emit($"; var_{node.AssignStmt.Identifier}++)");
+        int from = VisitLoopExpr(node.AssignStmt.Value);
+        int to = VisitLoopExpr(node.To);
+
+        Emit($"; var_{node.AssignStmt.Identifier}");
+
+        // i++
+        if (from < to) {
+            Emit(" < ");
+            Visit(node.To);
+            Emit($"; var_{node.AssignStmt.Identifier}++)");
+
+        }
+        else {
+            Emit(" > ");
+            Visit(node.To);
+            Emit($"; var_{node.AssignStmt.Identifier}--)");
+        }
         
         OpenScope();
 
@@ -214,6 +227,22 @@ public class CodeGenVisitor : ASTVisitor<Node>
         CloseScope();
 
         return node;
+    }
+
+    private int VisitLoopExpr(Node node) {
+        if(node is NumNode numNode) {
+            return numNode.Value;
+        }
+        else if (node is IdNode idNode) {
+            Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+            return VisitLoopExpr(symbol.Value);
+        }
+        else if (node is ExprNode exprNode) {
+            return VisitLoopExpr(exprNode.Value);
+        }
+        else {
+            throw new Exception("The guys who made this language made a mistake :)");
+        }
     }
 
     public override Node Visit(ParalStmtNode node)

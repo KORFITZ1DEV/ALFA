@@ -193,8 +193,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             if (symbol.Value is BoolNode || (symbol.Value is ExprNode exprNode && exprNode.Value is BoolNode))
                 throw new TypeException(
                     $"The 'to' value cannot be a boolean in loop on line {symbol.LineNumber} column{symbol.ColumnNumber}");
-            // else if (symbol.Value is ExprNode exprNode1 && exprNode1.Value is not BoolNode)
-            //     evaledTo = exprNode1.Value as NumNode;
         }
         Visit(node.Block);
         _symbolTable.CloseScope();
