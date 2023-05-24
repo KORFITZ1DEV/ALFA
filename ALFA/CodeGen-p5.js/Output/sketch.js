@@ -66,18 +66,42 @@ async function moveParal(animations) {
 
 
 async function main() {
-	let var_offset1=100
-	let var_offset2= -var_offset1
-	let var_offset3=var_offset1
-	let var_offset4=var_offset2
-	let var_duration=200
+	let var_len=40
+	let var_xPos=1000 / 2 - var_len / 2
+	let var_myRect1=new Rect(var_xPos,0,var_len,var_len)
+	let var_myRect2=new Rect(var_xPos,0,var_len,var_len)
+	let var_myRect3=new Rect(var_xPos,0,var_len,var_len)
+	let var_myRect4=new Rect(var_xPos,0,var_len,var_len)
+	let var_myRect5=new Rect(var_xPos,0,var_len,var_len)
+	let var_myRect6=new Rect(var_xPos,0,var_len,var_len)
+	let var_offset1=300
+	let var_offset2=400
+	let var_offset3=500
+	let var_offset4=600
+	let var_offset5=700
+	let var_offset6=800
+	let var_duration=300
 
-	for (let var_var_i=1
+	for (let var_i=0
 ; var_i < 4; var_i++){
-		var_offset1= -var_offset1
+		
+		await moveParal([			
+			() => var_myRect1.move(0,var_offset1,var_duration),
+			() => var_myRect2.move(0,var_offset2,var_duration),
+			() => var_myRect3.move(0,var_offset3,var_duration),
+			() => var_myRect4.move(0,var_offset4,var_duration),
+			() => var_myRect5.move(0,var_offset5,var_duration),
+			() => var_myRect6.move(0,var_offset6,var_duration),		
+		]);
+
+
+		await wait(1000);
+var_offset1= -var_offset1
 var_offset2= -var_offset2
 var_offset3= -var_offset3
 var_offset4= -var_offset4
+var_offset5= -var_offset5
+var_offset6= -var_offset6
 	}
 }
 
