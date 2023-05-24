@@ -102,7 +102,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     {
         Emit(node.Identifier + "=");
         Visit((dynamic) node.Value);
-
+        Emit("\n");
         return node;
     }
 
@@ -241,10 +241,11 @@ public class CodeGenVisitor : ASTVisitor<Node>
     // TODO: Use evalated expression value (dont replace loop variable tho)
     public override Node Visit(ExprNode node)
     {
+        //TODO Unaries should be handled differently op before emitting left.
         EmitValue(node.Left);
+        //Need to fix unary minus
         Emit($" {node.Operator} ");
         EmitValue(node.Right);
-
         return node;
     }
     
