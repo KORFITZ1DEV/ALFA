@@ -239,8 +239,9 @@ public class CodeGenVisitor : ASTVisitor<Node>
         else if (node is ExprNode exprNode) {
             return VisitLoopExpr(exprNode.Value);
         }
-        else {
-            throw new Exception("The guys who made this language made a mistake :)");
+        else
+        {
+            throw new ArgumentTypeException($"The loop expression must evaluate to a number on line {node.Line} coloumn {node.Col}");
         }
     }
 
