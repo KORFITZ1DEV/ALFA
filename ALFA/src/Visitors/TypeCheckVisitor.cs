@@ -423,8 +423,16 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
         if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
 
-        if (leftTNode == null) throw new ArgumentTypeException($"Incompatible type {left.GetType()} in '{op}' expression on line {left.Line} column {left.Col}");
-        if (rightTNode == null && isBinary) throw new ArgumentTypeException($"Incompatible type {right.GetType()} in '{op}' expression on line {right.Line} column {right.Col}");
+        if (leftTNode == null)
+        {
+            string wrongType = left.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
+            throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {left.Line} column {left.Col}");
+        }
+        if (rightTNode == null && isBinary)
+        {
+            string wrongType = right.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
+            throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {right.Line} column {right.Col}");
+        }
 
         return new Tuple<T, T>(leftTNode, rightTNode!);
     }
