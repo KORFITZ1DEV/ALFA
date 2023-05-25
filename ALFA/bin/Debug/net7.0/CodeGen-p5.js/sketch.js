@@ -66,46 +66,7 @@ async function moveParal(animations) {
 
 
 async function main() {
-	let var_len=40
-	let var_xPos=1000 / 2 - var_len / 2
-	let var_myRect1=new Rect(var_xPos,0,var_len,var_len)
-	let var_myRect2=new Rect(var_xPos,0,var_len,var_len)
-	let var_offset1=300
-	let var_offset2=400
-	let var_offset3=500
-	let var_offset4=600
-	let var_offset5=700
-	let var_offset6=800 + 300 - 200
-var_offset6=var_offset5 - var_offset3
-	let var_duration=300
-
-	for (let var_i=0
-; var_i < 4; var_i++){
-		
-		await moveParal([			
-			() => var_myRect1.move(0,var_offset1,var_duration),
-			() => var_myRect2.move(200,0,var_duration),		
-		]);
-
-
-		await moveParal([			
-			() => var_myRect1.move(var_offset1,0,var_duration),
-			() => var_myRect2.move(0,200,var_duration),		
-		]);
-
-
-		await moveParal([			
-			() => var_myRect1.move(0, -var_offset1,var_duration),
-			() => var_myRect2.move(-200,0,var_duration),		
-		]);
-
-
-		await moveParal([			
-			() => var_myRect1.move( -var_offset1,0,var_duration),
-			() => var_myRect2.move(0,-200,var_duration),		
-		]);
-
-	}
+	let var_Rect1=new Rect(100,100,100,100)
 }
 
 function setup() {

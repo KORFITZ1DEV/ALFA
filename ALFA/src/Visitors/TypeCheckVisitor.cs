@@ -23,26 +23,24 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
+    private void typeCheckIdNodeVarDcl(IdNode idNode, ALFATypes.TypeEnum type)
+    {
+        Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+        if (symbol.Type != type)
+        {
+            throw new TypeException($"You are assigning something of type {symbol.Type} on line {symbol.LineNumber} column {symbol.ColumnNumber} to a variable of type {type.ToString()}");
+        }
+    }
+    
+
     public override Node Visit(VarDclNode node)
     {
         Visit(node.AssignStmt);
 
-        if (node.AssignStmt.Value is ExprNode exprNode)
+        if (node.AssignStmt.Value is IdNode idNode)
         {
-            if (exprNode.Value == null) Visit(exprNode); // This is necessary:(
-            switch (exprNode.Value.GetType().ToString())
-            { 
-                case "ALFA.AST_Nodes.NumNode":
-                    if (node.Type != ALFATypes.TypeEnum.@int)
-                        throw new TypeException(
-                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a number");
-                    break;
-                case "ALFA.AST_Nodes.BoolNode":
-                    if (node.Type != ALFATypes.TypeEnum.@bool)
-                        throw new TypeException(
-                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a Boolean");
-                    break;
-            }
+            typeCheckIdNodeVarDcl(idNode, node.Type);
+
         }
         
         return node;
@@ -73,7 +71,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     {
                         if(idSymbol.Value is AssignStmtNode assStmt && assStmt.Value is NumNode numNode && numNode.Value <= 0) 
                             throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
-                        
+                        else if (idSymbol.Value is NumNode numNode1 && numNode1.Value <= 0)
+                        {
+                            throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
+                        }
                     }
                 }
             }

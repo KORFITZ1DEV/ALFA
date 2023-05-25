@@ -14,7 +14,7 @@ public class ProgMainTest
             {
                 Console.WriteLine(prog);
             }
-            Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
+            Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
