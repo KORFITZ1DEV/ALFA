@@ -212,7 +212,6 @@ public class CodeGenVisitor : ASTVisitor<Node>
             Emit(" <= ");
             Visit(node.To);
             Emit($"; var_{node.AssignStmt.Identifier}++)");
-
         }
         else {
             Emit(" => ");
