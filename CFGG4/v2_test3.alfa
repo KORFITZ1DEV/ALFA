@@ -2,8 +2,8 @@
     
     rect myRect1 = createRect(pos,pos,10,10);
     rect myRect2 = createRect(pos+100,pos,10,10);
-    rect myRect3 = createRect(pos+100,pos,10,10);
-    rect myRect4 = createRect(pos+100,pos,10,10);
+    rect myRect3 = createRect(pos+300,pos,10,10);
+    rect myRect4 = createRect(pos+400,pos,10,10);
     
     int duration1 = 500;
     int pushLength = 10;
