@@ -308,6 +308,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 EvaluateBooleanExpression(leftValue, rightValue, node.Operator, node);
                 break;
             case "()":
+                node.Value = node.Left;
                 break;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");
