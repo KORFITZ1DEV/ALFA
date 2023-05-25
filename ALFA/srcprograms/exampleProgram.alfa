@@ -1,9 +1,35 @@
 ﻿#Same rect moved in paral
  
+ rect myRect1 = createRect(100,100,10,10);
  rect myRect2 = createRect(100,100,10,10);
-
+ rect myRect3 = createRect(100,100,10,10);
  int offset = 10;
  int duration = 20;
  
- move(myRect2, 70 * (-offset), 70 * (-offset), duration); 
- 
+ loop(int k from 1 .. 100 + true){
+     loop(int i from 1 .. 70 ) {
+         paral{
+             move(myRect1, offset, 0, duration);
+             move(myRect3, 0, offset, duration);
+         }
+         paral{
+                   move(myRect1, 0, offset, duration);
+                   move(myRect3, offset, 0, duration);
+         }
+                 move(myRect2, offset, offset, duration);
+     }
+     
+     loop(int j from 1 .. 70 ) {
+         paral{
+                   move(myRect1, 0, -offset, duration);
+                   move(myRect3, -offset, 0, duration);
+         }
+         paral{
+             move(myRect1, -offset, 0, duration);
+             move(myRect3, 0, -offset, duration);
+         }
+         
+         move(myRect2, 70 * (-offset), 70 * (-offset), duration); 
+         
+     }
+ }

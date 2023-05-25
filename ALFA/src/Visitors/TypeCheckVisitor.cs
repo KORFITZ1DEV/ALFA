@@ -435,16 +435,16 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (right is ExprNode exprNode1)
         {
             EvaluateExpression(exprNode1);
-            leftTNode = (T)exprNode1.Value;
+            rightTNode = (T)exprNode1.Value;
         }
-        
         
         if (leftTNode == null)
         {
             string wrongType = left.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {left.Line} column {left.Col}");
         }
-        if (rightTNode == null && isBinary)
+
+        if (rightTNode == null)
         {
             string wrongType = right.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {right.Line} column {right.Col}");
