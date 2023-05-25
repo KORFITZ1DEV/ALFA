@@ -1,4 +1,4 @@
-﻿#Same rect moved in paral
+#Same rect moved in paral
  
  rect myRect1 = createRect(100,100,10,10);
  rect myRect2 = createRect(100,100,10,10);
@@ -33,3 +33,4 @@
          
      }
  }
+
