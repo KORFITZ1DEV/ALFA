@@ -1,7 +1,7 @@
-﻿//Additions: Animation declarations and user declared/defined animation calls.
-grammar ALFA3;
+﻿//Additions: arrays, new data types, constants, built-in utilities and play statement.
+grammar ALFA5;
 
-prog: stmt+ EOF;
+prog: stmt+ play EOF;
 
 stmt
     : varDcl
@@ -12,11 +12,20 @@ stmt
     | paralStmt
     | animDcl           //Only allowed at the top level (NOT allowed in blocks).
     | animCall
+    | builtInUtilCall
     ;
     
-varDcl: type assignStmt;
+varDcl
+    : <assoc=right> 'const'? type ID '=' elem ';'                                #VarDecl
+    | <assoc=right> 'const'? type '[]' ID ('=' '{' elem (',' elem)* '}')? ';'    #ArrayDecl
+    ;
 
-assignStmt: <assoc=right> ID '=' (builtInCreateShapeCall | expr) ';';
+assignStmt
+    : <assoc=right> ID '=' elem ';'                 #Assign
+    | <assoc=right>  ID '[' NUM ']' '=' elem        #ArrayAssign
+    ;
+
+elem: (builtInCreateShapeCall | expr);
 
 ifStmt: 'if' '(' expr ')' block ('else if' '(' expr ')' block)* ('else' block)?;
 
@@ -38,7 +47,10 @@ expr
     | expr 'or' expr                                #Or
     | ID                                            #Id
     | NUM                                           #Num
+    | ID '[' NUM ']'                                #ArrayAccess
+    | STRING                                        #String
     | bool                                          #Boolean
+    | color                                         #Colour
     ;
 
 block: '{' blockStmt* '}';
@@ -50,6 +62,7 @@ blockStmt
     | loopStmt
     | paralStmt
     | animCall
+    | builtInUtilCall
     ;
 
 paralBlock: '{' paralBlockStmt* '}';
@@ -58,16 +71,21 @@ paralBlockStmt
     | animCall
     ;
 
-builtInAnim: 'move' | 'wait';
-builtInAnimCall: builtInAnim '(' actualParams ')' ';';
-
-builtInCreateShape: 'createRect';
-builtInCreateShapeCall: builtInCreateShape '(' actualParams ')';
-
-builtInParalAnim: 'move';
-builtInParalAnimCall: builtInParalAnim '(' actualParams ')' ';';
+play: 'play' '{' blockStmt* '}';
 
 animCall: ID '(' actualParams ')' ';';
+
+builtInAnim: 'move' | 'wait' | 'color';
+builtInAnimCall: builtInAnim '(' actualParams ')' ';';
+
+builtInCreateShape: 'createRect' | 'createCircle' | 'createTriangle' | 'createLine' | 'createCanvas' | 'createImage' | 'createText';
+builtInCreateShapeCall: builtInCreateShape '(' actualParams ')';
+
+builtInUtil: 'add' | 'remove' | 'print' | 'resetCanvas' | 'changeDimensions' | 'import';
+builtInUtilCall: builtInUtil '(' actualParams ')' ';';
+
+builtInParalAnim: 'move' | 'color';
+builtInParalAnimCall: builtInParalAnim '(' actualParams ')' ';';
 
 formalParams: (type ID (',' type ID)*)?;                                             
 actualParams: (expr (',' expr)*)?;
@@ -75,7 +93,9 @@ actualParams: (expr (',' expr)*)?;
 COMMENT: '#' ~[\r\n]* -> skip;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUM: '0'| '-'?[1-9][0-9]*;
-type: 'int' | 'bool' | 'rect';
+STRING: '"' (~["\r\n\\] | '\\' [\\"])* '"';
+type: 'int' | 'bool' | 'color' | 'rect' | 'circle' | 'triangle' | 'line' | 'shape' | 'canvas' | 'img' | 'text';
 bool: 'true' | 'false';
+color: 'white' | 'black' | 'red' | 'green' | 'blue';
 
-WS: [ \t\r\n]+ -> skip;
+WS: [ \t\r\n]+ -> skip; 
