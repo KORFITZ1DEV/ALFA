@@ -276,7 +276,9 @@ public class CodeGenVisitor : ASTVisitor<Node>
             if (node.Operator == "()") node.Operator = "(";
             Emit($" {node.Operator}");
             EmitValue(node.Left);
-            Emit(")");
+            
+            if(node.Operator == "(") 
+                Emit(")");
         }
         else
         {
