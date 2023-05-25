@@ -38,17 +38,137 @@ public interface IALFAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitProgram([NotNull] ALFAParser.ProgramContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ALFAParser.statement"/>.
+	/// Visit a parse tree produced by <see cref="ALFAParser.stmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitStatement([NotNull] ALFAParser.StatementContext context);
+	Result VisitStmt([NotNull] ALFAParser.StmtContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitVarDcl([NotNull] ALFAParser.VarDclContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.assignStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssignStmt([NotNull] ALFAParser.AssignStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.ifStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIfStmt([NotNull] ALFAParser.IfStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.loopStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLoopStmt([NotNull] ALFAParser.LoopStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.paralStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParalStmt([NotNull] ALFAParser.ParalStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Not</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNot([NotNull] ALFAParser.NotContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Or</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOr([NotNull] ALFAParser.OrContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>MulDiv</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMulDiv([NotNull] ALFAParser.MulDivContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>AddSub</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAddSub([NotNull] ALFAParser.AddSubContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Parens</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParens([NotNull] ALFAParser.ParensContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>And</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAnd([NotNull] ALFAParser.AndContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Num</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNum([NotNull] ALFAParser.NumContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Relational</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitRelational([NotNull] ALFAParser.RelationalContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UnaryMinus</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUnaryMinus([NotNull] ALFAParser.UnaryMinusContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Id</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitId([NotNull] ALFAParser.IdContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Equality</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquality([NotNull] ALFAParser.EqualityContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Boolean</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBoolean([NotNull] ALFAParser.BooleanContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.block"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBlock([NotNull] ALFAParser.BlockContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.paralBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParalBlock([NotNull] ALFAParser.ParalBlockContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// </summary>
@@ -74,21 +194,33 @@ public interface IALFAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ALFAParser.args"/>.
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInParalAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitArgs([NotNull] ALFAParser.ArgsContext context);
+	Result VisitBuiltInParalAnim([NotNull] ALFAParser.BuiltInParalAnimContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ALFAParser.arg"/>.
+	/// Visit a parse tree produced by <see cref="ALFAParser.builtInParalAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitArg([NotNull] ALFAParser.ArgContext context);
+	Result VisitBuiltInParalAnimCall([NotNull] ALFAParser.BuiltInParalAnimCallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.actualParams"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitActualParams([NotNull] ALFAParser.ActualParamsContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitType([NotNull] ALFAParser.TypeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ALFAParser.bool"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBool([NotNull] ALFAParser.BoolContext context);
 }

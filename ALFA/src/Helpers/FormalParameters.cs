@@ -12,7 +12,7 @@ public static class FormalParameters
             
         {"move", new List<ALFATypes.TypeEnum>()
         {
-            ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int
+            ALFATypes.TypeEnum.rect, ALFATypes.TypeEnum.@int,ALFATypes.TypeEnum.@int, ALFATypes.TypeEnum.@int
         }},
             
         {"wait", new List<ALFATypes.TypeEnum>()

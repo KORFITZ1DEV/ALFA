@@ -1,37 +1,87 @@
 [
-  {
-    "Prog": "int xtest1 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test1 = createRect(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
-    "Comment": "Invalid number of arguments create rect, given 3 arguments og 4",
-    "ExceptionType": "InvalidNumberOfArgumentsException"
-  },
-  {
-    "Prog": "int xtest2 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test2 = createRect(0, 0, 0 length, length);\n\nmove(test2 , 200, animDuration);\nwait(delay);\nmove(test2 , -200, animDuration);",
-    "Comment": "Invalid number of arguments create rect, given 5 arguments og 4",
-    "ExceptionType": "SyntacticException"
-  },
-  {
-    "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length)\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",
-    "Comment": "Invalid type in create rect, input of type rect as id",
-    "ExceptionType": "ArgumentTypeException"
-  },
-  {
-    "Prog": "int xtest4 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test4 = createRect(0, 0, length, length);\n\nmove(test4, animDuration);\nwait(delay);",
-    "Comment": "Invalid number of arguments in move, given 2 arguments og 3",
-    "ExceptionType": "InvalidNumberOfArgumentsException"
-  },
-  {
-    "Prog": "int xtest5 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5 = createRect(0, 0, length, length);\n\nmove(xtest5, 200, animDuration);\nwait(delay);\nmove(test5 , -200, animDuration);",
-    "Comment": "Invalid type in move, rect should be first argument, give int id",
-    "ExceptionType": "ArgumentTypeException"
-  },
-  {
-    "Prog": "int xtest6 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test6 = createRect(0, 0, length, length);\n\nmove(test6 , 200, animDuration);\nwait(test6);\nmove(test6 , -200, animDuration);",
-    "Comment": "Invalid type in wait, should be int, but given type rect",
-    "ExceptionType": "ArgumentTypeException"
-  },
-  {
-    "Prog": "int xtest7 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;\nmove(myRect1 , 200, animDuration);\nwait(delay);\nmove(myRect1 , -200, animDuration);",
-    "Comment": "Invalid typed parsing rect to int, this throws nullException in the buildASTVisitor, but should actually be caught by the parser and should be in ASTbuild testdata",
-    "ExceptionType": "TypeException"
-  }
-]
+   {
+     "Prog": "int xtest1 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test1 = createRect(0, length, length);\n\nmove(test1 , 200, 0, animDuration);\nwait(delay);\nmove(test1 , -200, 0, animDuration);",
+     "Comment": "Invalid number of arguments create rect, given 3 arguments og 4",
+     "ExceptionType": "InvalidNumberOfArgumentsException"
+   },
+   {
+     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5fuck = createRect(0, 0, length, length);\n\nmove(200 , test5fuck, 0, animDuration);\nwait(delay);\nmove(test5fuck , -200, 0, animDuration);",
+     "Comment": "Invalid type in move, should be int",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "int length = 20;rect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;",
+     "Comment": "Invalid type parsing rect to int",
+     "ExceptionType": "TypeException"
+   },
+   {
+     "Prog": "int length = 20; rect myCoolRect = createCoolRect(0, 0, length, length);",
+     "Comment": "Unknown builtins",
+     "ExceptionType": "SyntacticException"
+   },
+   {
+     "Prog": "int xtest8 = 0;\nint length = 20;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nrect test8ErrorRect = createRect(0, 0, 10, length);\nrect test8Error = createRect(test8ErrorRect, 0, 0, length);\nmove(test8Error , 200, 0, animDuration);\nwait(delay);\nmove(test8Error , -200, 0, animDuration);",
+     "Comment": "Invalid type in create rect, input of type rect, should maybe be moved to ASTbuild testdata",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, 0, animDuration);\nwait(delay);\nmove(test9 , -200, 0, animDuration);",
+     "Comment": "Invalid type in move, rect should be first argument, give num",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "wait(0);",
+     "Comment": "Calls an BuiltInAnimCallNode visit with a duration that is non-positive.",
+     "ExceptionType": "NonPositiveAnimationDurationException"
+   },
+   {
+     "Prog": "int duration = 0; wait(duration);",
+     "Comment": "Calls an BuiltInAnimCallNode visit with a duration saved in the symboltable under an id that is non-positive.",
+     "ExceptionType": "NonPositiveAnimationDurationException"
+   },
+   {
+     "Prog": "int xtest2 = 0;\n int y = 0;\n \n int length = 20; \n int animDuration = 4000;\n int delay = 2000;\n rect test2 = createRect(0, 0, 0, length, length);\n \n move(test2 , 200, 0, animDuration);\n wait(delay);\n move(test2 , -200, 0, animDuration);",
+     "Comment": "Invalid number of arguments create rect, given 5 arguments og 4",
+     "ExceptionType": "InvalidNumberOfArgumentsException"
+   },
+   {
+     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length);\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, 0, animDuration);\nwait(delay);\nmove(test3 , -200, 0, animDuration);",
+     "Comment": "Invalid type in create rect, input of type rect as id",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "int xtest4 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test4 = createRect(0, 0, length, length);\n\nmove(test4, animDuration);\nwait(delay);",
+     "Comment": "Invalid number of arguments in move, given 2 arguments og 3",
+     "ExceptionType": "InvalidNumberOfArgumentsException"
+   },
+   {
+     "Prog": "int xtest5 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5 = createRect(0, 0, length, length);\n\nmove(xtest5, 200, 0, animDuration);\nwait(delay);\nmove(test5 , -200, 0, animDuration);",
+     "Comment": "Invalid type in move, rect should be first argument, give int id",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "int xtest6 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test6 = createRect(0, 0, length, length);\n\nmove(test6 , 200, 0, animDuration);\nwait(test6);\nmove(test6 , -200, 0, animDuration);",
+     "Comment": "Invalid type in wait, should be int, but given type rect",
+     "ExceptionType": "ArgumentTypeException"
+   },
+   {
+     "Prog": "int length = 20;\nrect myRect1 = createRect(0, 0, length, length);\nint i = myRect1;",
+     "Comment": "Invalid typed parsing rect to int, this throws nullException in the buildASTVisitor, but should actually be caught by the parser and should be in ASTbuild testdata",
+     "ExceptionType": "TypeException"
+   },
+   {
+     "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0, 0);",
+     "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
+     "ExceptionType": "NonPositiveAnimationDurationException"
+   },  
+   {
+     "Prog": "int len = 20;\nrect myRect1 = createRect(0,0,len,len);\nrect myRect2 = createRect(40,40,len,len);\n\nint offsetX = 100;\nint offsetY = 100;\nint duration = 1500;\n\nloop(int i from 1 .. 4) {\n    paral {\n        if (i == 1) {\n            move(myRect1, offsetX, 0, duration);\n        }\n        move(myRect1, offsetX, 0, duration);\n        move(myRect2, offsetX, 0, duration);\n    }\n}",
+     "Comment": "Using an if-statement inside a paral that is inside a loop",
+     "ExceptionType": "SyntacticException"
+   },  
+   {
+     "Prog": "int len = 20;\nrect myRect1 = createRect(0,0,len,len);\nrect myRect2 = createRect(40,40,len,len);\n\nint offsetX = 100;\nint offsetY = 100;\nint duration = 1500;\n\nparal {\n    loop (int i from 0 .. 6) {\n        move(myRect1, offsetX, offsetY, duration);\n    }\n}",
+     "Comment": "Using a loop inside a paral",
+     "ExceptionType": "SyntacticException"
+   }
+ ]

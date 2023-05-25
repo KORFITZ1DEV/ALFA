@@ -14,7 +14,7 @@ public class ProgMainTest
             {
                 Console.WriteLine(prog);
             }
-            Prog.Main(new string[] {prog, "../../../../ALFA/Output", "--test"});
+            Prog.Main(new string[] {prog, "../../../../ALFA/CodeGen-p5.js/Output", "--test"});
             Assert.True(false, "Expected exception was not thrown");
         }
         catch (Exception actualException)
@@ -36,11 +36,14 @@ public class ProgMainTest
                 case UndeclaredVariableException:
                     Assert.Equal(exceptionType, typeof(UndeclaredVariableException));
                     break;
-                case RedeclaredVariableException:
-                    Assert.Equal(exceptionType, typeof(RedeclaredVariableException));
+                case VariableAlreadyDeclaredException:
+                    Assert.Equal(exceptionType, typeof(VariableAlreadyDeclaredException));
                     break;
                 case SyntacticException:
                     Assert.Equal(exceptionType, typeof(SyntacticException));
+                    break;
+                case NonPositiveAnimationDurationException:
+                    Assert.Equal(exceptionType, typeof(NonPositiveAnimationDurationException));
                     break;
                 default:
                     Assert.Equal(new Exception("randomstuff"), actualException);

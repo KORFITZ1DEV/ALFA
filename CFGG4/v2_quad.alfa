@@ -1,0 +1,27 @@
+#Quad
+int len = 40;
+int xPos = 0;
+rect myRect1 = createRect(xPos,0,len,len);
+rect myRect2 = createRect(xPos,50,len,len);
+
+int offset1 = 500;
+int offset2 = 500;
+int duration = 500;
+
+loop (int i from 0 .. 20) {
+    paral {
+        move(myRect1, offset1/2, 0, duration);
+        move(myRect2, offset2, 0, duration);
+    }
+    paral {
+        move(myRect1, offset1/2, 0, duration);
+        move(myRect2, 0, offset2, duration);
+    }
+    paral {
+        move(myRect1, -offset1/2, 0, duration);
+        move(myRect2, -offset2, 0, duration);
+    }paral {
+        move(myRect1, -offset1/2, 0, duration);
+        move(myRect2, 0, -offset2, duration);
+    }
+}

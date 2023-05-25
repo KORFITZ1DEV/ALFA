@@ -15,13 +15,13 @@ public class CodeGenTest
 
   [Theory]
   [ClassData(typeof(CodeGenVisitorTestData))]
-  public void WritesCorrectlyToVarOutput(Node node, SymbolTable symbolTable, string expectedOutput)
+  public void WritesCorrectlyToMainOutput(Node node, SymbolTable symbolTable, string expectedOutput)
   {
     _sut = new CodeGenVisitor(symbolTable, "../../../../ALFA/bin/Debug/net7.0/CodeGen-p5.js/");
 
     _sut.Visit(node);
 
-    Assert.Equal(expectedOutput, _sut._varOutput);
+    Assert.Equal(expectedOutput, _sut._mainOutput);
   }
 }
 
@@ -40,16 +40,17 @@ public class CodeGenVisitorTestData : IEnumerable<object[]>
     SymbolTable symbolTable2 = new SymbolTable();
     yield return new object[]
     {
-      idNode1, symbolTable2, "Rect1"
+      idNode1, symbolTable2, "var_Rect1"
     };
+
+    AssignStmtNode assnmt = new AssignStmtNode(idNode1.Identifier, numNode1, 25, 20);
  
     
-
-    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, "num1" ,numNode1, 25, 20);
+    VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int, assnmt, 25, 20);
     SymbolTable symbolTableVarDclNode = new SymbolTable();
     yield return new object[]
     {
-      varDclNodeNumChild, symbolTableVarDclNode, "const num1 = 200\n"
+      varDclNodeNumChild, symbolTableVarDclNode, "\tlet var_Rect1=200\n"
     };
   }
 

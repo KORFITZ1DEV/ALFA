@@ -6,22 +6,40 @@ namespace ALFA.Visitors;
 public abstract class ASTVisitor<T>
 {
 
-    public abstract T Visit(BuiltInAnimCallNode node);
     public abstract T Visit(ProgramNode node);
     public abstract T Visit(VarDclNode node);
+    public abstract T Visit(AssignStmtNode node);
+    public abstract T Visit(BuiltInCreateShapeCallNode callNode);
+    public abstract T Visit(BuiltInAnimCallNode node);
+    public abstract T Visit(BuiltInParalAnimCallNode node);
+    public abstract T Visit(IfStmtNode node);
+    public abstract T Visit(LoopStmtNode node);
+    public abstract T Visit(ParalStmtNode node);
+    public abstract T Visit(ExprNode node);
+    public abstract T Visit(BlockNode node);
+    public abstract T Visit(ParalBlockNode node);
+    public abstract T Visit(BoolNode node);
     public abstract T Visit(IdNode node);
     public abstract T Visit(NumNode node);
-    public abstract T Visit(BuiltInCreateShapeCallNode callNode);
-    
+
 
     public T Visit(Node node)
     {
         return node switch
         {
-            BuiltInAnimCallNode builtInAnimNode => Visit(builtInAnimNode),
-            BuiltInCreateShapeCallNode builtInCreateShapeNode => Visit(builtInCreateShapeNode),
             ProgramNode programNode => Visit(programNode),
             VarDclNode varDclNode => Visit(varDclNode),
+            AssignStmtNode assignStmtNode => Visit(assignStmtNode),
+            BuiltInCreateShapeCallNode builtInCreateShapeNode => Visit(builtInCreateShapeNode),
+            BuiltInAnimCallNode builtInAnimNode => Visit(builtInAnimNode),
+            BuiltInParalAnimCallNode builtInParalAnimCallNode => Visit(builtInParalAnimCallNode),
+            IfStmtNode ifStmtNode => Visit(ifStmtNode),
+            LoopStmtNode loopStmtNode => Visit(loopStmtNode),
+            ParalStmtNode paralStmtNode => Visit(paralStmtNode),
+            ExprNode exprNode => Visit(exprNode),
+            BlockNode blockNode => Visit(blockNode),
+            ParalBlockNode paralBlockNode => Visit(paralBlockNode),
+            BoolNode boolNode => Visit(boolNode),
             IdNode idNode => Visit(idNode),
             NumNode numNode => Visit(numNode)
         };

@@ -35,6 +35,7 @@ public class BuiltInAnimCallNodeMoveTestData : IEnumerable<object[]>
       {
         idNode,
         new NumNode(200, 60, 20),
+        new NumNode(0, 60, 20),
         new NumNode(4000, 60, 20),
       };
       
@@ -43,7 +44,7 @@ public class BuiltInAnimCallNodeMoveTestData : IEnumerable<object[]>
       symbolTableMove.EnterSymbol(new Symbol("myrect1", idNode, ALFATypes.TypeEnum.rect, 25, 30));
       yield return new object[]
       {
-        buildInAnimCallNodeMove, symbolTableMove, "await myrect1.move(200, 0, 4000);\n\t"
+        buildInAnimCallNodeMove, symbolTableMove, "\n\tawait var_myrect1.move(200,0,4000);\n"
       };
       
       List<Node> numNodesWait = new List<Node>()
@@ -55,7 +56,7 @@ public class BuiltInAnimCallNodeMoveTestData : IEnumerable<object[]>
       SymbolTable symbolTableWait = new SymbolTable();
       yield return new object[]
       {
-        buildInAnimCallNodeWait, symbolTableWait, "await wait(100);\n\t"
+        buildInAnimCallNodeWait, symbolTableWait, "\n\tawait wait(100);\n"
       };
 
     }

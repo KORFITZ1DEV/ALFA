@@ -7,55 +7,57 @@ public class ProgramTreeMocker
 {
     private int _myInvokingState = 0;
 
-    //Generates our wanted parse tree created from the program: "int i = 2;
+    //Generates our wanted parse tree created from the program: int i = 2;
     public ALFAParser.ProgramContext MockProgramTreeWithIntVarDcl()
     {
         _myInvokingState = 0;
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
-        ALFAParser.StatementContext stmtWithVarDclNode = new ALFAParser.StatementContext(programContext, _myInvokingState++);
+        ALFAParser.StmtContext stmtWithVarDclNode = new ALFAParser.StmtContext(programContext, _myInvokingState++);
         ALFAParser.VarDclContext varDclNode = new ALFAParser.VarDclContext(stmtWithVarDclNode, _myInvokingState++);
+        ALFAParser.AssignStmtContext assmt = new ALFAParser.AssignStmtContext(varDclNode, _myInvokingState);
         ALFAParser.TypeContext terminalIntNode = new ALFAParser.TypeContext(varDclNode, _myInvokingState++);
         
         TerminalNodeImpl terminalNodeImplInt = new TerminalNodeImpl(new CommonToken(9, "int"));
+        varDclNode.AddChild(terminalIntNode);
+        varDclNode.AddChild(assmt);
  
         terminalIntNode.AddChild(terminalNodeImplInt);
-        terminalNodeImplInt.Parent = terminalIntNode;
         
         stmtWithVarDclNode.AddChild(varDclNode);
         
         TerminalNodeImpl identifierImpl = new TerminalNodeImpl(new CommonToken(11, "i"));
         TerminalNodeImpl equalSignImpl = new TerminalNodeImpl(new CommonToken(2, "="));
-        TerminalNodeImpl rightSideAssignmentImpl = new TerminalNodeImpl(new CommonToken(12, "2"));
-        varDclNode.AddChild(terminalIntNode);
-        varDclNode.AddChild(identifierImpl);
-        identifierImpl.Parent = varDclNode;
-        varDclNode.AddChild(equalSignImpl);
-        equalSignImpl.Parent = varDclNode;
+        assmt.AddChild(identifierImpl);
+        assmt.AddChild(equalSignImpl);
         
-        varDclNode.AddChild(rightSideAssignmentImpl);
-        rightSideAssignmentImpl.Parent = varDclNode;
+        ALFAParser.ExprContext expr = new ALFAParser.ExprContext(assmt, _myInvokingState++);
+        ALFAParser.NumContext rightSideAssignmentImpl = new ALFAParser.NumContext(expr);
+        TerminalNodeImpl twoImpl = new TerminalNodeImpl(new CommonToken(2, "2"));
+        rightSideAssignmentImpl.AddChild(twoImpl);
+        assmt.AddChild(rightSideAssignmentImpl);
+        
         
         TerminalNodeImpl semiColonImpl = new TerminalNodeImpl(new CommonToken(1, ";"));
-        varDclNode.AddChild(semiColonImpl);
-        semiColonImpl.Parent = varDclNode.Parent;
+        stmtWithVarDclNode.AddChild(semiColonImpl);
 
         
         TerminalNodeImpl eofImpl = new TerminalNodeImpl(new CommonToken(-1, "<EOF>"));
-        eofImpl.Parent = programContext;
  
         programContext.children = new List<IParseTree>() { stmtWithVarDclNode, eofImpl };
         
         return programContext;
     }
     
-    //Generates our wanted parse tree created from the program: "rect myRect1 = createRect(100, 100, 100, 100);
+    //Generates our wanted parse tree created from the program: rect myRect1 = createRect(100, 100, 100, 100);
     public ALFAParser.ProgramContext MockProgramTreeWithRectVarDcl()
     {
         _myInvokingState = 0;
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
-        ALFAParser.StatementContext stmtWithVarDclNode = new ALFAParser.StatementContext(programContext, _myInvokingState++);
+        ALFAParser.StmtContext stmtWithVarDclNode = new ALFAParser.StmtContext(programContext, _myInvokingState++);
         ALFAParser.VarDclContext varDclNode = new ALFAParser.VarDclContext(stmtWithVarDclNode, _myInvokingState++);
         ALFAParser.TypeContext terminalRectNode = new ALFAParser.TypeContext(varDclNode, _myInvokingState++);
+        ALFAParser.AssignStmtContext assmt = new ALFAParser.AssignStmtContext(varDclNode, _myInvokingState++);
+        
         
         TerminalNodeImpl terminalNodeRectImpl = new TerminalNodeImpl(new CommonToken(9, "rect"));
  
@@ -69,22 +71,21 @@ public class ProgramTreeMocker
         //Assigning child and parent to VarDclContext node
         TerminalNodeImpl identifierImpl = new TerminalNodeImpl(new CommonToken(11, "myRect1"));
         TerminalNodeImpl equalSignImpl = new TerminalNodeImpl(new CommonToken(2, "="));
-        ALFAParser.BuiltInCreateShapeCallContext builtInCreateShapeCallContext =
-            new ALFAParser.BuiltInCreateShapeCallContext(varDclNode, _myInvokingState);
-        TerminalNodeImpl rightSideAssignmentImpl = new TerminalNodeImpl(new CommonToken(12, "2"));
-        
+
         varDclNode.AddChild(terminalRectNode);
-
-        varDclNode.AddChild(identifierImpl);
-        identifierImpl.Parent = varDclNode;
+        varDclNode.AddChild(assmt);
         
-        varDclNode.AddChild(equalSignImpl);
-        equalSignImpl.Parent = varDclNode;
-
-        varDclNode.AddChild(builtInCreateShapeCallContext);
+        assmt.AddChild(identifierImpl);
+        identifierImpl.Parent = assmt;
+        assmt.AddChild(equalSignImpl);
+        equalSignImpl.Parent = assmt;
+        ALFAParser.BuiltInCreateShapeCallContext builtInCreateShapeCallContext =
+            new ALFAParser.BuiltInCreateShapeCallContext(assmt, _myInvokingState++);
+        assmt.AddChild(builtInCreateShapeCallContext);
+        
         
         ALFAParser.BuiltInCreateShapeContext builtInCreateShapeContextCreateRect =
-            new ALFAParser.BuiltInCreateShapeContext(builtInCreateShapeCallContext, _myInvokingState);
+            new ALFAParser.BuiltInCreateShapeContext(builtInCreateShapeCallContext, _myInvokingState++);
         TerminalNodeImpl createRectImpl = new TerminalNodeImpl(new CommonToken(11, "createRect"));
         builtInCreateShapeContextCreateRect.AddChild(createRectImpl);
         
@@ -95,44 +96,48 @@ public class ProgramTreeMocker
         leftParenImpl.Parent = builtInCreateShapeCallContext;
 
 
-        ALFAParser.ArgsContext argsContext = new ALFAParser.ArgsContext(builtInCreateShapeCallContext, _myInvokingState);
-        ALFAParser.ArgContext argContext1 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
-        TerminalNodeImpl numImpl1 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext1.AddChild(numImpl1);
-        numImpl1.Parent = argContext1;
+        ALFAParser.ActualParamsContext argsContext = new ALFAParser.ActualParamsContext(builtInCreateShapeCallContext, _myInvokingState);
+        ALFAParser.ExprContext argContext1 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        
+        ALFAParser.NumContext numContext1 = new ALFAParser.NumContext(argContext1);
+        TerminalNodeImpl arg1 = new TerminalNodeImpl(new CommonToken(12, "100"));
+        numContext1.AddChild(arg1);
+        argsContext.AddChild(numContext1);
 
-        argsContext.AddChild(argContext1);
         TerminalNodeImpl comma1 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma1);
         comma1.Parent = argsContext;
 
         
-        ALFAParser.ArgContext argContext2 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
-        TerminalNodeImpl numImpl2 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext2.AddChild(numImpl2);
-        numImpl2.Parent = argContext2;
+        ALFAParser.ExprContext argContext2 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext2 = new ALFAParser.NumContext(argContext2);
+        TerminalNodeImpl arg2 = new TerminalNodeImpl(new CommonToken(12, "100"));
+        numContext2.AddChild(arg2);
+        argContext2.AddChild(numContext2);
         
-        argsContext.AddChild(argContext2);
+        argsContext.AddChild(numContext2);
         TerminalNodeImpl comma2 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma2);
         comma2.Parent = argsContext;
         
-        ALFAParser.ArgContext argContext3 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
-        TerminalNodeImpl numImpl3 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext3.AddChild(numImpl3);
-        numImpl3.Parent = argContext3;
+        ALFAParser.ExprContext argContext3 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext3 = new ALFAParser.NumContext(argContext2);
+        TerminalNodeImpl arg3 = new TerminalNodeImpl(new CommonToken(12, "100"));
+        numContext3.AddChild(arg3);
+        argContext3.AddChild(numContext3);
         
-        argsContext.AddChild(argContext3);
+        argsContext.AddChild(numContext3);
         TerminalNodeImpl comma3 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma3);
         comma3.Parent = argsContext;
         
-        ALFAParser.ArgContext argContext4 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
-        TerminalNodeImpl numImpl4 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext4.AddChild(numImpl4);
-        numImpl4.Parent = argContext4;
+        ALFAParser.ExprContext argContext4 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext4 = new ALFAParser.NumContext(argContext2);
+        TerminalNodeImpl arg4 = new TerminalNodeImpl(new CommonToken(12, "100"));
+        numContext4.AddChild(arg4);
+        argContext4.AddChild(numContext4);
         
-        argsContext.AddChild(argContext4);
+        argsContext.AddChild(numContext4);
 
 
         builtInCreateShapeCallContext.AddChild(argsContext);
@@ -142,8 +147,7 @@ public class ProgramTreeMocker
         
         
         TerminalNodeImpl semiColonImpl = new TerminalNodeImpl(new CommonToken(1, ";"));
-        varDclNode.AddChild(semiColonImpl);
-        semiColonImpl.Parent = varDclNode.Parent;
+        stmtWithVarDclNode.AddChild(semiColonImpl);
 
         
         TerminalNodeImpl eofImpl = new TerminalNodeImpl(new CommonToken(-1, "<EOF>"));
@@ -154,12 +158,12 @@ public class ProgramTreeMocker
         return programContext;
     }
     
-    //Generates our wanted parse tree created from the program: "rect myRect1 = createRect(100, 100, 100, 100);
+    //Generates our wanted parse tree created from the program: "wait(100);"
     public ALFAParser.ProgramContext MockProgramTreeWithWait()
     {
         _myInvokingState = 0;
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
-        ALFAParser.StatementContext stmtWithBuiltInAnimCallContext = new ALFAParser.StatementContext(programContext, _myInvokingState++);
+        ALFAParser.StmtContext stmtWithBuiltInAnimCallContext = new ALFAParser.StmtContext(programContext, _myInvokingState++);
         
         //Assigning child and parent to VarDclContext node
         ALFAParser.BuiltInAnimCallContext builtInAnimCallContext =
@@ -181,13 +185,15 @@ public class ProgramTreeMocker
         leftParenImpl.Parent = builtInAnimCallContext;
 
 
-        ALFAParser.ArgsContext argsContext = new ALFAParser.ArgsContext(builtInAnimCallContext, _myInvokingState);
-        ALFAParser.ArgContext argContext1 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
+        ALFAParser.ActualParamsContext argsContext = new ALFAParser.ActualParamsContext(builtInAnimCallContext, _myInvokingState);
+        ALFAParser.ExprContext argContext1 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext1 = new ALFAParser.NumContext(argContext1);
         TerminalNodeImpl numImpl1 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext1.AddChild(numImpl1);
-        numImpl1.Parent = argContext1;
+        argContext1.AddChild(numContext1);
+        numContext1.AddChild(numImpl1);
+        numImpl1.Parent = numContext1;
 
-        argsContext.AddChild(argContext1);
+        argsContext.AddChild(numContext1);
 
         builtInAnimCallContext.AddChild(argsContext);
         builtInAnimCallContext.AddChild(rightParenImpl);
@@ -206,12 +212,12 @@ public class ProgramTreeMocker
         return programContext;
     }
     
-    //Generates our wanted parse tree created from the program: "move(myRect1, 100, 100);
+    //Generates our wanted parse tree created from the program: "move(myRect1, 100, 100);"
     public ALFAParser.ProgramContext MockProgramTreeWithMove()
     {
         _myInvokingState = 0;
         ALFAParser.ProgramContext programContext = new ALFAParser.ProgramContext(null, _myInvokingState++);
-        ALFAParser.StatementContext stmtWithBuiltInAnimCallContext = new ALFAParser.StatementContext(programContext, _myInvokingState++);
+        ALFAParser.StmtContext stmtWithBuiltInAnimCallContext = new ALFAParser.StmtContext(programContext, _myInvokingState++);
         
         //Assigning child and parent to VarDclContext node
         ALFAParser.BuiltInAnimCallContext builtInAnimCallContext =
@@ -232,33 +238,37 @@ public class ProgramTreeMocker
         leftParenImpl.Parent = builtInAnimCallContext;
 
 
-        ALFAParser.ArgsContext argsContext = new ALFAParser.ArgsContext(builtInAnimCallContext, _myInvokingState);
-        ALFAParser.ArgContext argContext1 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
+        ALFAParser.ActualParamsContext argsContext = new ALFAParser.ActualParamsContext(builtInAnimCallContext, _myInvokingState);
+        ALFAParser.ExprContext argContext1 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.IdContext idContext1 = new ALFAParser.IdContext(argContext1);
+        argContext1.AddChild(idContext1);
         TerminalNodeImpl myRectImpl = new TerminalNodeImpl(new CommonToken(12, "myRect1"));
-        argContext1.AddChild(myRectImpl);
-        myRectImpl.Parent = argContext1;
+        idContext1.AddChild(myRectImpl);
+        myRectImpl.Parent = idContext1;
 
-        argsContext.AddChild(argContext1);
+        argsContext.AddChild(idContext1);
         TerminalNodeImpl comma1 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma1);
         comma1.Parent = argsContext;
         
-        ALFAParser.ArgContext argContext2 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
+        ALFAParser.ExprContext argContext2 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext2 = new ALFAParser.NumContext(argContext2);
         TerminalNodeImpl numImpl2 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext2.AddChild(numImpl2);
-        numImpl2.Parent = argContext2;
+        numContext2.AddChild(numImpl2);
+        numImpl2.Parent = numContext2;
 
-        argsContext.AddChild(argContext2);
+        argsContext.AddChild(numContext2);
         TerminalNodeImpl comma2 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma2);
         comma1.Parent = argsContext;
         
-        ALFAParser.ArgContext argContext3 = new ALFAParser.ArgContext(argsContext, _myInvokingState);
+        ALFAParser.ExprContext argContext3 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext3 = new ALFAParser.NumContext(argContext3);
         TerminalNodeImpl numImpl3 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext3.AddChild(numImpl3);
-        numImpl3.Parent = argContext3;
+        numContext3.AddChild(numImpl3);
+        numImpl3.Parent = numContext3;
 
-        argsContext.AddChild(argContext3);
+        argsContext.AddChild(numContext3);
 
 
         builtInAnimCallContext.AddChild(argsContext);

@@ -77,8 +77,18 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
     var buildInNode3 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, args3, 50, 25);
     
     yield return new object[]
-      { buildInNode3, new ArgumentTypeException("Invalid number of arguments"), symbolTable3 };
+      { buildInNode3, new InvalidNumberOfArgumentsException("Invalid number of arguments"), symbolTable3 };
     
+    var args4 = new List<Node>()
+    {
+      new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22), new NumNode(0, 21, 22)
+    };
+    var buildInNode4 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, args4, 50, 25);
+    
+    
+    var symbolTable4 = new SymbolTable();
+    yield return new object[]
+      { buildInNode4, new ArgumentTypeException("Trying to move something that is not a rect"), symbolTable4 };
   }
 
   IEnumerator IEnumerable.GetEnumerator()
@@ -96,7 +106,7 @@ public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
       
       var args4 = new List<Node>()
       {
-        new IdNode("myrect1", 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
+        new IdNode("myrect1", 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42), new NumNode(2, 41, 42)
       };
       var buildInNode4 = new BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum.move, args4 , 15, 10);
 

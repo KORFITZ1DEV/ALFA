@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-using System.Diagnostics.CodeAnalysis;
+using Antlr4.Runtime.Misc;
 using IParseTreeListener = Antlr4.Runtime.Tree.IParseTreeListener;
 using IToken = Antlr4.Runtime.IToken;
 
@@ -34,100 +34,324 @@ public interface IALFAListener : IParseTreeListener {
 	/// Enter a parse tree produced by <see cref="ALFAParser.program"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterProgram([Antlr4.Runtime.Misc.NotNull] ALFAParser.ProgramContext context);
+	void EnterProgram([NotNull] ALFAParser.ProgramContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.program"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitProgram([Antlr4.Runtime.Misc.NotNull] ALFAParser.ProgramContext context);
+	void ExitProgram([NotNull] ALFAParser.ProgramContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.statement"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.stmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterStatement([Antlr4.Runtime.Misc.NotNull] ALFAParser.StatementContext context);
+	void EnterStmt([NotNull] ALFAParser.StmtContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.statement"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.stmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitStatement([Antlr4.Runtime.Misc.NotNull] ALFAParser.StatementContext context);
+	void ExitStmt([NotNull] ALFAParser.StmtContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterVarDcl([Antlr4.Runtime.Misc.NotNull] ALFAParser.VarDclContext context);
+	void EnterVarDcl([NotNull] ALFAParser.VarDclContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.varDcl"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitVarDcl([Antlr4.Runtime.Misc.NotNull] ALFAParser.VarDclContext context);
+	void ExitVarDcl([NotNull] ALFAParser.VarDclContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.assignStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAssignStmt([NotNull] ALFAParser.AssignStmtContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.assignStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAssignStmt([NotNull] ALFAParser.AssignStmtContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.ifStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterIfStmt([NotNull] ALFAParser.IfStmtContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.ifStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitIfStmt([NotNull] ALFAParser.IfStmtContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.loopStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterLoopStmt([NotNull] ALFAParser.LoopStmtContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.loopStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitLoopStmt([NotNull] ALFAParser.LoopStmtContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.paralStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterParalStmt([NotNull] ALFAParser.ParalStmtContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.paralStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitParalStmt([NotNull] ALFAParser.ParalStmtContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Not</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNot([NotNull] ALFAParser.NotContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Not</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNot([NotNull] ALFAParser.NotContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Or</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOr([NotNull] ALFAParser.OrContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Or</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOr([NotNull] ALFAParser.OrContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>MulDiv</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMulDiv([NotNull] ALFAParser.MulDivContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>MulDiv</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMulDiv([NotNull] ALFAParser.MulDivContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>AddSub</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAddSub([NotNull] ALFAParser.AddSubContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>AddSub</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAddSub([NotNull] ALFAParser.AddSubContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Parens</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterParens([NotNull] ALFAParser.ParensContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Parens</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitParens([NotNull] ALFAParser.ParensContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>And</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAnd([NotNull] ALFAParser.AndContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>And</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAnd([NotNull] ALFAParser.AndContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Num</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNum([NotNull] ALFAParser.NumContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Num</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNum([NotNull] ALFAParser.NumContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Relational</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterRelational([NotNull] ALFAParser.RelationalContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Relational</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitRelational([NotNull] ALFAParser.RelationalContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>UnaryMinus</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterUnaryMinus([NotNull] ALFAParser.UnaryMinusContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>UnaryMinus</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitUnaryMinus([NotNull] ALFAParser.UnaryMinusContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Id</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterId([NotNull] ALFAParser.IdContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Id</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitId([NotNull] ALFAParser.IdContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Equality</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEquality([NotNull] ALFAParser.EqualityContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Equality</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEquality([NotNull] ALFAParser.EqualityContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>Boolean</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterBoolean([NotNull] ALFAParser.BooleanContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>Boolean</c>
+	/// labeled alternative in <see cref="ALFAParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitBoolean([NotNull] ALFAParser.BooleanContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.block"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterBlock([NotNull] ALFAParser.BlockContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.block"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitBlock([NotNull] ALFAParser.BlockContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.paralBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterParalBlock([NotNull] ALFAParser.ParalBlockContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.paralBlock"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitParalBlock([NotNull] ALFAParser.ParalBlockContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterBuiltInAnim([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimContext context);
+	void EnterBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitBuiltInAnim([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimContext context);
+	void ExitBuiltInAnim([NotNull] ALFAParser.BuiltInAnimContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterBuiltInAnimCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimCallContext context);
+	void EnterBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitBuiltInAnimCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInAnimCallContext context);
+	void ExitBuiltInAnimCall([NotNull] ALFAParser.BuiltInAnimCallContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterBuiltInCreateShape([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeContext context);
+	void EnterBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShape"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitBuiltInCreateShape([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeContext context);
+	void ExitBuiltInCreateShape([NotNull] ALFAParser.BuiltInCreateShapeContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterBuiltInCreateShapeCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
+	void EnterBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.builtInCreateShapeCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitBuiltInCreateShapeCall([Antlr4.Runtime.Misc.NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
+	void ExitBuiltInCreateShapeCall([NotNull] ALFAParser.BuiltInCreateShapeCallContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.args"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInParalAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterArgs([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgsContext context);
+	void EnterBuiltInParalAnim([NotNull] ALFAParser.BuiltInParalAnimContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.args"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInParalAnim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitArgs([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgsContext context);
+	void ExitBuiltInParalAnim([NotNull] ALFAParser.BuiltInParalAnimContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="ALFAParser.arg"/>.
+	/// Enter a parse tree produced by <see cref="ALFAParser.builtInParalAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterArg([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgContext context);
+	void EnterBuiltInParalAnimCall([NotNull] ALFAParser.BuiltInParalAnimCallContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="ALFAParser.arg"/>.
+	/// Exit a parse tree produced by <see cref="ALFAParser.builtInParalAnimCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitArg([Antlr4.Runtime.Misc.NotNull] ALFAParser.ArgContext context);
+	void ExitBuiltInParalAnimCall([NotNull] ALFAParser.BuiltInParalAnimCallContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.actualParams"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterActualParams([NotNull] ALFAParser.ActualParamsContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.actualParams"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitActualParams([NotNull] ALFAParser.ActualParamsContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterType([Antlr4.Runtime.Misc.NotNull] ALFAParser.TypeContext context);
+	void EnterType([NotNull] ALFAParser.TypeContext context);
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ALFAParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitType([Antlr4.Runtime.Misc.NotNull] ALFAParser.TypeContext context);
+	void ExitType([NotNull] ALFAParser.TypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ALFAParser.bool"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterBool([NotNull] ALFAParser.BoolContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ALFAParser.bool"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitBool([NotNull] ALFAParser.BoolContext context);
 }

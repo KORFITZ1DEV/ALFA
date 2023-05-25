@@ -1,0 +1,36 @@
+﻿#This is a comment
+int len = 40;
+int xPos = 1000 / 2 - len / 2;
+rect myRect1 = createRect(xPos,0,len,len);
+rect myRect2 = createRect(xPos,0,len,len);
+rect myRect3 = createRect(xPos,0,len,len);
+rect myRect4 = createRect(xPos,0,len,len);
+rect myRect5 = createRect(xPos,0,len,len);
+rect myRect6 = createRect(xPos,0,len,len);
+
+int offset1 = 300;
+int offset2 = 400;
+int offset3 = 500;
+int offset4 = 600;
+int offset5 = 700;
+int offset6 = 800;
+int duration = 300;
+
+loop (int i from 0 .. 4) {
+
+    paral {
+        move(myRect1, 0, offset1, duration);
+        move(myRect2, 0, offset2, duration);
+        move(myRect3, 0, offset3, duration);
+        move(myRect4, 0, offset4, duration);
+        move(myRect5, 0, offset5, duration);
+        move(myRect6, 0, offset6, duration);
+    }
+    wait(1000);
+    offset1 = -offset1;
+    offset2 = -offset2;
+    offset3 = -offset3;
+    offset4 = -offset4;
+    offset5 = -offset5;
+    offset6 = -offset6;
+}

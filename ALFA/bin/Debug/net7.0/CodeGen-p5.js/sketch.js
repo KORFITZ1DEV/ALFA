@@ -1,7 +1,10 @@
+const shapesToDraw = [];
+
 class Shape {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        shapesToDraw.push(this);
     }
 
     move(offsetX, offsetY, duration) {
@@ -10,7 +13,7 @@ class Shape {
         let originalX = this.x;
         let originalY = this.y;
 
-        let animate = (resolve) => { // Added `resolve` parameter
+        let animate = (resolve) => {
             let now = Date.now();
             let progress = (now - start) / duration;
 
@@ -56,18 +59,19 @@ function wait(duration) {
     });
 }
 
-const x = 0
-const y = 0
-const length = 20
-const animDuration = 4000
-const delay = 2000
-const myRect1 = new Rect(0,0,length,length);
+async function moveParal(animations) {
+    const promises = animations.map(animation => animation());
+    return Promise.all(promises);
+}
+
 
 async function main() {
-	await myRect1.move(200, 0, animDuration);
-	await wait(delay);
-	await myRect1.move(-200, 0, animDuration);
-	}
+	let var_Rect1=new Rect(100,100,100,100)
+
+	await var_Rect1.move(200,0,4000);
+
+	await wait(300);
+}
 
 function setup() {
 	createCanvas(1000, 1000)
@@ -76,5 +80,8 @@ function setup() {
 
 function draw() {
 	background(255)
-	myRect1.draw();
+
+	for (const shape of shapesToDraw) {
+		shape.draw()
+	}
 }

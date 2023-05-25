@@ -38,15 +38,16 @@ public class UndeclaredVariableException : Exception
 }
 
 [ExcludeFromCodeCoverage]
-public class RedeclaredVariableException : Exception
+public class VariableAlreadyDeclaredException : Exception
 {
-    public RedeclaredVariableException(string message) : base(message){}
+    public VariableAlreadyDeclaredException(string message) : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
 public class SyntacticException : Exception
 {
-    public SyntacticException(string message) : base(message){}
+    public SyntacticException(string message) : base(message){
+    }
 }
 
 [ExcludeFromCodeCoverage]
@@ -54,3 +55,10 @@ public class NonPositiveAnimationDurationException : Exception
 {
     public NonPositiveAnimationDurationException(string message) : base(message){}
 }
+
+[ExcludeFromCodeCoverage]
+public class AttemptingToChangePropertyOfSameShapeInParalException: Exception
+{
+    public AttemptingToChangePropertyOfSameShapeInParalException(string message) : base(message){}
+}
+
