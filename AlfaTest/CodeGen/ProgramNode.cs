@@ -59,6 +59,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.@int ,assStmtNode, 25, 20);
     string varOutputWithVarDcl = File.ReadAllText(_stdlibPath);
     varOutputWithVarDcl += "\n\n";
+    string mainOutputNum = baseMainOutput + "\tlet var_num1=300\n" + closeBaseMainOutput;
     string setupOutputWithVarDcl = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tmain();\n}\n\n";
     List<Node> programNodeWithVarDclStatements = new List<Node>()
     {
@@ -68,11 +69,11 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     ProgramNode programNodeWithVarDcl = new ProgramNode(programNodeWithVarDclStatements);
     SymbolTable symbolTableProgramNodeWithVarDcl = new SymbolTable();
 
-    string outputWithVarDcl = varOutputWithVarDcl + mainOutputNothingAdded + setupOutputWithVarDcl + baseDrawOutput ;
+    string outputWithVarDcl = varOutputWithVarDcl + mainOutputNum + setupOutputWithVarDcl + baseDrawOutput ;
     
     yield return new object[]
     {
-      programNodeWithVarDcl, symbolTableProgramNodeWithVarDcl, varOutputWithVarDcl, setupOutputWithVarDcl, baseDrawOutput, outputWithVarDcl, mainOutputNothingAdded
+      programNodeWithVarDcl, symbolTableProgramNodeWithVarDcl, varOutputWithVarDcl, setupOutputWithVarDcl, baseDrawOutput, outputWithVarDcl, mainOutputNum
     };
 
     
@@ -93,7 +94,8 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     string varOutputRect = File.ReadAllText(_stdlibPath);
     varOutputRect += "\n\n";
     string setupOutputRect = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tmain();\n}\n\n";
-    string outputRect = varOutputRect + mainOutputNothingAdded + setupOutputRect + baseDrawOutput ;
+    string mainOutputWRect = baseMainOutput + "\tlet var_Rect1=new Rect(100,100,100,100)\n"+closeBaseMainOutput;
+    string outputRect = varOutputRect + mainOutputWRect + setupOutputRect + baseDrawOutput ;
     List<Node> programNodeWithRectStatements = new List<Node>()
     {
       varDclNodeRect
@@ -102,7 +104,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
 
     yield return new object[]
     {
-      programNodeRect, symbolTableProgramRect, varOutputRect, setupOutputRect, baseDrawOutput, outputRect, mainOutputNothingAdded
+      programNodeRect, symbolTableProgramRect, varOutputRect, setupOutputRect, baseDrawOutput, outputRect, mainOutputWRect
     };
 
     IdNode rect = new IdNode("Rect1", 30, 30);
@@ -130,7 +132,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
 
     ProgramNode programNodeRectAndMove = new ProgramNode(programNodeWithRectStatementsAndMove);
     SymbolTable symbolTableProgramNodeRectAndMove = new SymbolTable();
-    string mainOutputRectAndMove = baseMainOutput + "await Rect1.move(200, 0, 4000);\n\t\r}\n";
+    string mainOutputRectAndMove = baseMainOutput + "\tlet var_Rect1=new Rect(100,100,100,100)\n\n\tawait var_Rect1.move(200,0,4000);\n\r}\n";
     string outputRectAndMove = varOutputRectAndMove + mainOutputRectAndMove + setupOutputRectAndMove + baseDrawOutput;
     
     yield return new object[]
@@ -166,9 +168,9 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
 
     
     string varOutputRectAndMoveTwoFunc = File.ReadAllText(_stdlibPath);
-    varOutputRectAndMoveTwoFunc += "\n\nconst Rect1 = new Rect(100,100,100,100);\n";
+    varOutputRectAndMoveTwoFunc += "\n\n";
     string setupOutputRectAndMoveTwoFunc = "\nfunction setup() {\n\tcreateCanvas(1000, 1000)\n\tmain();\n}\n\n";
-    string mainOutputRectMoveAndWait = baseMainOutput + "await Rect1.move(200, 0, 4000);\n\tawait wait(300);\n\t\r}\n";
+    string mainOutputRectMoveAndWait = baseMainOutput + "\tlet var_Rect1=new Rect(100,100,100,100)\n\n\tawait var_Rect1.move(200,0,4000);\n\n\tawait wait(300);\n\r}\n";
     string outputRectAndMoveTwoFunc = varOutputRectAndMoveTwoFunc + mainOutputRectMoveAndWait + setupOutputRectAndMoveTwoFunc + baseDrawOutput;
     yield return new object[]
     {
