@@ -13,15 +13,14 @@ public class VarDclTest
     
     [Theory]
     [ClassData(typeof(VarDclCodeGenTestData))]
-    public void VarDclNodeWithCreateRectChildWritesToDrawOutput(Node node, SymbolTable symbolTable,
-        string expectedVarOutput, string expectedDrawOutput)
+    public void VarDclNodeWithCreateRectChildWritesToMainOutput(Node node, SymbolTable symbolTable,
+        string expectedVarOutput)
     {
         _sut = new CodeGenVisitor(symbolTable, "../TestOutput");
 
         _sut.Visit(node);
         
-        Assert.Equal(expectedVarOutput, _sut._varOutput);
-        Assert.Equal(expectedDrawOutput, _sut._drawOutput);
+        Assert.Equal(expectedVarOutput, _sut._mainOutput);
     }
 }
 
@@ -40,12 +39,11 @@ public class VarDclCodeGenTestData : IEnumerable<object[]>
         AssignStmtNode assStmtNodeRect = new AssignStmtNode("Rect1", buildInAnimCallNodeCreateRect, 25, 20);
         VarDclNode varDclNodeNumChild = new VarDclNode(ALFATypes.TypeEnum.rect, assStmtNodeRect, 25, 20);
         SymbolTable symbolTableVarDclNode = new SymbolTable();
-        string expectedVarOutput = "const rect1 = new Rect(100,100,100,100);\n";
-        string expectedDrawOutput = "\trect1.draw();\n";
+        string expectedMainOutput = "\tlet var_Rect1=new Rect(100,100,100,100)\n";
         
         yield return new object[]
         {
-            varDclNodeNumChild, symbolTableVarDclNode, expectedVarOutput, expectedDrawOutput
+            varDclNodeNumChild, symbolTableVarDclNode, expectedMainOutput
         };
     }
 

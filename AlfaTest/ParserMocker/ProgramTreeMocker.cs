@@ -75,17 +75,14 @@ public class ProgramTreeMocker
         varDclNode.AddChild(terminalRectNode);
         varDclNode.AddChild(assmt);
         
-        ALFAParser.BuiltInCreateShapeCallContext builtInCreateShapeCallContext =
-            new ALFAParser.BuiltInCreateShapeCallContext(varDclNode, _myInvokingState++);
-
-        
         assmt.AddChild(identifierImpl);
         identifierImpl.Parent = assmt;
-        
         assmt.AddChild(equalSignImpl);
         equalSignImpl.Parent = assmt;
-
-        assmt.AddChild(assmt);
+        ALFAParser.BuiltInCreateShapeCallContext builtInCreateShapeCallContext =
+            new ALFAParser.BuiltInCreateShapeCallContext(assmt, _myInvokingState++);
+        assmt.AddChild(builtInCreateShapeCallContext);
+        
         
         ALFAParser.BuiltInCreateShapeContext builtInCreateShapeContextCreateRect =
             new ALFAParser.BuiltInCreateShapeContext(builtInCreateShapeCallContext, _myInvokingState++);
@@ -105,9 +102,8 @@ public class ProgramTreeMocker
         ALFAParser.NumContext numContext1 = new ALFAParser.NumContext(argContext1);
         TerminalNodeImpl arg1 = new TerminalNodeImpl(new CommonToken(12, "100"));
         numContext1.AddChild(arg1);
-        argContext1.AddChild(numContext1);
+        argsContext.AddChild(numContext1);
 
-        argsContext.AddChild(argContext1);
         TerminalNodeImpl comma1 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma1);
         comma1.Parent = argsContext;
@@ -119,7 +115,7 @@ public class ProgramTreeMocker
         numContext2.AddChild(arg2);
         argContext2.AddChild(numContext2);
         
-        argsContext.AddChild(argContext2);
+        argsContext.AddChild(numContext2);
         TerminalNodeImpl comma2 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma2);
         comma2.Parent = argsContext;
@@ -130,7 +126,7 @@ public class ProgramTreeMocker
         numContext3.AddChild(arg3);
         argContext3.AddChild(numContext3);
         
-        argsContext.AddChild(argContext3);
+        argsContext.AddChild(numContext3);
         TerminalNodeImpl comma3 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma3);
         comma3.Parent = argsContext;
@@ -141,7 +137,7 @@ public class ProgramTreeMocker
         numContext4.AddChild(arg4);
         argContext4.AddChild(numContext4);
         
-        argsContext.AddChild(argContext4);
+        argsContext.AddChild(numContext4);
 
 
         builtInCreateShapeCallContext.AddChild(argsContext);
@@ -162,7 +158,7 @@ public class ProgramTreeMocker
         return programContext;
     }
     
-    //Generates our wanted parse tree created from the program: "rect myRect1 = createRect(100, 100, 100, 100);
+    //Generates our wanted parse tree created from the program: "wait(100);"
     public ALFAParser.ProgramContext MockProgramTreeWithWait()
     {
         _myInvokingState = 0;
@@ -191,11 +187,13 @@ public class ProgramTreeMocker
 
         ALFAParser.ActualParamsContext argsContext = new ALFAParser.ActualParamsContext(builtInAnimCallContext, _myInvokingState);
         ALFAParser.ExprContext argContext1 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext1 = new ALFAParser.NumContext(argContext1);
         TerminalNodeImpl numImpl1 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext1.AddChild(numImpl1);
-        numImpl1.Parent = argContext1;
+        argContext1.AddChild(numContext1);
+        numContext1.AddChild(numImpl1);
+        numImpl1.Parent = numContext1;
 
-        argsContext.AddChild(argContext1);
+        argsContext.AddChild(numContext1);
 
         builtInAnimCallContext.AddChild(argsContext);
         builtInAnimCallContext.AddChild(rightParenImpl);
@@ -214,7 +212,7 @@ public class ProgramTreeMocker
         return programContext;
     }
     
-    //Generates our wanted parse tree created from the program: "move(myRect1, 100, 100);
+    //Generates our wanted parse tree created from the program: "move(myRect1, 100, 100);"
     public ALFAParser.ProgramContext MockProgramTreeWithMove()
     {
         _myInvokingState = 0;
@@ -242,31 +240,35 @@ public class ProgramTreeMocker
 
         ALFAParser.ActualParamsContext argsContext = new ALFAParser.ActualParamsContext(builtInAnimCallContext, _myInvokingState);
         ALFAParser.ExprContext argContext1 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.IdContext idContext1 = new ALFAParser.IdContext(argContext1);
+        argContext1.AddChild(idContext1);
         TerminalNodeImpl myRectImpl = new TerminalNodeImpl(new CommonToken(12, "myRect1"));
-        argContext1.AddChild(myRectImpl);
-        myRectImpl.Parent = argContext1;
+        idContext1.AddChild(myRectImpl);
+        myRectImpl.Parent = idContext1;
 
-        argsContext.AddChild(argContext1);
+        argsContext.AddChild(idContext1);
         TerminalNodeImpl comma1 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma1);
         comma1.Parent = argsContext;
         
         ALFAParser.ExprContext argContext2 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext2 = new ALFAParser.NumContext(argContext2);
         TerminalNodeImpl numImpl2 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext2.AddChild(numImpl2);
-        numImpl2.Parent = argContext2;
+        numContext2.AddChild(numImpl2);
+        numImpl2.Parent = numContext2;
 
-        argsContext.AddChild(argContext2);
+        argsContext.AddChild(numContext2);
         TerminalNodeImpl comma2 = new TerminalNodeImpl(new CommonToken(12, ","));
         argsContext.AddChild(comma2);
         comma1.Parent = argsContext;
         
         ALFAParser.ExprContext argContext3 = new ALFAParser.ExprContext(argsContext, _myInvokingState);
+        ALFAParser.NumContext numContext3 = new ALFAParser.NumContext(argContext3);
         TerminalNodeImpl numImpl3 = new TerminalNodeImpl(new CommonToken(12, "100"));
-        argContext3.AddChild(numImpl3);
-        numImpl3.Parent = argContext3;
+        numContext3.AddChild(numImpl3);
+        numImpl3.Parent = numContext3;
 
-        argsContext.AddChild(argContext3);
+        argsContext.AddChild(numContext3);
 
 
         builtInAnimCallContext.AddChild(argsContext);

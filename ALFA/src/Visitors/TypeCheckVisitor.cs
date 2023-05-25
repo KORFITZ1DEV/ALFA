@@ -23,25 +23,24 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
+    private void typeCheckIdNodeVarDcl(IdNode idNode, ALFATypes.TypeEnum type)
+    {
+        Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+        if (symbol.Type != type)
+        {
+            throw new TypeException($"You are assigning something of type {symbol.Type} on line {symbol.LineNumber} column {symbol.ColumnNumber} to a variable of type {type.ToString()}");
+        }
+    }
+    
+
     public override Node Visit(VarDclNode node)
     {
         Visit(node.AssignStmt);
 
-        if (node.AssignStmt.Value is ExprNode exprNode)
+        if (node.AssignStmt.Value is IdNode idNode)
         {
-            switch (exprNode.Value.GetType().ToString())
-            { 
-                case "ALFA.AST_Nodes.NumNode":
-                    if (node.Type != ALFATypes.TypeEnum.@int)
-                        throw new TypeException(
-                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a number");
-                    break;
-                case "ALFA.AST_Nodes.BoolNode":
-                    if (node.Type != ALFATypes.TypeEnum.@bool)
-                        throw new TypeException(
-                            $"Expected expression on line {exprNode.Line} column {exprNode.Col} to evaluate to a Boolean");
-                    break;
-            }
+            typeCheckIdNodeVarDcl(idNode, node.Type);
+
         }
         
         return node;
@@ -72,7 +71,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     {
                         if(idSymbol.Value is AssignStmtNode assStmt && assStmt.Value is NumNode numNode && numNode.Value <= 0) 
                             throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
-                        
+                        else if (idSymbol.Value is NumNode numNode1 && numNode1.Value <= 0)
+                        {
+                            throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
+                        }
                     }
                 }
             }
@@ -433,31 +435,25 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
         var nodeToCast = symbol.Value;
-        if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
+
+        if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
+        {
+            nodeToCast = exprNode.Value;
+        }
+        else if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
         {
             EvaluateExpression(locValExpr);
-            return (T)locValExpr.Value;
-        }
-        else if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
-        {
-            return (T)exprNode.Value;
+            nodeToCast = locValExpr.Value;
         }
         else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
         {
-            return VisitSymbol<T>(exprIdNode);
+            nodeToCast = VisitSymbol<T>(exprIdNode);
         }
         else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
-            return (T)idNode.LocalValue!;
+            nodeToCast = idNode.LocalValue!;
         }
         
-        
-        if (nodeToCast is IdNode nodeToLookup)
-        {
-            var idSymbol = _symbolTable.RetrieveSymbol(nodeToLookup.Identifier);
-            nodeToCast = idSymbol!.Value;
-        }
-
         return (T)nodeToCast;
     }
 
