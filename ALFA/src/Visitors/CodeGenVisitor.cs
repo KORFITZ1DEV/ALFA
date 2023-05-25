@@ -209,13 +209,13 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
         // i++
         if (from < to) {
-            Emit(" < ");
+            Emit(" <= ");
             Visit(node.To);
             Emit($"; var_{node.AssignStmt.Identifier}++)");
 
         }
         else {
-            Emit(" > ");
+            Emit(" => ");
             Visit(node.To);
             Emit($"; var_{node.AssignStmt.Identifier}--)");
         }
