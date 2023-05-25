@@ -1,3 +1,7 @@
-﻿int offset = 300;
-offset = 2;
-offset = -offset + 200 * (200+300);
+﻿rect myRect1 = createRect(0,0,50,50);
+int fDuration = 100;
+move(myRect1, (-10)*(-20),  (-10)*(-20), fDuration);
+
+loop(int i from 1 .. i+2) {
+    move(myRect1, 10, 20, 4000); 
+}
