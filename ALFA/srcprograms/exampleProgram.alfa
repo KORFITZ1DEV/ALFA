@@ -1,7 +1,9 @@
-﻿rect myRect1 = createRect(0,0,50,50);
-int fDuration = 100;
-move(myRect1, (-10)*(-20),  (-10)*(-20), fDuration);
+﻿#Same rect moved in paral
+ 
+ rect myRect2 = createRect(100,100,10,10);
 
-loop(int i from 1 .. i+2) {
-    move(myRect1, 10, 20, 4000); 
-}
+ int offset = 10;
+ int duration = 20;
+ 
+ move(myRect2, 70 * (-offset), 70 * (-offset), duration); 
+ 

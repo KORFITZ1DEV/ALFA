@@ -426,6 +426,19 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
         if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
 
+        if (left is ExprNode exprNode)
+        {
+            EvaluateExpression(exprNode);
+            leftTNode = (T)exprNode.Value;
+        }
+
+        if (right is ExprNode exprNode1)
+        {
+            EvaluateExpression(exprNode1);
+            leftTNode = (T)exprNode1.Value;
+        }
+        
+        
         if (leftTNode == null)
         {
             string wrongType = left.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
