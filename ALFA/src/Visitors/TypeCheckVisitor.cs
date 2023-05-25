@@ -444,13 +444,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {left.Line} column {left.Col}");
         }
 
-        if (rightTNode == null)
+        if (rightTNode == null && isBinary)
         {
             string wrongType = right.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {right.Line} column {right.Col}");
         }
 
-        return new Tuple<T, T>(leftTNode, rightTNode!);
+        return new Tuple<T, T>(leftTNode, rightTNode);
     }
 
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
