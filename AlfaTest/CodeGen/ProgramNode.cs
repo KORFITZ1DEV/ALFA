@@ -144,6 +144,7 @@ public class ProgramNodeCodeGenTestData : IEnumerable<object[]>
     {
       idNode1TwoFunc,
       new NumNode(200, 60, 20),
+      new NumNode(0, 60, 20),
       new NumNode(4000, 60, 20)
     };
     
