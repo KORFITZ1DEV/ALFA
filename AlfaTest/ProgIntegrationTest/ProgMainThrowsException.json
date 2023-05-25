@@ -1,11 +1,11 @@
 [
    {
-     "Prog": "int xtest1 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test1 = createRect(0, length, length);\n\nmove(test1 , 200, animDuration);\nwait(delay);\nmove(test1 , -200, animDuration);",
+     "Prog": "int xtest1 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test1 = createRect(0, length, length);\n\nmove(test1 , 200, 0, animDuration);\nwait(delay);\nmove(test1 , -200, 0, animDuration);",
      "Comment": "Invalid number of arguments create rect, given 3 arguments og 4",
      "ExceptionType": "InvalidNumberOfArgumentsException"
    },
    {
-     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5fuck = createRect(0, 0, length, length);\n\nmove(200 , test5fuck, animDuration);\nwait(delay);\nmove(test5fuck , -200, animDuration);",
+     "Prog": "int x = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5fuck = createRect(0, 0, length, length);\n\nmove(200 , test5fuck, 0, animDuration);\nwait(delay);\nmove(test5fuck , -200, 0, animDuration);",
      "Comment": "Invalid type in move, should be int",
      "ExceptionType": "ArgumentTypeException"
    },
@@ -20,12 +20,12 @@
      "ExceptionType": "SyntacticException"
    },
    {
-     "Prog": "int xtest8 = 0;\nint length = 20;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nrect test8ErrorRect = createRect(0, 0, 10, length);\nrect test8Error = createRect(test8ErrorRect, 0, 0, length);\nmove(test8Error , 200, animDuration);\nwait(delay);\nmove(test8Error , -200, animDuration);",
+     "Prog": "int xtest8 = 0;\nint length = 20;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nrect test8ErrorRect = createRect(0, 0, 10, length);\nrect test8Error = createRect(test8ErrorRect, 0, 0, length);\nmove(test8Error , 200, 0, animDuration);\nwait(delay);\nmove(test8Error , -200, 0, animDuration);",
      "Comment": "Invalid type in create rect, input of type rect, should maybe be moved to ASTbuild testdata",
      "ExceptionType": "ArgumentTypeException"
    },
    {
-     "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, animDuration);\nwait(delay);\nmove(test9 , -200, animDuration);",
+     "Prog": "int xtest9 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test9 = createRect(0, 0, length, length);\n\nmove(10, 200, 0, animDuration);\nwait(delay);\nmove(test9 , -200, 0, animDuration);",
      "Comment": "Invalid type in move, rect should be first argument, give num",
      "ExceptionType": "ArgumentTypeException"
    },
@@ -40,12 +40,12 @@
      "ExceptionType": "NonPositiveAnimationDurationException"
    },
    {
-     "Prog": "int xtest2 = 0;\n int y = 0;\n \n int length = 20; \n int animDuration = 4000;\n int delay = 2000;\n rect test2 = createRect(0, 0, 0, length, length);\n \n move(test2 , 200, animDuration);\n wait(delay);\n move(test2 , -200, animDuration);",
+     "Prog": "int xtest2 = 0;\n int y = 0;\n \n int length = 20; \n int animDuration = 4000;\n int delay = 2000;\n rect test2 = createRect(0, 0, 0, length, length);\n \n move(test2 , 200, 0, animDuration);\n wait(delay);\n move(test2 , -200, 0, animDuration);",
      "Comment": "Invalid number of arguments create rect, given 5 arguments og 4",
      "ExceptionType": "InvalidNumberOfArgumentsException"
    },
    {
-     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length);\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, animDuration);\nwait(delay);\nmove(test3 , -200, animDuration);",
+     "Prog": "int xtest3 = 0;\nint y = 0;\nint animDuration = 4000;\nint delay = 2000;\nint length = 20;\nrect test3Error = createRect(0, 0, 0, length);\n\nrect test3 = createRect(test3Error, 0, 0, length);\n\nmove(test3 , 200, 0, animDuration);\nwait(delay);\nmove(test3 , -200, 0, animDuration);",
      "Comment": "Invalid type in create rect, input of type rect as id",
      "ExceptionType": "ArgumentTypeException"
    },
@@ -55,12 +55,12 @@
      "ExceptionType": "InvalidNumberOfArgumentsException"
    },
    {
-     "Prog": "int xtest5 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5 = createRect(0, 0, length, length);\n\nmove(xtest5, 200, animDuration);\nwait(delay);\nmove(test5 , -200, animDuration);",
+     "Prog": "int xtest5 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test5 = createRect(0, 0, length, length);\n\nmove(xtest5, 200, 0, animDuration);\nwait(delay);\nmove(test5 , -200, 0, animDuration);",
      "Comment": "Invalid type in move, rect should be first argument, give int id",
      "ExceptionType": "ArgumentTypeException"
    },
    {
-     "Prog": "int xtest6 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test6 = createRect(0, 0, length, length);\n\nmove(test6 , 200, animDuration);\nwait(test6);\nmove(test6 , -200, animDuration);",
+     "Prog": "int xtest6 = 0;\nint y = 0;\n\nint length = 20;\nint animDuration = 4000;\nint delay = 2000;\nrect test6 = createRect(0, 0, length, length);\n\nmove(test6 , 200, 0, animDuration);\nwait(test6);\nmove(test6 , -200, 0, animDuration);",
      "Comment": "Invalid type in wait, should be int, but given type rect",
      "ExceptionType": "ArgumentTypeException"
    },
@@ -70,7 +70,7 @@
      "ExceptionType": "TypeException"
    },
    {
-     "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0);",
+     "Prog": "rect myrect1 = createRect(40, 40, 89, 84);\nmove(myrect1, 200, 0, 0);",
      "Comment": "Calls an BuiltInAnimCallNode visit with move with a duration as a numnode that is non-positive.",
      "ExceptionType": "NonPositiveAnimationDurationException"
    },  
