@@ -1,0 +1,69 @@
+int pos = 20;
+
+rect myRect1 = createRect(pos,pos,10,10);
+rect myRect2 = createRect(pos,pos,10,10);
+rect myRect3 = createRect(pos,pos,10,10);
+rect myRect4 = createRect(pos,pos,10,10);
+rect myRect5 = createRect(pos,pos,10,10);
+rect myRect6 = createRect(pos,pos,10,10);
+rect myRect7 = createRect(pos,pos,10,10);
+rect myRect8 = createRect(pos,pos,10,10);
+rect myRect9 = createRect(pos,pos,10,10);
+rect myRect10 = createRect(pos,pos,10,10);
+rect myRect11 = createRect(pos,pos,10,10);
+rect myRect12 = createRect(pos,pos,10,10);
+rect myRect13 = createRect(pos,pos,10,10);
+rect myRect14 = createRect(pos,pos,10,10);
+rect myRect15 = createRect(pos,pos,10,10);
+rect myRect16 = createRect(pos,pos,10,10);
+rect myRect17 = createRect(pos,pos,10,10);
+rect myRect18 = createRect(pos,pos,10,10);
+rect myRect19 = createRect(pos,pos,10,10);
+rect myRect20 = createRect(pos,pos,10,10);
+rect myRect21 = createRect(pos,pos,10,10);
+rect myRect22 = createRect(pos,pos,10,10);
+
+int duration1 = 1000;
+int pushLength = 1;
+
+loop(int i from 1 .. 100 ) {
+
+    #move out
+    paral{
+        #leftside
+        move(myRect1, -pushLength, 0, duration1); 
+        move(myRect2, -pushLength, 20, duration1);
+        move(myRect3, -pushLength, 40, duration1);
+        move(myRect4, -pushLength, 60, duration1);
+        move(myRect5, -pushLength, 80, duration1);
+        move(myRect6, -pushLength, 100, duration1);
+        #rightside
+         move(myRect7, pushLength, 0, duration1); 
+         move(myRect8, pushLength, 20, duration1);
+         move(myRect9, pushLength, 40, duration1);
+         move(myRect10, pushLength, 60, duration1);
+         move(myRect11, pushLength, 80, duration1);
+         move(myRect12, pushLength, 100, duration1);
+       
+        #topside
+           move(myRect13, 0, 0, duration1); 
+           move(myRect14, 20, -pushLength, duration1);
+           move(myRect15, 40, -pushLength, duration1);
+           move(myRect16, 60, -pushLength, duration1);
+           move(myRect17, 80, -pushLength, duration1);
+           move(myRect18, 100, -pushLength, duration1);
+       
+        #bottomside
+         move(myRect13, 0, 0, duration1); 
+         move(myRect19, 20, pushLength, duration1);
+         move(myRect20, 40, pushLength, duration1);
+         move(myRect21, 60, pushLength, duration1);
+         move(myRect22, 80, pushLength, duration1);     
+  }
+ 
+    
+    #move in
+   paral{ 
+    }
+     
+}
