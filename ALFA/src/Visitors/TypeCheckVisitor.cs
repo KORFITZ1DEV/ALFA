@@ -40,7 +40,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (node.AssignStmt.Value is IdNode idNode)
         {
             typeCheckIdNodeVarDcl(idNode, node.Type);
-
         }
         
         return node;
@@ -198,7 +197,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override LoopStmtNode Visit(LoopStmtNode node)
     {
         _symbolTable.OpenScope();
-        Visit(node.AssignStmt);
+        var assignStmtNode = Visit(node.AssignStmt);
+        Symbol newSymbol = new Symbol(assignStmtNode.Identifier, assignStmtNode.Value, ALFATypes.TypeEnum.@int, 25, 30);
+        _symbolTable.EnterSymbol(newSymbol);
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)
@@ -308,6 +309,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 EvaluateBooleanExpression(leftValue, rightValue, node.Operator, node);
                 break;
             case "()":
+                node.Value = node.Left;
                 break;
             default:
                 throw new Exception("You used an arithmetic operator that is not being switched on");

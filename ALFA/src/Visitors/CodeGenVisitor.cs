@@ -209,13 +209,12 @@ public class CodeGenVisitor : ASTVisitor<Node>
 
         // i++
         if (from < to) {
-            Emit(" < ");
+            Emit(" <= ");
             Visit(node.To);
             Emit($"; var_{node.AssignStmt.Identifier}++)");
-
         }
         else {
-            Emit(" > ");
+            Emit(" => ");
             Visit(node.To);
             Emit($"; var_{node.AssignStmt.Identifier}--)");
         }
@@ -273,8 +272,12 @@ public class CodeGenVisitor : ASTVisitor<Node>
         if (node.Right == null)
         {
             if (node.Operator == "u-") node.Operator = "-";
+            if (node.Operator == "()") node.Operator = "(";
             Emit($" {node.Operator}");
             EmitValue(node.Left);
+            
+            if(node.Operator == "(") 
+                Emit(")");
         }
         else
         {

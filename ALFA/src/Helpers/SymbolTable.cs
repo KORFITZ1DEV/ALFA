@@ -3,7 +3,8 @@ namespace ALFA;
 public class SymbolTable
 {
     public int _depth = 0;
-    public Dictionary<string, Symbol> _symbols = new(); 
+    public Dictionary<string, Symbol> _symbols = new();
+    public List<Dictionary<string, Symbol>> _scopeDisplays = new List<Dictionary<string, Symbol>>();
     public List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
 
     public void OpenScope()
@@ -32,9 +33,8 @@ public class SymbolTable
             sym = prevSymbol;
         }
 
-        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
+        // if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
 
-        _scopeDisplay[_depth] = null;
         _depth--;
     }
     
