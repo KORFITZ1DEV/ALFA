@@ -197,9 +197,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override LoopStmtNode Visit(LoopStmtNode node)
     {
         _symbolTable.OpenScope();
-        var assignStmtNode = Visit(node.AssignStmt);
-        Symbol newSymbol = new Symbol(assignStmtNode.Identifier, assignStmtNode.Value, ALFATypes.TypeEnum.@int, 25, 30);
-        _symbolTable.EnterSymbol(newSymbol);
+        Visit(node.AssignStmt);
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)
