@@ -200,7 +200,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
         Symbol loopVar = new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, 25, 25 );
-        _symbolTable.EnterSymbol(loopVar);
+        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
+        {
+            _symbolTable.EnterSymbol(loopVar);
+        }
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)
