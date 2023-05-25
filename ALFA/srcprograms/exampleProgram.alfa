@@ -1,1 +1,3 @@
-﻿offset = 2;
+﻿int offset = 300;
+offset = 2;
+offset = -offset + 200 * (200+300);

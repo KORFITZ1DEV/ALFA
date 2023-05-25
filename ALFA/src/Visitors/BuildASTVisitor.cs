@@ -68,7 +68,13 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             return VisitVarDcl(context.varDcl());
 
         if (context.assignStmt() != null)
-            return VisitAssignStmt(context.assignStmt());
+        {
+            AssignStmtNode assignmentNode = VisitAssignStmt(context.assignStmt());
+            Symbol symbol = _symbolTable.RetrieveSymbol(assignmentNode.Identifier);
+            if (symbol == null)
+                throw new UndeclaredVariableException($"You are trying to assign a value to variable called {assignmentNode.Identifier} that is undeclared on line {assignmentNode.Line} column {assignmentNode.Col}");
+            return assignmentNode;
+        }
 
         if (context.builtInAnimCall() != null)
             return VisitBuiltInAnimCall(context.builtInAnimCall());
