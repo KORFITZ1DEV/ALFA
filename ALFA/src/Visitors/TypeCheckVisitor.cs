@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using ALFA.AST_Nodes;
 using ALFA.Types;
 
@@ -460,6 +461,20 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
         {
             nodeToCast = idNode.LocalValue!;
+        }
+        else if (nodeToCast.GetType().ToString() != typeof(T).ToString())
+        {
+            string type = "";
+            switch (typeof(T).ToString())
+            {
+                case "ALFA.AST_Nodes.NumNode":
+                    type = "int";
+                    break;
+                case "ALFA.AST_Nodes.BoolNode":
+                    type = "bool";
+                    break;
+            }
+            throw new ArgumentTypeException($"Expected type {type} on line {nodeToCast.Line} column {nodeToCast.Col}");
         }
         
         return (T)nodeToCast;
