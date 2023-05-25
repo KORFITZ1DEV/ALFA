@@ -33,7 +33,7 @@ public class SymbolTable
             sym = prevSymbol;
         }
 
-        // if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
+        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
 
         _depth--;
     }
