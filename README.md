@@ -20,14 +20,14 @@ Moves a rectangle from its current position to a new position based on offsetX, 
 | rect x | A declared variable of type rect |
 | int offsetX | A declared variable of type int |
 | int offsetY | A declared variable of type int |
-| int duration | A declared variable of type int |
+| int duration | A declared variable of type int that must be positive |
 
 ## wait(int duration)
 Repeats the last played frame over a duration in miliseconds.
 
 | Parameters | Description |
 | ----------- | ----------- |
-| int duration | A declared variable of type int |
+| int duration | A declared variable of type int that must be positive |
 
 
 ## createRect(int xPosition, int yPosition, int width, int length)
@@ -41,8 +41,13 @@ Creates a rectangle at (x, y) on the canvas with a given width and length.
 | int length | A declared variable of type int |
 
 # Keywords
-## paral 
+## paral { }
+Used to play animations in parallel.
+Note, only allows the same property in a single paral to be changed once.
 
-## loop
+## loop (int i from 1 .. 2) { }
+Allows animations to be played a number of times.
+The loop above is executed twice, where i is first assigned to 1, then 2.
 
-## if-elseif-else
+## if(bool condition1)-else if(bool condition2)-else
+The typical if statement.
