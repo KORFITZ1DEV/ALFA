@@ -42,7 +42,7 @@ Creates a rectangle at (x, y) on the canvas with a given width and length.
 
 # Keywords
 ## paral { }
-Used to play animations in parallel.
+Used to play animations in parallel. Currently, only the move built-in function is allowed to be executed within a paral statement. 
 Note, only allows the same property in a single paral to be changed once.
 
 ## loop (int i from 1 .. 2) { }
