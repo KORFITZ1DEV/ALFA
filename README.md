@@ -51,3 +51,6 @@ The loop above is executed twice, where i is first assigned to 1, then 2.
 
 ## if(bool condition1)-else if(bool condition2)-else
 The typical if statement.
+
+## Single Line Comments
+Initiated by '#'
