@@ -199,6 +199,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
+        Symbol loopVar = new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, 25, 25 );
+        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
+        {
+            _symbolTable.EnterSymbol(loopVar);
+        }
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)
@@ -424,18 +429,31 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (left is IdNode idNode) leftTNode = VisitSymbol<T>(idNode);
         if (right is IdNode idNode1) rightTNode = VisitSymbol<T>(idNode1);
 
+        if (left is ExprNode exprNode)
+        {
+            EvaluateExpression(exprNode);
+            leftTNode = (T)exprNode.Value;
+        }
+
+        if (right is ExprNode exprNode1)
+        {
+            EvaluateExpression(exprNode1);
+            rightTNode = (T)exprNode1.Value;
+        }
+        
         if (leftTNode == null)
         {
             string wrongType = left.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {left.Line} column {left.Col}");
         }
+
         if (rightTNode == null && isBinary)
         {
             string wrongType = right.GetType().ToString() == "ALFA.AST_Nodes.BoolNode" ? "bool" : "int";
             throw new ArgumentTypeException($"Incompatible type {wrongType} in '{op}' expression on line {right.Line} column {right.Col}");
         }
 
-        return new Tuple<T, T>(leftTNode, rightTNode!);
+        return new Tuple<T, T>(leftTNode, rightTNode);
     }
 
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
