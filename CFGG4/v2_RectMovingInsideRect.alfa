@@ -1,0 +1,58 @@
+﻿int initOffsetY = 20;
+int width = 50;
+int duration = 1000;
+int moveX = 200;
+int moveY = 200;
+int xPos = 300;
+
+rect myRect1 = createRect(xPos, initOffsetY, width, width);
+rect myRect2 = createRect(xPos-width, initOffsetY, width, width);
+initOffsetY = initOffsetY + width + 10;
+initOffsetY = initOffsetY + width + 10;
+rect myRect4 = createRect(xPos+width, initOffsetY, width, width);
+rect rectInsideRect4 = createRect(xPos+width, initOffsetY, 20, 20);
+int rectInsideWidth = 20;
+int smallRectWidth = 10;
+rect rectInsideRectRec = createRect(xPos+width, initOffsetY, 10, 10);
+initOffsetY = initOffsetY + width - 10;
+int innerWidth = 20;
+
+wait(500);
+loop(int i from 1 .. i+1) {
+    int insideRectXMove = moveX-width-width;
+
+    paral{
+        move(myRect1, moveX, 0, duration);
+        move(myRect2, -moveX, 0, duration);
+        move(myRect4, moveX-width-width, 0, duration);
+        move(rectInsideRect4, insideRectXMove, width - innerWidth, duration);
+        move(rectInsideRectRec, insideRectXMove, width - smallRectWidth, duration);
+    }
+    
+    # 
+    paral {
+        move(myRect1, 0, initOffsetY, duration);
+        move(myRect2, 0, initOffsetY, duration);
+        move(myRect4, 0, -initOffsetY + 2*(width + innerWidth/2), duration);
+        move(rectInsideRect4, width - innerWidth, -initOffsetY + 2*(width + innerWidth/2), duration);
+        move(rectInsideRectRec, width - smallRectWidth, -initOffsetY + 2*(width + smallRectWidth), duration);
+    }
+    
+    #
+    paral{
+        move(myRect1, -moveX, 0, duration);
+        move(myRect2, moveX, 0, duration);
+        move(myRect4, -moveX + width*2, 0, duration);
+        move(rectInsideRect4, -moveX + width+width, - width + innerWidth, duration);
+        move(rectInsideRectRec, -moveX + width+width, - width + smallRectWidth, duration);
+    }
+    
+    #    
+    paral{
+        move(myRect1, 0, -initOffsetY, duration);
+        move(myRect2, 0, -initOffsetY, duration);
+        move(myRect4, 0, initOffsetY - 2*(width + innerWidth/2), duration);
+        move(rectInsideRect4, innerWidth - width, initOffsetY - 2*(width + innerWidth/2), duration);
+        move(rectInsideRectRec, smallRectWidth - width, initOffsetY - 2*(width + smallRectWidth), duration);
+    }
+}
