@@ -63,6 +63,36 @@
     "Prog": " #Same rect moved in paral\n \n rect myRect1 = createRect(100,100,60,60);\n rect myRect2 = createRect(100,100,60,60);\n rect myRect3 = createRect(100,100,60,60);\n int offset = 50;\n int duration = 200;\n \n loop(int i from 1 .. 10 ) {\n     paral{\n         move(myRect1, offset, 0, duration);\n         move(myRect3, 0, offset, duration);\n     }\n     paral{\n               move(myRect1, 0, offset, duration);\n               move(myRect3, offset, 0, duration);\n     }\n     \n     if(i % 2 == 0) {\n             move(myRect2, 2*offset, 2*offset, duration);\n     }\n }\n \n loop(int j from 1 .. 10 ) {\n     paral{\n               move(myRect1, 0, -offset, duration);\n               move(myRect3, -offset, 0, duration);\n     }\n     paral{\n         move(myRect1, -offset, 0, duration);\n         move(myRect3, 0, -offset, duration);\n     }\n     \n     if(j % 2 == 0) {\n             move(myRect2, 2* (-offset), 2* (-offset), duration); \n     }\n }",
     "Comment": "",
     "exceptionType": ""
+  },
+  {
+    "Prog": "\nrect myRect = createRect(300, 300, 100, 100);\n\nint i = 0;\nloop (int j from 0..i) {\n    i = j+1;\n    move(myRect, 0, 40, 200);\n    wait(100);\n    if (j > 5) {\n        i = 5000;\n    }\n}\n\nmove(myRect, 100, 0, 400);",
+    "Comment": "Man laver infinite loop og forsøger at bryde ud",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "#Bør heller ikke kaste nogen fejl. Infinite Loop, men rektangel flytter sig ikke.\nrect myRect = createRect(400, 400, 100, 100);\n\nloop (int a from 0..a+1) {\n    move(myRect, 0, -50, 500);\n    rect myRect = createRect(1+a, 100, 100, 100);\n    move(myRect, 0, a, 100);\n}\n",
+    "Comment": "Rektangel bør flytte sig, men har haft problem hvor den ikke gjorde",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "#Evaluering af j fejl. Burde ikke give nogen exception men giver en argumenttype exception på linje 3.\n\nint i = 300 + 500;\nint j = 100;\nj = i;\nloop (int j from 0..i) {\n    i = j+1;\n}\n",
+    "Comment": "Der har været problemer med at assigne en expression til en anden",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "#Der har været problem med at bruge loop variabel inde i en if i loop scopet\nrect myRect = createRect(300, 300, 100, 100);\n\nint i = 0;\nloop (int j from 0..i) {\n    i = j+1;\n    \n    move(myRect, 0, 40, 200);\n    wait(100);\n    if (j > 5) {\n        j = j + 2;\n    }\n}\n\nmove(myRect, 100, 0, 400);",
+    "Comment": "Der har været problem med at bruge loop variabel inde i en if i loop scopet",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "#Ingen exception, men ikke forventet udfald. Man ville forvente, at myRect flyttede sig diagonalt.\nrect myRect = createRect(300, 300, 100, 100);\nrect myRect2 = myRect;\n\nparal {\n    move(myRect, 100, 0, 600);\n    move(myRect2, 0, 100, 600);\n}\n",
+    "Comment": "Sætter to variable til at referere til samme rect og forsøger at flytte dem i paral, men resulterer ikke i forventet diagonal bevægelse",
+    "exceptionType": ""
+  },  
+  {
+    "Prog": "#Skal ikke kaste nogen fejl\nloop (int a from 0..a+1) {\n    rect myRect = createRect(1+a, 100, 100, 100);\n    move(myRect, 0, a, 100);\n}\n",
+    "Comment": "Sejt program, hvor det ligner der tegnes en sort streg efter firkant",
+    "exceptionType": ""
   }
   
 ]
