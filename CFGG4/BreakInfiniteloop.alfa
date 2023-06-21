@@ -1,0 +1,14 @@
+rect myRect = createRect(300, 300, 100, 100);
+
+int i = 0;
+loop (int j from 0..i) {
+    i = j+1;
+    
+    move(myRect, 0, 40, 200);
+    wait(100);
+    if (j > 5) {
+        j = j + 2;
+    }
+}
+
+move(myRect, 100, 0, 400);
