@@ -13,16 +13,16 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     //A function that replaces an id in an expression with the value from the symbol table.
     //int offset = 100; offset = -offset; The value of offset in the symbol table must assume an integer value when this is executed in the same scope
     //otherwise the value can never be retrieved
-    private void addLocalValueToIdInExpr(ExprNode expr, string identifier)
+    private void AddLocalValueToIdInExpr(ExprNode expr, string identifier)
     {
         if (expr.Left is ExprNode leftExpr)
         {
-            addLocalValueToIdInExpr(leftExpr, identifier);
+            AddLocalValueToIdInExpr(leftExpr, identifier);
         }
 
         if (expr.Right is ExprNode rightExpr)
         {
-            addLocalValueToIdInExpr(rightExpr, identifier);
+            AddLocalValueToIdInExpr(rightExpr, identifier);
         }
 
         if (expr.Left is IdNode idNodeLeft)
@@ -119,10 +119,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
 
-            if (assignStmtNode.Value is IdNode assIdNode)
-            {
-                newVarDclNode.AssignStmt = assIdNode;
-            }
             newVarDclNode.AssignStmt = assignStmtNode;
         }
 
@@ -149,7 +145,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         else if (context.expr() != null)
         {
             var expr = Visit((dynamic)context.expr());
-            if(expr is ExprNode exprNode) addLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
+            if(expr is ExprNode exprNode) AddLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
 
             newAssignStmtNode.Value = expr;
         }
@@ -391,8 +387,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         Dictionary<string, List<Node>> shapesToCompare = new Dictionary<string, List<Node>>();
         
         foreach(BuiltInParalAnimCallNode callNode in paralBlock.Statements) {
-            if (callNode.Arguments[0] is IdNode idArg) {
-                if (!shapesToCompare.ContainsKey(idArg.Identifier)) {
+            if (callNode.Arguments[0] is IdNode idArg)
+            {
+                string derivedId = TryDeriveIdInAssignment(idArg.Identifier);
+                if (!shapesToCompare.ContainsKey(idArg.Identifier) && !shapesToCompare.ContainsKey(derivedId)) {
                     shapesToCompare.Add(idArg.Identifier, callNode.Arguments);
                 }
                 else {
@@ -402,10 +400,25 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         }
     }
 
+    private string TryDeriveIdInAssignment(string identifier)
+    {
+        var id = identifier;
+        
+        var symVal = _symbolTable.RetrieveSymbol(identifier)?.Value;
+        if (symVal is IdNode symIdNode)
+        {
+            id = symIdNode.Identifier;
+            return TryDeriveIdInAssignment(id);
+        }
+        return id;
+    }
+
     private void TryMergeProperties(Dictionary<string, List<Node>> shapesToCompare, List<Node> newCallNodeArgs) {
-        if (newCallNodeArgs[0] is IdNode idArg) {
+        if (newCallNodeArgs[0] is IdNode idArg)
+        {
+            string identifier = TryDeriveIdInAssignment(idArg.Identifier);
             int i = 1;
-            foreach(var dictArg in shapesToCompare[idArg.Identifier].Skip(1))
+            foreach(var dictArg in shapesToCompare[identifier].Skip(1))
             {
                 if (i == newCallNodeArgs.Count - 1) continue;
                 if(dictArg is NumNode numArg && numArg.Value == 0) {}
@@ -418,6 +431,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 }
                 i++;
             }
+
+            shapesToCompare[identifier] = newCallNodeArgs;
         }
     }
 
