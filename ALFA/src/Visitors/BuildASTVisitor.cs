@@ -118,7 +118,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (assignStmtContext != null)
         {
             AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
-
+            assignStmtNode.VarDclParentType = typeEnum; 
             newVarDclNode.AssignStmt = assignStmtNode;
         }
 

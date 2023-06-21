@@ -157,10 +157,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
-        if (assNode.Identifier == "insideRectXMove")
-        {
-            Console.WriteLine("Hello");
-        }
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
         if (idSymbol == null && assNode.Value == null)
         {
@@ -190,12 +186,36 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         if (assNode.Value is IdNode idChildNode)
         {
             Symbol? idSymbolChild = _symbolTable.RetrieveSymbol(idChildNode.Identifier);
-            if (idSymbolChild?.Type != idSymbol.Type)
-                throw new TypeException("Invalid type on line " + assNode.Line + ": " + "column: " + assNode.Col);
+            if (idSymbolChild?.Type != assNode.VarDclParentType || (idSymbol != null && idSymbolChild?.Type != idSymbol.Type))
+                throw new TypeException($"Invalid type {idSymbolChild?.Type} on line: " + assNode.Line + ": " + "column: " + assNode.Col);
         }
-        if(!visitedChild) Visit(assNode.Value);
+
+        if (!visitedChild)
+        {
+            HandleUnvisitedChild(assNode);
+        }
 
         return assNode;
+    }
+
+    private void HandleUnvisitedChild(AssignStmtNode assNode)
+    {
+        Visit(assNode.Value); //This is the unvisited child
+        switch (assNode.Value)
+        {
+            case BoolNode:
+                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@bool)
+                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                break;
+            case NumNode:
+                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@int)
+                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                break;
+            case BuiltInCreateShapeCallNode:
+                if(assNode.VarDclParentType != ALFATypes.TypeEnum.rect)
+                    throw new TypeException($"Invalid type rect on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                break;
+        }
     }
 
     public override IfStmtNode Visit(IfStmtNode ifNode)

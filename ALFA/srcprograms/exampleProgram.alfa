@@ -1,14 +1,25 @@
+#Two rects moving on x-axis
+int LOWERBOUND = 0;
+int UPPERBOUND = 100;
+int len = 20;
+rect myRect1 = createRect(0,0,len,len);
+rect myRect2 = createRect(0,60,len,len);
 
-rect myRect = createRect(300, 300, 100, 100);
+int offsetX1 = 100;
+int offsetX2 = 100;
+int offsetY = 0;
+int duration = 2000;
 
-int i = 0;
-loop (int j from 0..i) {
-    i = j+1;
-    move(myRect, 0, 40, 200);
-    wait(100);
-    if (j > 5) {
-        j = 5000;
+loop(int i from LOWERBOUND..UPPERBOUND) {
+    i = createRect(0,0,len,len);
+    if (i % 2 == 0 and i != 0) {
+        paral {
+            move(myRect1, offsetX1, offsetY, duration);    
+            move(myRect2, offsetX2, offsetY, duration);    
+        }
+        offsetX2 = -offsetX2;
+    } else {
+        move(myRect1, offsetX1, offsetY, duration);
     }
+    offsetX1 = -offsetX1;
 }
-
-move(myRect, 100, 0, 400);
