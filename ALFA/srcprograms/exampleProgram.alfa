@@ -1,5 +1,8 @@
-#Forventer type exception i if. Men i stedet er den truthy
+#Ingen exception, men ikke forventet udfald. Man ville forvente, at myRect flyttede sig diagonalt.
+rect myRect = createRect(300, 300, 100, 100);
+rect myRect2 = myRect;
 
-if (5) {
-
+paral {
+    move(myRect, 100, 0, 600);
+    move(myRect2, 0, 100, 600);
 }

@@ -94,7 +94,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     public override VarDclNode VisitVarDcl(ALFAParser.VarDclContext context)
     {
         VarDclNode newVarDclNode = new VarDclNode(context.Start.Line, context.Start.Column);
-        //TODO program should throw an exception if one of the children is a ErrorNodeImpl.
 
         ALFATypes.TypeEnum typeEnum;
 
@@ -119,6 +118,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         if (assignStmtContext != null)
         {
             AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
+
+            if (assignStmtNode.Value is IdNode assIdNode)
+            {
+                newVarDclNode.AssignStmt = assIdNode;
+            }
             newVarDclNode.AssignStmt = assignStmtNode;
         }
 
@@ -146,7 +150,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         {
             var expr = Visit((dynamic)context.expr());
             if(expr is ExprNode exprNode) addLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
-            
 
             newAssignStmtNode.Value = expr;
         }
