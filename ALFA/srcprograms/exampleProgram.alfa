@@ -1,54 +1,5 @@
-int pos = 200;
+#Forventer type exception i if. Men i stedet er den truthy
 
-rect myRect1 = createRect(pos,pos,10,10);
-rect myRect2 = createRect(pos+100,pos,10,10);
-rect myRect3 = createRect(pos+300,pos,10,10);
-rect myRect4 = createRect(pos+400,pos,10,10);
+if (5) {
 
-int duration1 = 500;
-int pushLength = 10;
-int offSet = 50;
-int fDuration = 100;
-int loopduration1 = 500;
-
-loop(int i from 1 .. 10 ) {    
-    paral{
-        move(myRect1, 20,20, duration1);
-        move(myRect2, 20,20, duration1);
-        move(myRect3, 20,20, duration1);
-        move(myRect4, 20,20, duration1);
-    }
-    
-    loop(int j from 1 .. 2) {
-       paral{
-         move(myRect1,offSet ,0, loopduration1);
-         move(myRect2,offSet ,0, loopduration1);
-         move(myRect3,offSet ,0, loopduration1);
-         move(myRect4,offSet ,0, loopduration1);
-        }
-         paral{
-         move(myRect1,0 ,offSet, loopduration1);
-         move(myRect2,0 ,offSet, loopduration1);
-         move(myRect3,0 ,offSet, loopduration1);
-         move(myRect4,0 ,offSet, loopduration1);
-         }
-        
-        paral{
-         move(myRect1,-offSet ,0 ,loopduration1);
-         move(myRect2,-offSet ,0 ,loopduration1);
-         move(myRect3,-offSet ,0 ,loopduration1);
-         move(myRect4,-offSet ,0 ,loopduration1);
-        }
-        paral{
-         move(myRect1,0 ,-offSet, loopduration1);
-         move(myRect2,0 ,-offSet, loopduration1);
-         move(myRect3,0 ,-offSet, loopduration1);
-         move(myRect4,0 ,-offSet, loopduration1);
-        }
-    }
 }
-    
-    move(myRect1,10*(-20), 10*(-20), fDuration);
-    move(myRect2, 10*(-20), 10*(-20), fDuration);
-    move(myRect3, 10*(-20),10*(-20), fDuration);
-    move(myRect4, 10*(-20), 10*(-20), fDuration);
