@@ -6,5 +6,4 @@ rect myRect3 = myRect2;
 paral {
     move(myRect, 100, 0, 600);
     move(myRect2, 0, 100, 600);
-    move(myRect3, 0, 100, 600);
 }

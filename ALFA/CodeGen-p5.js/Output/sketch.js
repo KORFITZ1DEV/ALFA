@@ -66,11 +66,15 @@ async function moveParal(animations) {
 
 
 async function main() {
-	let var_Rect1=new Rect(100,100,100,100)
+	let var_myRect=new Rect(300,300,100,100)
+	let var_myRect2=var_myRect
+	let var_myRect3=var_myRect2
 
-	await var_Rect1.move(200,0,4000);
+	await moveParal([		
+		() => var_myRect.move(100,0,600),
+		() => var_myRect2.move(100,100,600),	
+	]);
 
-	await wait(300);
 }
 
 function setup() {
