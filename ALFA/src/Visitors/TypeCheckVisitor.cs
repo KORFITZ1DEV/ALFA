@@ -246,7 +246,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
             if (symbol == null)
             {
-                throw new UndeclaredVariableException( $"An undeclared variable {idNode.LocalValue} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
+                throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
             }
             Visit((dynamic)symbol.Value);
 
