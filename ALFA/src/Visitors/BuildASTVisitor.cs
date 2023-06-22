@@ -45,6 +45,33 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         
     }
 
+    private void AddBuiltInCallArguments<T>(ALFAParser.ExprContext[] exprCtxs, AnimCallNode<T> builtInAnimCallNodeNode)
+    {
+        foreach (var exprCtx in exprCtxs)
+        {
+            var expr = Visit((dynamic)exprCtx);
+
+            switch (expr)
+            {
+                case IdNode idNode:
+                    string id = idNode.Identifier;
+                    Symbol? sym = _symbolTable.RetrieveSymbol(id);
+                    if (sym == null)
+                        throw new UndeclaredVariableException($"Variable {id} not declared at line {exprCtx.Start.Line}:{exprCtx.Start.Column}");
+                    builtInAnimCallNodeNode.Arguments.Add(idNode);
+                    break;
+                case NumNode numNode:
+                    builtInAnimCallNodeNode.Arguments.Add(numNode);
+                    break;
+                case BoolNode boolNode:
+                    throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInAnimCallNodeNode.Type.ToString()} on line " + boolNode.Line + ":" + boolNode.Col);
+                default:
+                    builtInAnimCallNodeNode.Arguments.Add(expr);
+                    break;
+            }
+        }
+    }
+
     public BuildASTVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
@@ -68,13 +95,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             return VisitVarDcl(context.varDcl());
 
         if (context.assignStmt() != null)
-        {
-            AssignStmtNode assignmentNode = VisitAssignStmt(context.assignStmt());
-            Symbol symbol = _symbolTable.RetrieveSymbol(assignmentNode.Identifier);
-            if (symbol == null)
-                throw new UndeclaredVariableException($"You are trying to assign a value to variable called {assignmentNode.Identifier} that is undeclared on line {assignmentNode.Line} column {assignmentNode.Col}");
-            return assignmentNode;
-        }
+            return VisitAssignStmt(context.assignStmt());
 
         if (context.builtInAnimCall() != null)
             return VisitBuiltInAnimCall(context.builtInAnimCall());
@@ -115,12 +136,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         newVarDclNode.Type = typeEnum;
 
         ALFAParser.AssignStmtContext assignStmtContext = context.assignStmt();
-        if (assignStmtContext != null)
-        {
-            AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
-            assignStmtNode.VarDclParentType = typeEnum; 
-            newVarDclNode.AssignStmt = assignStmtNode;
-        }
+        AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
+        
+        assignStmtNode.VarDclParentType = typeEnum; 
+        newVarDclNode.AssignStmt = assignStmtNode;
 
         string id = newVarDclNode.AssignStmt.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
@@ -136,6 +155,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         AssignStmtNode newAssignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
         newAssignStmtNode.Identifier = context.ID().GetText();
+        
         if (context.builtInCreateShapeCall() != null)
         {
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
@@ -179,35 +199,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         BuiltInAnimCallNode builtInAnimCallNodeNode = new BuiltInAnimCallNode(builtInAnimEnum, new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.actualParams() != null)
-        {
-            int i = 0;
-            foreach (var exprCtx in context.actualParams().expr())
-            {
-                var expr = Visit((dynamic)exprCtx);
-
-                switch (expr)
-                {
-                    case IdNode idNode:
-                        string id = idNode.Identifier;
-                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
-                        if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {exprCtx.Start.Line}:{exprCtx.Start.Column}");
-                        builtInAnimCallNodeNode.Arguments.Add(idNode);
-                        break;
-                    case NumNode numNode:
-                        builtInAnimCallNodeNode.Arguments.Add(numNode);
-                        break;
-                    case BoolNode boolNode:
-                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInAnimCallNodeNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
-                    default:
-                        builtInAnimCallNodeNode.Arguments.Add(expr);
-                        break;
-                }
-
-                i++;
-            }
-        }
-
+            AddBuiltInCallArguments(context.actualParams().expr(), builtInAnimCallNodeNode);
+            
         return builtInAnimCallNodeNode;
     }
 
@@ -228,31 +221,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         BuiltInParalAnimCallNode builtInParalAnimCallNodeNode = new BuiltInParalAnimCallNode(builtInParalAnimEnum, new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.actualParams() != null)
-        {
-            foreach (var exprCtx in context.actualParams().expr())
-            {
-                var expr = Visit((dynamic)exprCtx);
-
-                switch (expr)
-                {
-                    case IdNode idNode:
-                        string id = idNode.Identifier;
-                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
-                        if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {expr.Line}:{expr.Col}");
-                        builtInParalAnimCallNodeNode.Arguments.Add(idNode);
-                        break;
-                    case NumNode numNode:
-                        builtInParalAnimCallNodeNode.Arguments.Add(numNode);
-                        break;
-                    case BoolNode boolNode:
-                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInParalAnimCallNodeNode.Type.ToString()} on line " + expr.Line + ":" + expr.Column);
-                    default:
-                        builtInParalAnimCallNodeNode.Arguments.Add(expr);
-                        break;
-                }
-            }
-        }
+            AddBuiltInCallArguments(context.actualParams().expr(), builtInParalAnimCallNodeNode);
 
         return builtInParalAnimCallNodeNode;
     }
@@ -278,33 +247,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         BuiltInCreateShapeCallNode builtInCreateShapeCallNode = new BuiltInCreateShapeCallNode(createShapeEnum, new List<Node>(), context.Start.Line, context.Start.Column);
 
         if (context.actualParams() != null)
-        {
-            foreach (var exprCtx in context.actualParams().expr())
-            {
-                var expr = Visit((dynamic)exprCtx);
-
-                switch (expr)
-                {
-                    case IdNode idNode:
-                        string id = idNode.Identifier;
-                        Symbol? sym = _symbolTable.RetrieveSymbol(id);
-                        if (sym == null)
-                            throw new UndeclaredVariableException($"Variable {id} not declared at line {exprCtx.Start.Line}:{exprCtx.Start.Column}");
-
-                        builtInCreateShapeCallNode.Arguments.Add(idNode);
-                        break;
-                    case NumNode numNode:
-                        int value = numNode.Value;
-                        builtInCreateShapeCallNode.Arguments.Add(numNode);
-                        break;
-                    case BoolNode boolNode:
-                        throw new TypeException($"Boolean type {boolNode.Value} is not allowed in {builtInCreateShapeCallNode.Type.ToString()} on line " + exprCtx.Start.Line + ":" + exprCtx.Start.Column);
-                    default:
-                        builtInCreateShapeCallNode.Arguments.Add(expr);
-                        break;
-                }
-            }
-        }
+            AddBuiltInCallArguments(context.actualParams().expr(), builtInCreateShapeCallNode);
 
         return builtInCreateShapeCallNode;
     }
@@ -509,7 +452,4 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         return new BoolNode(Boolean.Parse(context.@bool().GetText()), context.Start.Line, context.Start.Column);
     }
-    
-
-
 }
