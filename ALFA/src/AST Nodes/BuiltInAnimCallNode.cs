@@ -2,14 +2,12 @@ using ALFA.Types;
 
 namespace ALFA.AST_Nodes;
 
-public class BuiltInAnimCallNode : Node
+public class BuiltInAnimCallNode : AnimCallNode<ALFATypes.BuiltInAnimEnum>
 {
-    public ALFATypes.BuiltInAnimEnum Type { get; set; }
-    public List<Node> Arguments { get; set; }
+    public override ALFATypes.BuiltInAnimEnum Type { get; set; }
 
-    public BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum type, List<Node> arguments, int line, int col) : base(line, col)
+    public BuiltInAnimCallNode(ALFATypes.BuiltInAnimEnum type, List<Node> arguments, int line, int col) : base(line, col, arguments)
     {
         Type = type;
-        Arguments = arguments;
     }
 }
