@@ -9,7 +9,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 {
     private SymbolTable _symbolTable;
     
-//TODO move typecheck vardcl here
     public TypeCheckVisitor(SymbolTable symbolTable)
     {
         _symbolTable = symbolTable;
@@ -24,12 +23,63 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return node;
     }
 
-    private void typeCheckIdNodeVarDcl(IdNode idNode, ALFATypes.TypeEnum type)
+    private void TypeCheckIdNodeVarDcl(IdNode idNode, ALFATypes.TypeEnum type)
     {
         Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-        if (symbol.Type != type)
+        if (symbol != null && symbol.Type != type)
         {
             throw new TypeException($"You are assigning something of type {symbol.Type} on line {symbol.LineNumber} column {symbol.ColumnNumber} to a variable of type {type.ToString()}");
+        }
+    }
+
+    private void TypeCheckArgsInAnimCallNode<T>(AnimCallNode<T> node)
+    {
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
+
+        if (node.Arguments.Count != nodeFormalParameters.Count)
+        {
+            throw new InvalidNumberOfArgumentsException(
+                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
+        }
+        
+        int i = 0;
+        foreach (var actualParam in node.Arguments)
+        {
+            TypeCheckArgNode<T>(actualParam, i++, node);
+        }
+    }
+
+    private void TypeCheckArgNode<T>(Node actualParam, int i, AnimCallNode<T> node)
+    {
+        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
+        switch (actualParam)
+        {
+            case IdNode idNode:
+                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                if (idSymbol != null)
+                {
+                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()!][i])
+                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
+                    TypeCheckArgNode<T>(idSymbol.Value, i, node);
+                }
+                break;
+            
+            case NumNode numNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@int:
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+            
+            case NumNode numNode when i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && numNode.Value <= 0:
+                throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {numNode.Line} column {numNode.Col}");
+            
+            case BoolNode boolNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@bool:
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@bool} on line {boolNode.Line}:{boolNode.Col}");
+            
+            case ExprNode exprNode:
+                Visit(exprNode);
+                if (i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
+                {
+                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
+                }
+                break;
         }
     }
     
@@ -40,7 +90,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (node.AssignStmt.Value is IdNode idNode)
         {
-            typeCheckIdNodeVarDcl(idNode, node.Type);
+            TypeCheckIdNodeVarDcl(idNode, node.Type);
         }
         
         return node;
@@ -48,90 +98,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override BuiltInAnimCallNode Visit(BuiltInAnimCallNode node)
     {
-        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
-
-        if (node.Arguments.Count != nodeFormalParameters.Count)
-        {
-            throw new InvalidNumberOfArgumentsException(
-                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
-        }
-
-        int i = 0;
-        foreach (var actualParam in node.Arguments)
-        {
-            if (actualParam is IdNode idNode)
-            {
-                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-                if (idSymbol != null)
-                {
-                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
-                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
-
-                    if (i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1)
-                    {
-                        if(idSymbol.Value is AssignStmtNode assStmt && assStmt.Value is NumNode numNode && numNode.Value <= 0) 
-                            throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
-                        else if (idSymbol.Value is NumNode numNode1 && numNode1.Value <= 0)
-                        {
-                            throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {idSymbol.LineNumber} column {idSymbol.ColumnNumber}");
-                        }
-                    }
-                }
-            }
-            else if (actualParam is NumNode numNode)
-            {
-                if (nodeFormalParameters[i] != ALFATypes.TypeEnum.@int)
-                    throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
-                if(i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1 && numNode.Value <= 0) 
-                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {numNode.Line} column {numNode.Col}");
-
-            }
-            else if (actualParam is ExprNode exprNode)
-            {
-                Visit(exprNode);
-                if (i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
-                {
-                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
-                }
-            }
-            i++;
-        }
+        TypeCheckArgsInAnimCallNode<ALFATypes.BuiltInAnimEnum>(node);
         return node;
     }
 
     public override Node Visit(BuiltInParalAnimCallNode node)
     {
-        List<ALFATypes.TypeEnum> nodeFormalParameters = FormalParameters.FormalParams[node.Type.ToString()];
-
-        if (node.Arguments.Count != nodeFormalParameters.Count)
-        {
-            throw new InvalidNumberOfArgumentsException(
-                $"Invalid number of arguments to {node.Type.ToString()}, expected {nodeFormalParameters.Count} but got {node.Arguments.Count} arguments");
-        }
-
-        int i = 0;
-        foreach (var actualParam in node.Arguments)
-        {
-            if (actualParam is IdNode idNode)
-            {
-                Visit(actualParam); //Not needed now but it is more extensible
-                Symbol? idSymbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-                if (idSymbol != null)
-                {
-                    if (idSymbol.Type != FormalParameters.FormalParams[node.Type.ToString()][i])
-                        throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
-                }
-            }
-            else if (actualParam is ExprNode exprNode)
-            {
-                Visit(exprNode);
-                if (i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
-                {
-                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
-                }
-            }
-            i++;
-        }
+        TypeCheckArgsInAnimCallNode<ALFATypes.BuiltInParalAnimEnum>(node);
         return node;
     }
 
@@ -157,6 +130,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     if (idSymbol.Type != FormalParameters.FormalParams[callNode.Type.ToString()][i])
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
+
+                TypeCheckIdNodeVarDcl(idNode, FormalParameters.FormalParams[callNode.Type.ToString()][i]);
             }
             i++;
         }
@@ -166,10 +141,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
-        if (idSymbol == null && assNode.Value == null)
-        {
-            throw new UndeclaredVariableException( $"An undeclared variable {assNode.Identifier} is attempted to be assigned on line: {assNode.Line} column: {assNode.Col}");
-        }
         bool visitedChild = false;
         
         if (assNode.Value is ExprNode exprValue)
@@ -193,9 +164,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (assNode.Value is IdNode idChildNode)
         {
-            Symbol? idSymbolChild = _symbolTable.RetrieveSymbol(idChildNode.Identifier);
-            if (idSymbolChild?.Type != assNode.VarDclParentType || (idSymbol != null && idSymbolChild?.Type != idSymbol.Type))
-                throw new TypeException($"Invalid type {idSymbolChild?.Type} on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+            TypeCheckIdNodeVarDcl(idChildNode, assNode.VarDclParentType);
         }
 
         if (!visitedChild)
