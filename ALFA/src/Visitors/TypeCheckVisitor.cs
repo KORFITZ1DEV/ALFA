@@ -26,7 +26,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     private void TypeCheckIdNodeVarDcl(IdNode idNode, ALFATypes.TypeEnum type)
     {
         Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-        if (symbol.Type != type)
+        if (symbol != null && symbol.Type != type)
         {
             throw new TypeException($"You are assigning something of type {symbol.Type} on line {symbol.LineNumber} column {symbol.ColumnNumber} to a variable of type {type.ToString()}");
         }
@@ -130,6 +130,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     if (idSymbol.Type != FormalParameters.FormalParams[callNode.Type.ToString()][i])
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
+
+                TypeCheckIdNodeVarDcl(idNode, FormalParameters.FormalParams[callNode.Type.ToString()][i]);
             }
             i++;
         }
@@ -162,9 +164,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         if (assNode.Value is IdNode idChildNode)
         {
-            Symbol? idSymbolChild = _symbolTable.RetrieveSymbol(idChildNode.Identifier);
-            if (idSymbolChild?.Type != assNode.VarDclParentType || (idSymbol != null && idSymbolChild?.Type != idSymbol.Type))
-                throw new TypeException($"Invalid type {idSymbolChild?.Type} on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+            TypeCheckIdNodeVarDcl(idChildNode, assNode.VarDclParentType);
         }
 
         if (!visitedChild)
