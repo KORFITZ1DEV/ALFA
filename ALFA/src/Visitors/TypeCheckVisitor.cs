@@ -122,6 +122,14 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                         throw new ArgumentTypeException($"Invalid type, expected {nodeFormalParameters[i]} but got {idSymbol.Type} on line {idNode.Line}:{idNode.Col}");
                 }
             }
+            else if (actualParam is ExprNode exprNode)
+            {
+                Visit(exprNode);
+                if (i == FormalParameters.FormalParams[node.Type.ToString()].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
+                {
+                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
+                }
+            }
             i++;
         }
         return node;
@@ -172,12 +180,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 idSymbol.Value = exprValue;   
             }
             visitedChild = true;
-            switch (exprValue.Value.GetType().ToString())
+            switch (exprValue.Value)
             {
-                case "NumNode":
+                case NumNode:
                     if (idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
-                case "BoolNode":
+                case BoolNode:
                     if (idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
             }
@@ -240,6 +248,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             case NumNode:
                 typeIncorrect = true;
                 break;
+            case IdNode idNode:
+                var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
+                    typeIncorrect = true;
+                break;
+                
         }
         if (typeIncorrect) throw new TypeException("Condition in if-statement did not evaluate to a boolean on line " + ifNode.Expressions[0].Line + " column: " + ifNode.Expressions[0].Col);
 
