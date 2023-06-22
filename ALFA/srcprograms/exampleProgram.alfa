@@ -1,5 +1,4 @@
-#While loop
-rect myRect = createRect(100, 100, 100, 100);
+#rect myRect = createRect(100, 100, 100, 100);
 
 if(myRect) {
 }

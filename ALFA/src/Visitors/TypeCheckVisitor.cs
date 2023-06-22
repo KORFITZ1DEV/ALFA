@@ -183,10 +183,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             switch (exprValue.Value)
             {
                 case NumNode:
-                    if (idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@int && idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
                 case BoolNode:
-                    if (idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@bool && idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
             }
         }
@@ -252,6 +252,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
                 if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
                     typeIncorrect = true;
+                else if (symbol == null)
+                    throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
                 break;
                 
         }
