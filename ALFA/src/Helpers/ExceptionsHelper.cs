@@ -3,61 +3,72 @@ using System.Diagnostics.CodeAnalysis;
 namespace ALFA;
 
 [ExcludeFromCodeCoverage]
-public class TypeException : Exception
+public class AlfaException : Exception
+{
+    public AlfaException(string message) : base(message){}
+
+    public override string StackTrace
+    {
+        get { return ""; } // remove stacktrace
+    }
+}
+
+[ExcludeFromCodeCoverage]
+public class TypeException : AlfaException
 {
     public TypeException(string message)
         : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class ArgumentTypeException : Exception
+public class ArgumentTypeException : AlfaException
 {
     public ArgumentTypeException(string message)
         : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class InvalidNumberOfArgumentsException : Exception
+public class InvalidNumberOfArgumentsException : AlfaException
 {
     public InvalidNumberOfArgumentsException(string message)
         : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class UnknownBuiltinException : Exception
+public class UnknownBuiltinException : AlfaException
 {
     public UnknownBuiltinException(string message)
         : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class UndeclaredVariableException : Exception
+public class UndeclaredVariableException : AlfaException
 {
     public UndeclaredVariableException(string message)
         : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class VariableAlreadyDeclaredException : Exception
+public class VariableAlreadyDeclaredException : AlfaException
 {
     public VariableAlreadyDeclaredException(string message) : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class SyntacticException : Exception
+public class SyntacticException : AlfaException
 {
     public SyntacticException(string message) : base(message){
     }
 }
 
 [ExcludeFromCodeCoverage]
-public class NonPositiveAnimationDurationException : Exception
+public class NonPositiveAnimationDurationException : AlfaException
 {
     public NonPositiveAnimationDurationException(string message) : base(message){}
 }
 
 [ExcludeFromCodeCoverage]
-public class AttemptingToChangePropertyOfSameShapeInParalException: Exception
+public class AttemptingToChangePropertyOfSameShapeInParalException: AlfaException
 {
     public AttemptingToChangePropertyOfSameShapeInParalException(string message) : base(message){}
 }

@@ -91,18 +91,49 @@
    },  
    {
      "Prog": "#Forventes DurationException\n\nrect middleRect = createRect(250, 100, 100, 200);\nrect movingRect = createRect(100, 100, 100, 100);\n\nloop (int i from 0..4) {\n    move(movingRect, 150, 0, 500);\n    wait(300);\n    move(movingRect, 0, 100, 1 - 1);\n    move(movingRect, 150, 0, 500);\n    move(movingRect, -150, 0, 500);\n    wait(300);\n    move(movingRect, 0, -100, 1 - 1);\n    move(movingRect, -150, 0, 500);\n}\n",
-     "Comment": "Forventer at der kastes en NonPositiveAnimationDurationException, da duration i move sættes til 1 - 1",
+     "Comment": "Forventer at der kastes en NonPositiveAnimationDurationException, da duration i move sættes til en expr: 1 - 1",
+     "ExceptionType": "NonPositiveAnimationDurationException"
+   },   
+  {
+     "Prog": "#Forventes DurationException\n\n wait(1 - 1);",
+     "Comment": "Forventer at der kastes en NonPositiveAnimationDurationException, da duration i wait sættes til en expr: 1 - 1",
      "ExceptionType": "NonPositiveAnimationDurationException"
    },  
    {
-     "Prog": "#Forventer undeclared variable fejl, men giver i stedet object reference not set to an instance of an object \n\nrect middleRect = createRect(250, 100, 100, 200);\nrect movingRect = createRect(100, 100, 100, 100);\n\nloop (int j from 0..3) {\n\n}\n\nloop (int i from 0..j) {\n    move(movingRect, 150, 0, 500);\n    wait(300);\n    move(movingRect, 0, 100, 1 - 1);\n    move(movingRect, 150, 0, 500);\n    move(movingRect, -150, 0, 500);\n    wait(300);\n    move(movingRect, 0, -100, 1 - 1);\n    move(movingRect, -150, 0, 500);\n}\n",
-     "Comment": "J eksisterer ikke i det scope den forsøgtes at blive anvendt",
+     "Prog": "#Forventer undeclared variable fejl \n\nrect middleRect = createRect(250, 100, 100, 200);\nrect movingRect = createRect(100, 100, 100, 100);\n\nloop (int j from 0..3) {\n\n}\n\nloop (int i from 0..j) {\n    move(movingRect, 150, 0, 500);\n    wait(300);\n    move(movingRect, 0, 100, 1 - 1);\n    move(movingRect, 150, 0, 500);\n    move(movingRect, -150, 0, 500);\n    wait(300);\n    move(movingRect, 0, -100, 1 - 1);\n    move(movingRect, -150, 0, 500);\n}\n",
+     "Comment": "J eksisterer ikke i det scope den forsøges anvendt",
      "ExceptionType": "UndeclaredVariableException"
    },
   {
     "Prog": "#Forventer type exception i if. Men i stedet er den truthy\n\nif (5) {\n\n}",
     "Comment": "Forventer type exception i if",
     "ExceptionType": "TypeException"
+  }, 
+  {
+    "Prog": "#Forventer VariableAlreadyDeclaredException\n\nint i = 0; int i = 2;",
+    "Comment": "Forventer VariableAlreadyDeclaredException",
+    "ExceptionType": "VariableAlreadyDeclaredException"
+  },  
+  {
+    "Prog": "#Forventer VariableAlreadyDeclaredException\n\nint i = 0; int i = 2;",
+    "Comment": "Forventer VariableAlreadyDeclaredException",
+    "ExceptionType": "VariableAlreadyDeclaredException"
+  },
+  {
+    "Prog": "#Forventer Alfa.TypeException\n int myRect = 200;\n\nif(myRect) {\n}\n",
+    "Comment": "Forventer Alfa.TypeException",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "#Forventer Alfa.TypeException\n rect myRect = createRect(100, 100, 100, 100);\n\nif(myRect) {\n}\n",
+    "Comment": "Forventer Alfa.TypeException",
+    "ExceptionType": "TypeException"
+  },
+  {
+    "Prog": "#Forventer UndeclaredVariableException\n #rect myRect = createRect(100, 100, 100, 100);\n\nif(myRect) {\n}\n",
+    "Comment": "Forventer Alfa.UndeclaredVariableException",
+    "ExceptionType": "UndeclaredVariableException"
   }
+  
   
  ]

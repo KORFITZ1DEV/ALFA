@@ -65,7 +65,7 @@
     "exceptionType": ""
   },
   {
-    "Prog": "\nrect myRect = createRect(300, 300, 100, 100);\n\nint i = 0;\nloop (int j from 0..i) {\n    i = j+1;\n    move(myRect, 0, 40, 200);\n    wait(100);\n    if (j > 5) {\n        i = 5000;\n    }\n}\n\nmove(myRect, 100, 0, 400);",
+    "Prog": "\nrect myRect = createRect(300, 300, 100, 100);\n\nint i = 0;\nloop (int j from 0..i) {\n    i = j+1;\n    move(myRect, 0, 40, 200);\n    wait(100);\n    if (j > 5) {\n        i = -1;\n    }\n}\n\nmove(myRect, 100, 0, 400);",
     "Comment": "Man laver infinite loop og forsøger at bryde ud",
     "exceptionType": ""
   },  

@@ -1,5 +1,5 @@
-#Forventer type exception i if. Men i stedet er den truthy
+rect myRect = createRect(100, 100, 100, 100);
 
-if (5) {
-
+loop(int i from 0 .. 0) {
+    move(myRect, 100, 0, 4000);
 }
