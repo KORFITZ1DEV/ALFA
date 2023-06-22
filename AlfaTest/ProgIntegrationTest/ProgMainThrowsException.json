@@ -95,7 +95,7 @@
      "ExceptionType": "NonPositiveAnimationDurationException"
    },   
   {
-     "Prog": "#Forventes DurationException\n\n wait(1-1);",
+     "Prog": "#Forventes DurationException\n\n wait(1 - 1);",
      "Comment": "Forventer at der kastes en NonPositiveAnimationDurationException, da duration i wait sættes til en expr: 1 - 1",
      "ExceptionType": "NonPositiveAnimationDurationException"
    },  
