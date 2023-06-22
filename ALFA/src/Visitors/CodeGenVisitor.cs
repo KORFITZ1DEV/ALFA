@@ -362,7 +362,7 @@ public class CodeGenVisitor : ASTVisitor<Node>
     
     public override Node Visit(BoolNode node)
     {
-        Emit(node.Value.ToString());
+        Emit(node.Value.ToString().ToLower());
         return node;
     }
 
