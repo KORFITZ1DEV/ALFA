@@ -177,19 +177,22 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     private void HandleUnvisitedChild(AssignStmtNode assNode)
     {
+        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
         Visit(assNode.Value); //This is the unvisited child
         switch (assNode.Value)
         {
+            //idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool
+            //Checks if it is incorrect in the symboltable.  
             case BoolNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@bool)
+                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool) && assNode.VarDclParentType != ALFATypes.TypeEnum.@bool)
                     throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case NumNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@int)
+                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int) && assNode.VarDclParentType != ALFATypes.TypeEnum.@int)
                     throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case BuiltInCreateShapeCallNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.rect)
+                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect) && assNode.VarDclParentType != ALFATypes.TypeEnum.rect)
                     throw new TypeException($"Invalid type rect on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
         }
