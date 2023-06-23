@@ -573,7 +573,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     break;
             }
 
-            throw new ArgumentTypeException($"Expected type {type} on line {nodeToCast.Line} column {nodeToCast.Col}");
+            throw new ArgumentTypeException($"Expected type {type} on line {idNode.Line} column {idNode.Col}");
         }
         
         return (T)nodeToCast;
