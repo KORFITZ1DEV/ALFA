@@ -93,6 +93,11 @@
     "Prog": "#Skal ikke kaste nogen fejl\nloop (int a from 0..a+1) {\n    rect myRect = createRect(1+a, 100, 100, 100);\n    move(myRect, 0, a, 100);\n}\n",
     "Comment": "Sejt program, hvor det ligner der tegnes en sort streg efter firkant",
     "exceptionType": ""
+  },  
+  {
+    "Prog": "#Tester at man kan ændre variabel inde i nyt scope og holde styr på typen den har\nbool changedDir = false;\n\nloop (int i from 1 .. 8) {\n    if(!changedDir) {\n        changedDir = true;\n    }\n}\n",
+    "Comment": "Tester at man kan ændre variabel inde i nyt scope og holde styr på typen den har",
+    "exceptionType": ""
   }
   
 ]
