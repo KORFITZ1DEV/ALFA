@@ -463,7 +463,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         switch (op)
         {
             case "and":
-                parent.Operator = "&&";
+                parent.Operator = "and";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "or":
@@ -482,7 +482,17 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         if (left is IdNode idNode) left = VisitSymbol<NumNode>(idNode);
         if (right is IdNode idNode1) left = VisitSymbol<NumNode>(idNode1);
-
+        if (left is ExprNode leftExpr)
+        {
+            EvaluateExpression(leftExpr);
+            left = leftExpr.Value;
+        }        
+        if (right is ExprNode rightExpr)
+        {
+            EvaluateExpression(rightExpr);
+            right = rightExpr.Value;
+        }
+        
         if (left.GetType() != right.GetType()) throw new ArgumentTypeException($"Incompatible type {left.GetType()} in '{op}' expression on line {left.Line} column {left.Col}");
         return new Tuple<Node, Node>(left, right);
     }

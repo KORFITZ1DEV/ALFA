@@ -108,6 +108,11 @@
     "Prog": "#Tester advanced static scoping\n int offset2 = 500 + 200;\nint duration = 500;\n\nloop (int i from 0 .. 20) {\n    int duration = 200;\n    int offset2 = 0;\n    if(1 < 2) {\n        int offset2 = 0;\n    }\n}\n\nwait(offset2);",
     "Comment": "Tester advanced static scoping",
     "exceptionType": ""
+  },
+  {
+    "Prog": "#Tester håndtering af kompliceret expression\n if((1 + 1) == 2 != true and 0 == 0) {\n}\n",
+    "Comment": "Tester håndtering af kompliceret expression",
+    "exceptionType": ""
   }
   
 ]
