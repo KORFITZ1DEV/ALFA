@@ -463,11 +463,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         switch (op)
         {
             case "and":
-                parent.Operator = "and";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "or":
-                parent.Operator = "||";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
                 break;
             case "!":
