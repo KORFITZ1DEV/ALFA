@@ -4,14 +4,11 @@ public class SymbolTable
 {
     public int _depth = 0;
     public Dictionary<string, Symbol> _symbols = new();
-    public List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
 
 
     public void OpenScope()
     {
         _depth++;
-        if (_scopeDisplay.Count != _depth + 1)
-            _scopeDisplay.Add(null);
     }
     public void CloseScope()
     {
@@ -87,20 +84,4 @@ public class SymbolTable
         return sym;
     }
 
-    public bool DeclaredLocally(string name)
-    {
-        bool isDeclaredLocally = false;
-        Symbol? sym = _scopeDisplay[_depth];
-        while (sym != null)
-        {
-            if (sym.Name == name)
-            {
-                isDeclaredLocally = true;
-            }
-
-            sym = sym.PrevSymbol;
-        }
-
-        return isDeclaredLocally; 
-    }
 }

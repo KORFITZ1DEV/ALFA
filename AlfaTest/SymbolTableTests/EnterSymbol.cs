@@ -56,7 +56,6 @@ public class EnterSymbolTestData : IEnumerable<object[]>
         SymbolTable symbolTableRedeclaredSymbol = new SymbolTable();
         symbolTableRedeclaredSymbol._symbols.Add(oldSymbol.Name, oldSymbol);
         symbolTableRedeclaredSymbol._depth++;
-        symbolTableRedeclaredSymbol._scopeDisplay.Add(null);
 
         yield return new object[]
         {
@@ -81,7 +80,6 @@ public class RedeclaredVariableExceptionTestData : IEnumerable<object[]>
         newSymbol1.PrevSymbol = oldSymbol;
         SymbolTable symbolTableRedeclaredSymbol = new SymbolTable();
         symbolTableRedeclaredSymbol._symbols.Add(oldSymbol.Name, oldSymbol);
-        symbolTableRedeclaredSymbol._scopeDisplay.Add(null);
         
         yield return new object[]
         {

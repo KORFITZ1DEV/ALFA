@@ -212,7 +212,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             idSymbol.Value = assNode.Value;
         }
 
-
     }
 
     public override IfStmtNode Visit(IfStmtNode ifNode)
