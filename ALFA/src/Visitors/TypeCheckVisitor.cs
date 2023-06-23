@@ -65,19 +65,19 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 break;
             
             case NumNode numNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@int:
-                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {node.Arguments[i].Line}:{node.Arguments[i].Col}");
             
             case NumNode numNode when i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && numNode.Value <= 0:
-                throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {numNode.Line} column {numNode.Col}");
+                throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {node.Arguments[i].Line} column {node.Arguments[i].Col}");
             
             case BoolNode boolNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@bool:
-                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@bool} on line {boolNode.Line}:{boolNode.Col}");
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@bool} on line {node.Arguments[i].Line}:{node.Arguments[i].Col}");
             
             case ExprNode exprNode:
                 Visit(exprNode);
                 if (i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
                 {
-                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
+                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {node.Arguments[i].Line} column {node.Arguments[i].Col}");
                 }
                 break;
         }
@@ -86,7 +86,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override Node Visit(VarDclNode node)
     {
+        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
+        {
+            _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, node.Type,
+                node.AssignStmt.Line, node.AssignStmt.Col));
+        }
         Visit(node.AssignStmt);
+
 
         if (node.AssignStmt.Value is IdNode idNode)
         {
@@ -140,7 +146,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
-        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
+        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier); 
+        if(idSymbol != null && idSymbol.Depth < _symbolTable._depth) 
+            _symbolTable.EnterSymbol(new Symbol(assNode.Identifier, assNode.Value, assNode.VarDclParentType, assNode.Line, assNode.Col));
+
+
         bool visitedChild = false;
         
         if (assNode.Value is ExprNode exprValue)
@@ -154,10 +164,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             switch (exprValue.Value)
             {
                 case NumNode:
-                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@int && idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
                 case BoolNode:
-                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@bool && idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
             }
         }
@@ -184,18 +194,25 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             //idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool
             //Checks if it is incorrect in the symboltable.  
             case BoolNode:
-                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool) && assNode.VarDclParentType != ALFATypes.TypeEnum.@bool)
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool)
                     throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case NumNode:
-                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int) && assNode.VarDclParentType != ALFATypes.TypeEnum.@int)
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int)
                     throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case BuiltInCreateShapeCallNode:
-                if((idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect) && assNode.VarDclParentType != ALFATypes.TypeEnum.rect)
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect)
                     throw new TypeException($"Invalid type rect on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
         }
+
+        if(idSymbol != null)
+        {
+            idSymbol.Value = assNode.Value;
+        }
+
+
     }
 
     public override IfStmtNode Visit(IfStmtNode ifNode)
@@ -207,7 +224,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         foreach (var block in ifNode.Blocks)
         {
+            _symbolTable.OpenScope();
             Visit(block);
+            _symbolTable.CloseScope();
         }
 
         
@@ -246,11 +265,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
-        Symbol loopVar = new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, 25, 25 );
-        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
-        {
-            _symbolTable.EnterSymbol(loopVar);
-        }
+        if(_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) 
+            _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, node.AssignStmt.Line, node.AssignStmt.Col));
+
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)

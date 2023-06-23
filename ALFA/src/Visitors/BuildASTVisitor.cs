@@ -174,7 +174,10 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         string id = newAssignStmtNode.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null)
+        {
             symbol.Value = newAssignStmtNode.Value;
+            newAssignStmtNode.VarDclParentType = symbol.Type;
+        }
 
         return newAssignStmtNode;
     }
@@ -269,7 +272,6 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
             foreach (var stmtCtx in context.block(i).stmt())
             {
                 block.Statements.Add(Visit(stmtCtx));
-                
             }
             blocks.Add(block);
             _symbolTable.CloseScope();

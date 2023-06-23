@@ -15,27 +15,31 @@ public class SymbolTable
     }
     public void CloseScope()
     {
-        Symbol? sym = _scopeDisplay[_depth];
-        bool removedSymbol = false;
-        Symbol? origSym = _scopeDisplay[_depth];
-        while (sym != null)
+        List<KeyValuePair<string, Symbol>> keyValuePairs = new List<KeyValuePair<string, Symbol>>();
+        foreach (var kvp in _symbols)
         {
-            Symbol? prevSymbol = sym.PrevSymbol;
-            // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
-            // it should be added to the dictionary symbols dictionary.
-            if (prevSymbol != null)
-            {
-                _symbols.Remove(sym.Name);
-                removedSymbol = true;
-                _symbols.Add(prevSymbol.Name, prevSymbol); 
-            }
-
-            sym = prevSymbol;
+            keyValuePairs.Add(kvp);
         }
 
-        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
+        foreach (var symbolKvp in keyValuePairs)
+        {
+            var sym = symbolKvp.Value; 
+            Symbol? prevSymbol = sym.PrevSymbol;
 
+            //If a variable is equal or higher than current depth then the symbol must be removed.
+            if (sym.Depth >= _depth)
+            {
+                _symbols.Remove(sym.Name);
+                // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
+                // it should be added to the dictionary symbols dictionary.
+                if (prevSymbol != null)
+                {
+                    _symbols.Add(prevSymbol.Name, prevSymbol); 
+                }
+            }
+        }
         _depth--;
+
     }
     
     public void EnterSymbol(Symbol symbol)
@@ -47,10 +51,6 @@ public class SymbolTable
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         }
 
-        Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.Type, symbol.LineNumber, symbol.ColumnNumber);
-        newSymbol.Depth = _depth;
-        _scopeDisplay[_depth] = newSymbol;
-
         //If there is a variable declared with the same name on a lower depth
         if (oldSymbol == null || oldSymbol.Depth < _depth) 
         {
@@ -59,12 +59,14 @@ public class SymbolTable
                 oldSymbol = _symbols[symbol.Name];
                 _symbols.Remove(symbol.Name);
             }
-            _symbols.Add(symbol.Name, newSymbol);
+
+            symbol.Depth = _depth; //Need to assign correct depth
+            _symbols.Add(symbol.Name, symbol);
         }
 
         //Sets the oldSymbol with the same name as the newSymbol to be the PrevSymbol
         //because newSymbol is in the nearest scope with the name.
-        newSymbol.PrevSymbol = oldSymbol!;
+        symbol.PrevSymbol = oldSymbol!;
     }
 
     public Symbol? RetrieveSymbol(string name) 

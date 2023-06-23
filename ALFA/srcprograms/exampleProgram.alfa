@@ -1,8 +1,58 @@
-bool changedDir = false;
+int initOffsetY = 20;
+int width = 50;
+int duration = 1000;
+int moveX = 200;
+int moveY = 200;
+int xPos = 300;
 
-loop (int j from 1 .. 8) {
-    j = 4;
-    if(!changedDir) {
-        changedDir = true;
+rect myRect1 = createRect(xPos, initOffsetY, width, width);
+rect myRect2 = createRect(xPos-width, initOffsetY, width, width);
+initOffsetY = initOffsetY + width + 10;
+rect myRect3 = createRect(xPos-moveX, initOffsetY, width, width);
+initOffsetY = initOffsetY + width + 10;
+rect myRect4 = createRect(xPos+width, initOffsetY, width, width);
+rect rectInsideRect4 = createRect(xPos+width, initOffsetY, 20, 20);
+initOffsetY = initOffsetY + width - 10;
+
+wait(500);
+loop(int i from 1 .. i+1) {
+    # 2 move right 2 swap place
+    int insideRectXMove = moveX-width-width;
+    if(i % 2 == 0) {
+        insideRectXMove = moveX - width-width-width+20;
+    }
+    paral{
+        move(myRect1, moveX, 0, duration);
+        move(myRect2, -moveX, 0, duration);
+        move(myRect3, moveX-width-width, 0, duration);
+        move(myRect4, moveX-width-width, 0, duration);
+        move(rectInsideRect4, insideRectXMove, 50 - 20, duration);
+    }
+    
+    # 
+    paral {
+        move(myRect1, 0, initOffsetY, duration);
+        move(myRect2, 0, initOffsetY, duration);
+        move(myRect3, 0, initOffsetY - 2*(width + 10), duration);
+        move(myRect4, 0, -initOffsetY + 2*(width + 10), duration);
+        move(rectInsideRect4, 0, -initOffsetY + 2*(width + 10), duration);
+    }
+    
+    #
+    paral{
+        move(myRect1, -moveX, 0, duration);
+        move(myRect2, moveX, 0, duration);
+        move(myRect3, -moveX + width*2, 0, duration);
+        move(myRect4, -moveX + width*2, 0, duration);
+        move(rectInsideRect4, -moveX + width*2 - 20+50, 0, duration);
+    }
+    
+    #    
+    paral{
+        move(myRect1, 0, -initOffsetY, duration);
+        move(myRect2, 0, -initOffsetY, duration);
+        move(myRect3, 0, -initOffsetY + 2*(width + 10), duration);
+        move(myRect4, 0, initOffsetY - 2*(width + 10), duration);
+        move(rectInsideRect4, 0, initOffsetY - 2*(width + 10) - 50 + 20, duration);
     }
 }
