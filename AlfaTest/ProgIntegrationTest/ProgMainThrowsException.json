@@ -133,7 +133,13 @@
     "Prog": "#Forventer UndeclaredVariableException\n #rect myRect = createRect(100, 100, 100, 100);\n\nif(myRect) {\n}\n",
     "Comment": "Forventer Alfa.UndeclaredVariableException",
     "ExceptionType": "UndeclaredVariableException"
+  },
+  {
+    "Prog": "#Forventer UndeclaredVariableException ved typo\n bool changedDir = false;\nint offSet = 5;\n\nif(!changedDir) {\n    offset = -offset;\n}",
+    "Comment": "Forventer Alfa.UndeclaredVariableException fordi der er type i offSet inde i if statement",
+    "ExceptionType": "UndeclaredVariableException"
   }
+  
   
   
  ]

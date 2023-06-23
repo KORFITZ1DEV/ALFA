@@ -1,5 +1,9 @@
+bool changedDir = false;
+int offSet = 5;
 rect myRect = createRect(100, 100, 100, 100);
 
-loop(int i from 0 .. 0) {
-    move(myRect, 100, 0, 4000);
+if(!changedDir) {
+    paral {
+        move(myrect, 100, 100, 100);
+    }
 }

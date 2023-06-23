@@ -202,6 +202,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             Visit((dynamic)expr);
         }
 
+        Visit(ifNode.Blocks[0]);
+
+        
         var typeIncorrect = false;
         switch (ifNode.Expressions[0])
         {
@@ -501,6 +504,9 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public T VisitSymbol<T>(IdNode idNode) where T : Node
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+        if(symbol == null)
+            throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
+
         var nodeToCast = symbol.Value;
 
         if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
@@ -523,6 +529,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         else if (nodeToCast is IdNode idNoLocalVal)
         {
             nodeToCast = VisitSymbol<T>(idNoLocalVal);
+        }
+        else if (nodeToCast is ExprNode exprNodeNoVal)
+        {
+            EvaluateExpression(exprNodeNoVal);
+            nodeToCast = exprNodeNoVal.Value;
         }
         else if (nodeToCast.GetType().ToString() != typeof(T).ToString())
         {
