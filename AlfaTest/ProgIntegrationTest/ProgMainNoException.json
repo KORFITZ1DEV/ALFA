@@ -98,6 +98,11 @@
     "Prog": "#Tester at man kan ændre variabel inde i nyt scope og holde styr på typen den har\nbool changedDir = false;\n\nloop (int i from 1 .. 8) {\n    if(!changedDir) {\n        changedDir = true;\n    }\n}\n",
     "Comment": "Tester at man kan ændre variabel inde i nyt scope og holde styr på typen den har",
     "exceptionType": ""
+  },
+  {
+    "Prog": "#Tester static scoping\n int offset2 = 500 + 200;\nint duration = 500;\n\nloop (int i from 0 .. 20) {\n    int duration = 200;\n    int offset2 = 0;\n}\n\nwait(offset2);",
+    "Comment": "Tester static scoping",
+    "exceptionType": ""
   }
   
 ]
