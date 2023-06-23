@@ -205,35 +205,40 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             Visit((dynamic)expr);
         }
 
-        Visit(ifNode.Blocks[0]);
+        foreach (var block in ifNode.Blocks)
+        {
+            Visit(block);
+        }
 
         
         var typeIncorrect = false;
-        switch (ifNode.Expressions[0])
+        foreach (var expression in ifNode.Expressions)
         {
-            case ExprNode exprNode:
+            switch (expression)
             {
-                if (exprNode.Value is not BoolNode)
+                case ExprNode exprNode:
                 {
-                    typeIncorrect = true;
+                    if (exprNode.Value is not BoolNode)
+                    {
+                        typeIncorrect = true;
+                    }
+                    break;
                 }
-                break;
-            }
-            
-            case NumNode:
-                typeIncorrect = true;
-                break;
-            case IdNode idNode:
-                var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-                if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
-                    typeIncorrect = true;
-                else if (symbol == null)
-                    throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
-                break;
                 
+                case NumNode:
+                    typeIncorrect = true;
+                    break;
+                case IdNode idNode:
+                    var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                    if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
+                        typeIncorrect = true;
+                    else if (symbol == null)
+                        throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
+                    break;
+                    
+            }
+            if (typeIncorrect) throw new TypeException("Condition in if-statement did not evaluate to a boolean on line " + ifNode.Expressions[0].Line + " column: " + ifNode.Expressions[0].Col);
         }
-        if (typeIncorrect) throw new TypeException("Condition in if-statement did not evaluate to a boolean on line " + ifNode.Expressions[0].Line + " column: " + ifNode.Expressions[0].Col);
-
         return ifNode;
     }
 

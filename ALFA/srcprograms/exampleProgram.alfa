@@ -1,6 +1,7 @@
 bool changedDir = false;
 
-loop (int i from 1 .. 8) {
+loop (int j from 1 .. 8) {
+    j = 4;
     if(!changedDir) {
         changedDir = true;
     }
