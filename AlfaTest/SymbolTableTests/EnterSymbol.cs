@@ -15,7 +15,8 @@ public class EnterSymbol
         sut.EnterSymbol(expectedSymbol);
 
         var expectedSymbolSerialized = JsonConvert.SerializeObject(expectedSymbol);
-        var actualSymbolSerialized = JsonConvert.SerializeObject(sut._symbols[expectedSymbol.Name]);
+        var actualSymbolSerialized = JsonConvert.SerializeObject(sut.RetrieveSymbol(expectedSymbol.Name));
+        
         
         Assert.Equal(expectedSymbolSerialized, actualSymbolSerialized);
     }
@@ -54,9 +55,8 @@ public class EnterSymbolTestData : IEnumerable<object[]>
         newSymbol1.Depth = 1;
         newSymbol1.PrevSymbol = oldSymbol;
         SymbolTable symbolTableRedeclaredSymbol = new SymbolTable();
-        symbolTableRedeclaredSymbol._symbols.Add(oldSymbol.Name, oldSymbol);
-        symbolTableRedeclaredSymbol._depth++;
-        symbolTableRedeclaredSymbol._scopeDisplay.Add(null);
+        symbolTableRedeclaredSymbol.EnterSymbol(oldSymbol);
+        symbolTableRedeclaredSymbol.OpenScope();
 
         yield return new object[]
         {
@@ -80,9 +80,9 @@ public class RedeclaredVariableExceptionTestData : IEnumerable<object[]>
         newSymbol1.Depth = 0;
         newSymbol1.PrevSymbol = oldSymbol;
         SymbolTable symbolTableRedeclaredSymbol = new SymbolTable();
-        symbolTableRedeclaredSymbol._symbols.Add(oldSymbol.Name, oldSymbol);
-        symbolTableRedeclaredSymbol._scopeDisplay.Add(null);
-        
+        symbolTableRedeclaredSymbol.EnterSymbol(oldSymbol);
+        symbolTableRedeclaredSymbol.OpenScope();
+
         yield return new object[]
         {
             newSymbol1, symbolTableRedeclaredSymbol

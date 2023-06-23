@@ -19,7 +19,8 @@ public class OpenScope
         for (int i = 0; i < openThisManyScopes; i++)
         {
             _sut.OpenScope();
-            Assert.Null(_sut._scopeDisplay[i]);
+            var currScope = _sut._scopeDisplay.Peek();
+            currScope.Values.ToList().ForEach(Assert.Null);
         }
         
         Assert.Equal(expectedDepth, _sut._depth);

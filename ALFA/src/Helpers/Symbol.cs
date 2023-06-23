@@ -16,7 +16,7 @@ public class Symbol
     public int LineNumber;
     public int ColumnNumber;
 
-    public Symbol? PrevSymbol;
+    public Symbol? PrevSymbol; // for shadowing
 
     public Symbol(string name, Node value, ALFATypes.TypeEnum type, int line, int column)
     {

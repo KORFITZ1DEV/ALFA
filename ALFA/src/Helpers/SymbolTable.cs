@@ -2,72 +2,61 @@ namespace ALFA;
 // Fischer Crafting a Compiler page 292 figure 8.7
 public class SymbolTable
 {
-    public int _depth = 0;
+    public int _depth = -1;
+    public Stack<Dictionary<string, Symbol>>_scopeDisplay = new();
     public Dictionary<string, Symbol> _symbols = new();
-    public List<Symbol?>_scopeDisplay = new() {null};  //open the first scope (Global scope) init with null
 
+    public SymbolTable() => OpenScope();  //open the first scope (Global scope)
 
     public void OpenScope()
     {
+        _scopeDisplay.Push(new());
         _depth++;
-        if (_scopeDisplay.Count != _depth + 1)
-            _scopeDisplay.Add(null);
     }
     public void CloseScope()
     {
-        Symbol? sym = _scopeDisplay[_depth];
-        bool removedSymbol = false;
-        Symbol? origSym = _scopeDisplay[_depth];
-        while (sym != null)
+        _scopeDisplay.Pop();
+        
+        foreach (var symbol in _symbols.Values)
         {
-            Symbol? prevSymbol = sym.PrevSymbol;
-            // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
-            // it should be added to the dictionary symbols dictionary.
-            if (prevSymbol != null)
+            if (symbol.PrevSymbol != null)
             {
-                _symbols.Remove(sym.Name);
-                removedSymbol = true;
-                _symbols.Add(prevSymbol.Name, prevSymbol); 
+                _symbols[symbol.Name] = symbol.PrevSymbol;
+                continue;
             }
-
-            sym = prevSymbol;
+            if (symbol.Depth == _depth) _symbols.Remove(symbol.Name);
         }
-
-        if (!removedSymbol && origSym != null) _symbols.Remove(origSym.Name);
-
+        
         _depth--;
     }
     
     public void EnterSymbol(Symbol symbol)
     {
-        Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
-        if (oldSymbol != null && oldSymbol.Depth == _depth) //
-        {
+        Symbol? oldSymbol = RetrieveSymbol(symbol.Name); // check if symbol already exists
+        if (oldSymbol != null && oldSymbol.Depth == _depth) // if symbol exists in current scope
             throw new VariableAlreadyDeclaredException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
-        }
-
-        Symbol newSymbol = new(symbol.Name, symbol.Value, symbol.Type, symbol.LineNumber, symbol.ColumnNumber);
-        newSymbol.Depth = _depth;
-        _scopeDisplay[_depth] = newSymbol;
-
-        //If there is a variable declared with the same name on a lower depth
-        if (oldSymbol == null || oldSymbol.Depth < _depth) 
+        
+        // no need to construct a new symbol, but still need update depth
+        symbol.Depth = _depth;
+        
+        // if shadowing
+        if (oldSymbol != null && oldSymbol.Depth < _depth)
         {
-            if (_symbols.ContainsKey(symbol.Name))
-            {
-                oldSymbol = _symbols[symbol.Name];
-                _symbols.Remove(symbol.Name);
-            }
-            _symbols.Add(symbol.Name, newSymbol);
+            symbol.PrevSymbol = oldSymbol;
+            _symbols[oldSymbol.Name] = symbol;
+            return;
         }
 
-        //Sets the oldSymbol with the same name as the newSymbol to be the PrevSymbol
-        //because newSymbol is in the nearest scope with the name.
-        newSymbol.PrevSymbol = oldSymbol!;
+        // editing a stack, kinda sucks D:
+        var currScope = _scopeDisplay.Pop();
+        currScope.Add(symbol.Name, symbol);
+        _scopeDisplay.Push(currScope);
+        
+        _symbols.Add(symbol.Name, symbol);
     }
 
-    public Symbol? RetrieveSymbol(string name) 
+    public Symbol? RetrieveSymbol(string name)
     {
         Symbol? sym;
         sym = _symbols.TryGetValue(name, out sym) ? sym : null;
@@ -81,24 +70,7 @@ public class SymbolTable
 
             sym = sym.PrevSymbol;
         }
-
+        
         return sym;
-    }
-
-    public bool DeclaredLocally(string name)
-    {
-        bool isDeclaredLocally = false;
-        Symbol? sym = _scopeDisplay[_depth];
-        while (sym != null)
-        {
-            if (sym.Name == name)
-            {
-                isDeclaredLocally = true;
-            }
-
-            sym = sym.PrevSymbol;
-        }
-
-        return isDeclaredLocally; 
     }
 }
