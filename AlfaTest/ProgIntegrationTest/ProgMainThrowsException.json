@@ -143,8 +143,11 @@
     "Prog": "#Tester evaluering af expressions ved reassignment\n int offset2 = 500 + 200;\noffset2 = 0;\nwait(offset2);",
     "Comment": "Tester evaluering af expressions",
     "exceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
+    "Prog": "#Tester at addition mellem -100 og 100 beregnes til 0\n wait(-100+100);",
+    "Comment": "Tester at addition mellem -100 og 100 beregnes til 0",
+    "exceptionType": "NonPositiveAnimationDurationException"
   }
-  
-  
   
  ]

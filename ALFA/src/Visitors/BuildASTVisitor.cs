@@ -454,7 +454,9 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     }
     public override NumNode VisitNum(ALFAParser.NumContext context)
     {
-        return new NumNode(int.Parse(context.NUM().GetText()), context.Start.Line, context.Start.Column);
+        //The numcontext contains two children when it is a negative number
+        int num = context.children.Count == 2 ? -int.Parse(context.NUM().GetText()) : int.Parse(context.NUM().GetText()); 
+        return new NumNode(num, context.Start.Line, context.Start.Column);
     }
     public override BoolNode VisitBoolean(ALFAParser.BooleanContext context)
     {
