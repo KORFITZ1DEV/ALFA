@@ -42,7 +42,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
                 idNodeRight.LocalValue = symbol.Value;
             }
         }
-        
+
     }
 
     private void AddBuiltInCallArguments<T>(ALFAParser.ExprContext[] exprCtxs, AnimCallNode<T> builtInAnimCallNodeNode)
@@ -137,8 +137,8 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         ALFAParser.AssignStmtContext assignStmtContext = context.assignStmt();
         AssignStmtNode assignStmtNode = VisitAssignStmt(assignStmtContext);
-        
-        assignStmtNode.VarDclParentType = typeEnum; 
+
+        assignStmtNode.VarDclParentType = typeEnum;
         newVarDclNode.AssignStmt = assignStmtNode;
 
         string id = newVarDclNode.AssignStmt.Identifier;
@@ -155,7 +155,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     {
         AssignStmtNode newAssignStmtNode = new AssignStmtNode(context.Start.Line, context.Start.Column);
         newAssignStmtNode.Identifier = context.ID().GetText();
-        
+
         if (context.builtInCreateShapeCall() != null)
         {
             var builtInCreateShapeCall = (BuiltInCreateShapeCallNode)Visit(context.builtInCreateShapeCall());
@@ -165,12 +165,12 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         else if (context.expr() != null)
         {
             var expr = Visit((dynamic)context.expr());
-            if(expr is ExprNode exprNode) AddLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
+            if (expr is ExprNode exprNode) AddLocalValueToIdInExpr(exprNode, newAssignStmtNode.Identifier);
 
             newAssignStmtNode.Value = expr;
         }
 
-        
+
         string id = newAssignStmtNode.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null)
@@ -203,7 +203,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
         if (context.actualParams() != null)
             AddBuiltInCallArguments(context.actualParams().expr(), builtInAnimCallNodeNode);
-            
+
         return builtInAnimCallNodeNode;
     }
 
@@ -231,12 +231,11 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
 
     public override BuiltInCreateShapeCallNode VisitBuiltInCreateShapeCall(ALFAParser.BuiltInCreateShapeCallContext context)
     {
-        string? identifier = null;
         string type = context.builtInCreateShape().GetText();
         ALFATypes.CreateShapeEnum createShapeEnum;
 
         var parent = (ALFAParser.AssignStmtContext)context.Parent;
-        identifier = parent.ID().GetText();
+        string identifier = parent.ID().GetText();
 
         switch (type)
         {
@@ -328,17 +327,21 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return new ParalStmtNode(paralBlock, context.Start.Line, context.Start.Column);
     }
 
-    private void PropertyMerge(ParalBlockNode paralBlock) {
+    private void PropertyMerge(ParalBlockNode paralBlock)
+    {
         Dictionary<string, List<Node>> shapesToCompare = new Dictionary<string, List<Node>>();
-        
-        foreach(BuiltInParalAnimCallNode callNode in paralBlock.Statements) {
+
+        foreach (BuiltInParalAnimCallNode callNode in paralBlock.Statements)
+        {
             if (callNode.Arguments[0] is IdNode idArg)
             {
                 string derivedId = TryDeriveIdInAssignment(idArg.Identifier);
-                if (!shapesToCompare.ContainsKey(idArg.Identifier) && !shapesToCompare.ContainsKey(derivedId)) {
+                if (!shapesToCompare.ContainsKey(idArg.Identifier) && !shapesToCompare.ContainsKey(derivedId))
+                {
                     shapesToCompare.Add(idArg.Identifier, callNode.Arguments);
                 }
-                else {
+                else
+                {
                     TryMergeProperties(shapesToCompare, callNode.Arguments);
                 }
             }
@@ -348,7 +351,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
     private string TryDeriveIdInAssignment(string identifier)
     {
         var id = identifier;
-        
+
         var symVal = _symbolTable.RetrieveSymbol(identifier)?.Value;
         if (symVal is IdNode symIdNode)
         {
@@ -358,20 +361,23 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         return id;
     }
 
-    private void TryMergeProperties(Dictionary<string, List<Node>> shapesToCompare, List<Node> newCallNodeArgs) {
+    private void TryMergeProperties(Dictionary<string, List<Node>> shapesToCompare, List<Node> newCallNodeArgs)
+    {
         if (newCallNodeArgs[0] is IdNode idArg)
         {
             string identifier = TryDeriveIdInAssignment(idArg.Identifier);
             int i = 1;
-            foreach(var dictArg in shapesToCompare[identifier].Skip(1))
+            foreach (var dictArg in shapesToCompare[identifier].Skip(1))
             {
                 if (i == newCallNodeArgs.Count - 1) continue;
-                if(dictArg is NumNode numArg && numArg.Value == 0) {}
+                if (dictArg is NumNode numArg && numArg.Value == 0) { }
                 //If one of the args is a NumNode with value 0 then we know the builtInParalAnimCall is allowed 
-                else if (newCallNodeArgs[i] is NumNode newNumArg && newNumArg.Value == 0) {
+                else if (newCallNodeArgs[i] is NumNode newNumArg && newNumArg.Value == 0)
+                {
                     newCallNodeArgs[i] = dictArg;
                 }
-                else {
+                else
+                {
                     throw new AttemptingToChangePropertyOfSameShapeInParalException($"Attempting to change the same property in a shape is not allowed. Error on line {newCallNodeArgs[i].Line} column {newCallNodeArgs[i].Col}");
                 }
                 i++;

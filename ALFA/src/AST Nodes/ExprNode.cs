@@ -15,7 +15,7 @@ public class ExprNode : Node
         Left = left;
         Right = right;
     }
-    public ExprNode(string op, Node left, int line, int col) : base(line, col)
+    public ExprNode(string op, Node left, int line, int col) : base(line, col) // unary
     {
         Operator = op;
         Left = left;

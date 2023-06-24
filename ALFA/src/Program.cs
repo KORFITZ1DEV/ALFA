@@ -15,7 +15,7 @@ namespace ALFA
     [ExcludeFromCodeCoverage]
     public static class Prog
     {
-        
+
         public static void Main(string[] args)
         {
             string input = String.Empty;
@@ -23,8 +23,6 @@ namespace ALFA
 
             if (args.Length == 0)
                 throw new Exception("Missing input arguments. Please provide a .alfa file, example: alfa ./path/to/file.alfa");
-
-
 
             if (args.Contains("--test")) // test mode 
             {
@@ -84,7 +82,7 @@ namespace ALFA
                 throw new SyntacticException($"Something is syntactically incorrect: {syntacticErrorNode.GetText()} on line {syntacticErrorNode.Payload?.ToString()?.Split(",")[3].Split(":")[0]} column {syntacticErrorNode.Payload.ToString().Split(",")[3].Split(":")[1]}");
             }
 
-            SymbolTable symbolTable = new();
+            SymbolTable symbolTable = new SymbolTable();
             BuildASTVisitor visitor = new BuildASTVisitor(symbolTable);
             Node ast = visitor.Visit(tree);
             TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(symbolTable);
@@ -99,7 +97,7 @@ namespace ALFA
 
         private static ErrorNodeImpl? findErrorNode(IParseTree context)
         {
-            
+
             for (int i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
