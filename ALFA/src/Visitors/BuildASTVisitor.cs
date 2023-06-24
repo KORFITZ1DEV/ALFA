@@ -144,7 +144,7 @@ public class BuildASTVisitor : ALFABaseVisitor<Node>
         string id = newVarDclNode.AssignStmt.Identifier;
         var symbol = _symbolTable.RetrieveSymbol(id);
         if (symbol != null && symbol.Depth == _symbolTable._depth)
-            throw new VariableAlreadyDeclaredException($"Variable {id} already declared on line {symbol.LineNumber}:{symbol.ColumnNumber}");
+            throw new VariableAlreadyDeclaredException($"You tried declaring Variable {id} on line {assignStmtNode.Line} column {assignStmtNode.Col} but {id} is already declared on line {symbol.LineNumber}:{symbol.ColumnNumber}");
 
         _symbolTable.EnterSymbol(new Symbol(id, newVarDclNode.AssignStmt.Value, typeEnum, context.Start.Line, context.Start.Column));
 
