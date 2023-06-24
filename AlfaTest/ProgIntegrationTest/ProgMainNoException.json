@@ -113,6 +113,12 @@
     "Prog": "#Tester håndtering af kompliceret expression\n if((1 + 1) == 2 != true and 0 == 0) {\n}\n",
     "Comment": "Tester håndtering af kompliceret expression",
     "exceptionType": ""
+  },
+  {
+    "Prog": "#Tester at der ikke er problemer med unary minus\nif(1-1 <= 2) {}",
+    "Comment": "Tester at der ikke er problemer med unary minus",
+    "exceptionType": ""
   }
+  
   
 ]
