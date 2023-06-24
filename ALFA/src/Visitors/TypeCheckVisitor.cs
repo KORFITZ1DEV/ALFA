@@ -86,7 +86,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override Node Visit(VarDclNode node)
     {
-        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
+        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) //Enter variable in symbol table if it is shadowing outer variable
         {
             _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, node.Type,
                 node.AssignStmt.Line, node.AssignStmt.Col));
@@ -147,7 +147,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier); 
-        if(idSymbol != null && idSymbol.Depth < _symbolTable._depth) 
+        if(idSymbol != null && idSymbol.Depth < _symbolTable._depth) //Enter variable in symbol table if it is shadowing outer variable
             _symbolTable.EnterSymbol(new Symbol(assNode.Identifier, assNode.Value, assNode.VarDclParentType, assNode.Line, assNode.Col));
 
 
@@ -265,7 +265,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
 
-        if(_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) 
+        if(_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) //If the variable is shadowed
             _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, node.AssignStmt.Line, node.AssignStmt.Col));
 
         Visit(node.To);
@@ -536,6 +536,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return new Tuple<T, T>(leftTNode, rightTNode);
     }
 
+    
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
     //whether the identifier's value is a boolean or an integer
     public T VisitSymbol<T>(IdNode idNode) where T : Node
