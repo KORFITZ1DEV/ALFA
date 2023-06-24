@@ -8,18 +8,18 @@ namespace AlfaTest.TypeChecking;
 
 public class VarDclNodeTest
 {
-    private TypeCheckVisitor _sut;
+    private TypeCheckVisitor typeChecker;
     
     
     [Theory]
     [ClassData(typeof(VarDclNodeTestData))]
-    public void FunCallNodeThrowsException(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
+    public void VarDclNodeThrowsTypeExceptionWhenAssignedWrongType(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
     {
-        _sut = new TypeCheckVisitor(symbolTable);
+        typeChecker = new TypeCheckVisitor(symbolTable);
 
         try
         {
-            _sut.Visit(funcCallNode);
+            typeChecker.Visit(funcCallNode);
         }
         catch (Exception actualException)
         {

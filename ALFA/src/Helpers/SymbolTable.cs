@@ -3,20 +3,16 @@ namespace ALFA;
 public class SymbolTable
 {
     public int _depth = -1;
-    public Stack<Dictionary<string, Symbol>>_scopeDisplay = new();
     public Dictionary<string, Symbol> _symbols = new();
 
     public SymbolTable() => OpenScope();  //open the first scope (Global scope)
 
     public void OpenScope()
     {
-        _scopeDisplay.Push(new());
         _depth++;
     }
     public void CloseScope()
     {
-        _scopeDisplay.Pop();
-        
         foreach (var symbol in _symbols.Values)
         {
             if (symbol.PrevSymbol != null)
@@ -48,11 +44,6 @@ public class SymbolTable
             return;
         }
 
-        // editing a stack, kinda sucks D:
-        var currScope = _scopeDisplay.Pop();
-        currScope.Add(symbol.Name, symbol);
-        _scopeDisplay.Push(currScope);
-        
         _symbols.Add(symbol.Name, symbol);
     }
 
