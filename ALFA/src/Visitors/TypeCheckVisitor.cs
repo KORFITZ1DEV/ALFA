@@ -195,11 +195,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             //Checks if it is incorrect in the symboltable.  
             case BoolNode:
                 if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool)
-                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                    throw new TypeException($"Invalid type bool on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case NumNode:
                 if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int)
-                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                    throw new TypeException($"Invalid type int on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case BuiltInCreateShapeCallNode:
                 if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect)
