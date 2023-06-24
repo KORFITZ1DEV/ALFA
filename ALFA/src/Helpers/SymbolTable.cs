@@ -2,86 +2,62 @@ namespace ALFA;
 // Fischer Crafting a Compiler page 292 figure 8.7
 public class SymbolTable
 {
-    public int _depth = 0;
+    public int _depth = -1;
     public Dictionary<string, Symbol> _symbols = new();
 
+    public SymbolTable() => OpenScope();  //open the first scope (Global scope)
 
-    public void OpenScope()
-    {
-        _depth++;
-    }
+    public void OpenScope() => _depth++;
+    
     public void CloseScope()
     {
-        List<KeyValuePair<string, Symbol>> keyValuePairs = new List<KeyValuePair<string, Symbol>>();
-        foreach (var kvp in _symbols)
+        foreach (var symbol in _symbols.Values.Where(s => s.Depth == _depth))
         {
-            keyValuePairs.Add(kvp);
-        }
-
-        foreach (var symbolKvp in keyValuePairs)
-        {
-            var sym = symbolKvp.Value; 
-            Symbol? prevSymbol = sym.PrevSymbol;
-
-            //If a variable is equal or higher than current depth then the symbol must be removed.
-            if (sym.Depth >= _depth)
+            if (symbol.PrevSymbol != null)
             {
-                _symbols.Remove(sym.Name);
-                // If a variable is declared under the same name in an outer scope (when sym.PrevSymbol != null)
-                // it should be added to the dictionary symbols dictionary.
-                if (prevSymbol != null)
-                {
-                    _symbols.Add(prevSymbol.Name, prevSymbol); 
-                }
+                _symbols[symbol.Name] = symbol.PrevSymbol;
+                continue;
             }
+            _symbols.Remove(symbol.Name);
         }
+        
         _depth--;
-
     }
     
     public void EnterSymbol(Symbol symbol)
     {
-        Symbol? oldSymbol = RetrieveSymbol(symbol.Name);
-        if (oldSymbol != null && oldSymbol.Depth == _depth) //
-        {
+        Symbol? oldSymbol = RetrieveSymbol(symbol.Name); // check if symbol already exists
+        if (oldSymbol != null && oldSymbol.Depth == _depth) // if symbol exists in current scope
             throw new VariableAlreadyDeclaredException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
-        }
-
-        //If there is a variable declared with the same name on a lower depth
-        if (oldSymbol == null || oldSymbol.Depth < _depth) 
+        
+        // no need to construct a new symbol, but still need to update depth
+        symbol.Depth = _depth;
+        
+        // if shadowing
+        if (oldSymbol != null && oldSymbol.Depth < _depth)
         {
-            if (_symbols.ContainsKey(symbol.Name))
-            {
-                oldSymbol = _symbols[symbol.Name];
-                _symbols.Remove(symbol.Name);
-            }
-
-            symbol.Depth = _depth; //Need to assign correct depth
-            _symbols.Add(symbol.Name, symbol);
+            symbol.PrevSymbol = oldSymbol;
+            _symbols[oldSymbol.Name] = symbol;
+            return;
         }
 
-        //Sets the oldSymbol with the same name as the newSymbol to be the PrevSymbol
-        //because newSymbol is in the nearest scope with the name.
-        symbol.PrevSymbol = oldSymbol!;
+        _symbols.Add(symbol.Name, symbol);
     }
 
-    public Symbol? RetrieveSymbol(string name) 
+    public Symbol? RetrieveSymbol(string name)
     {
         Symbol? sym;
         sym = _symbols.TryGetValue(name, out sym) ? sym : null;
 
         while (sym != null)
         {
-            if (sym.Name == name && sym.Depth <= _depth) 
-            {
+            if (sym.Name == name && sym.Depth <= _depth)
                 return sym;
-            }
 
             sym = sym.PrevSymbol;
         }
-
+        
         return sym;
     }
-
 }
