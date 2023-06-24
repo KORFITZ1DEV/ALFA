@@ -375,6 +375,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 EvaluateEqualityExpression(leftValue, rightValue, node.Operator, node);
                 break;
             case "and":
+            case  "&&":
+            case "||":
             case "or":
             case "!":
                 EvaluateBooleanExpression(leftValue, rightValue, node.Operator, node);
@@ -463,9 +465,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             case "and":
                 parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
+                parent.Operator = "&&";
                 break;
             case "or":
                 parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
+                parent.Operator = "||";
                 break;
             case "!":
                 parent.Value = new BoolNode(!expectedNodes.Item1.Value, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
