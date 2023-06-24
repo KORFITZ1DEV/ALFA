@@ -13,7 +13,7 @@ public class VarDclNodeTest
     
     [Theory]
     [ClassData(typeof(VarDclNodeTestData))]
-    public void FunCallNodeThrowsException(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
+    public void VarDclNodeThrowsTypeExceptionWhenAssignedWrongType(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
     {
         _sut = new TypeCheckVisitor(symbolTable);
 
