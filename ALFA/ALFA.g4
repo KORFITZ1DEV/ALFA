@@ -23,7 +23,10 @@ loopStmt: 'loop' '(' 'int' ID 'from' expr '..' expr ')' block;
 paralStmt: 'paral' paralBlock;
 
 expr
-    : '(' expr ')'                                  #Parens
+    : '-'?NUM                                       #Num
+    | ID                                            #Id
+    //Precedence rules
+    | '(' expr ')'                                  #Parens
     | '!' expr                                      #Not
     | '-' expr                                      #UnaryMinus    
     | expr op=('*' | '/' | '%') expr                #MulDiv
@@ -32,8 +35,6 @@ expr
     | expr op=('==' | '!=') expr                    #Equality
     | expr 'and' expr                               #And
     | expr 'or' expr                                #Or
-    | ID                                            #Id
-    | NUM                                           #Num
     | bool                                          #Boolean
     ;
 
@@ -53,7 +54,7 @@ actualParams: (expr (',' expr)*)?;
 
 COMMENT: '#' ~[\r\n]* -> skip;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUM: '0'| '-'?[1-9][0-9]*;
+NUM: '0'| [1-9][0-9]*;
 type: 'int' | 'bool' | 'rect';
 bool: 'true' | 'false';
 WS: [ \t\r\n]+ -> skip;
