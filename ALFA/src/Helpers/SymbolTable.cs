@@ -7,20 +7,18 @@ public class SymbolTable
 
     public SymbolTable() => OpenScope();  //open the first scope (Global scope)
 
-    public void OpenScope()
-    {
-        _depth++;
-    }
+    public void OpenScope() => _depth++;
+    
     public void CloseScope()
     {
-        foreach (var symbol in _symbols.Values)
+        foreach (var symbol in _symbols.Values.Where(s => s.Depth == _depth))
         {
             if (symbol.PrevSymbol != null)
             {
                 _symbols[symbol.Name] = symbol.PrevSymbol;
                 continue;
             }
-            if (symbol.Depth == _depth) _symbols.Remove(symbol.Name);
+            _symbols.Remove(symbol.Name);
         }
         
         _depth--;
@@ -33,7 +31,7 @@ public class SymbolTable
             throw new VariableAlreadyDeclaredException(
                 $"Symbol {symbol.Name} already declared on line {oldSymbol.LineNumber}:{oldSymbol.ColumnNumber}");
         
-        // no need to construct a new symbol, but still need update depth
+        // no need to construct a new symbol, but still need to update depth
         symbol.Depth = _depth;
         
         // if shadowing
@@ -54,10 +52,8 @@ public class SymbolTable
 
         while (sym != null)
         {
-            if (sym.Name == name && sym.Depth <= _depth) 
-            {
+            if (sym.Name == name && sym.Depth <= _depth)
                 return sym;
-            }
 
             sym = sym.PrevSymbol;
         }
