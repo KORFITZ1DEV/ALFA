@@ -264,6 +264,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
+
         if(_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) 
             _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, node.AssignStmt.Line, node.AssignStmt.Col));
 

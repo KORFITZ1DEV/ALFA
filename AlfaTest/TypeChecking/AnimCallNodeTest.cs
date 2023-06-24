@@ -7,19 +7,19 @@ using ALFA.Visitors;
 
 namespace AlfaTest.TypeChecking;
 
-public class FuncCallNodeTest
+public class AnimCallNodeTest
 {
   private TypeCheckVisitor _sut;
 
   [Theory]
-  [ClassData(typeof(FuncCallNodeTestData))]
-  public void FunCallNodeThrowsException(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
+  [ClassData(typeof(AnimCallNodeTestData))]
+  public void AnimCallNodeThrowsException(Node AnimCallNode, Exception expectedException, SymbolTable symbolTable)
   {
     _sut = new TypeCheckVisitor(symbolTable);
 
     try
     {
-      _sut.Visit(funcCallNode);
+      _sut.Visit(AnimCallNode);
     }
     catch (Exception actualException)
     {
@@ -28,17 +28,17 @@ public class FuncCallNodeTest
   }
   
   [Theory]
-  [ClassData(typeof(FuncCallNodeTestsIfValidNumberOfParameters))]
-  public void FunCallNodeValidNumberOfParameters(Node funcCallNode, SymbolTable symbolTable)
+  [ClassData(typeof(AnimCallNodeTestsIfValidNumberOfParameters))]
+  public void AnimCallNodeValidNumberOfParameters(Node AnimCallNode, SymbolTable symbolTable)
   {
     _sut = new TypeCheckVisitor(symbolTable);
-    _sut.Visit(funcCallNode);
+    _sut.Visit(AnimCallNode);
     Assert.True(true);
   }
 }
 
 
-public class FuncCallNodeTestData : IEnumerable<object[]>
+public class AnimCallNodeTestData : IEnumerable<object[]>
 {
   public IEnumerator<object[]> GetEnumerator()
   {
@@ -97,7 +97,7 @@ public class FuncCallNodeTestData : IEnumerable<object[]>
   }
 }
 
-public class FuncCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
+public class AnimCallNodeTestsIfValidNumberOfParameters : IEnumerable<object[]>
   {
     public IEnumerator<object[]> GetEnumerator()
     {
