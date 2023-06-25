@@ -25,6 +25,7 @@ paralStmt: 'paral' paralBlock;
 expr
     : '-'?NUM                                       #Num
     | ID                                            #Id
+    | bool                                          #Boolean
     //Precedence rules
     | '(' expr ')'                                  #Parens
     | '!' expr                                      #Not
@@ -35,7 +36,6 @@ expr
     | expr op=('==' | '!=') expr                    #Equality
     | expr 'and' expr                               #And
     | expr 'or' expr                                #Or
-    | bool                                          #Boolean
     ;
 
 block: '{' stmt* '}';
