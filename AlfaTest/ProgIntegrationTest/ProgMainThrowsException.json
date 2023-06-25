@@ -100,7 +100,7 @@
      "ExceptionType": "NonPositiveAnimationDurationException"
    },  
    {
-     "Prog": "#Forventer undeclared variable fejl \n\nrect middleRect = createRect(250, 100, 100, 200);\nrect movingRect = createRect(100, 100, 100, 100);\n\nloop (int j from 0..3) {\n\n}\n\nloop (int i from 0..j) {\n    move(movingRect, 150, 0, 500);\n    wait(300);\n    move(movingRect, 0, 100, 1 - 1);\n    move(movingRect, 150, 0, 500);\n    move(movingRect, -150, 0, 500);\n    wait(300);\n    move(movingRect, 0, -100, 1 - 1);\n    move(movingRect, -150, 0, 500);\n}\n",
+     "Prog": "#Forventer undeclared variable fejl \n loop (int j from 0..3) {\n\n}\n\nloop (int i from 0..j) {\n}",
      "Comment": "J eksisterer ikke i det scope den forsøges anvendt",
      "ExceptionType": "UndeclaredVariableException"
    },
@@ -133,7 +133,21 @@
     "Prog": "#Forventer UndeclaredVariableException\n #rect myRect = createRect(100, 100, 100, 100);\n\nif(myRect) {\n}\n",
     "Comment": "Forventer Alfa.UndeclaredVariableException",
     "ExceptionType": "UndeclaredVariableException"
+  },
+  {
+    "Prog": "#Forventer UndeclaredVariableException ved typo\n bool changedDir = false;\nint offSet = 5;\n\nif(!changedDir) {\n    offset = -offset;\n}",
+    "Comment": "Forventer Alfa.UndeclaredVariableException fordi der er type i offSet inde i if statement",
+    "ExceptionType": "UndeclaredVariableException"
+  },
+  {
+    "Prog": "#Tester evaluering af expressions ved reassignment\n int offset2 = 500 + 200;\noffset2 = 0;\nwait(offset2);",
+    "Comment": "Tester evaluering af expressions",
+    "exceptionType": "NonPositiveAnimationDurationException"
+  },
+  {
+    "Prog": "#Tester at addition mellem -100 og 100 beregnes til 0\n wait(-100+100);",
+    "Comment": "Tester at addition mellem -100 og 100 beregnes til 0",
+    "exceptionType": "NonPositiveAnimationDurationException"
   }
-  
   
  ]

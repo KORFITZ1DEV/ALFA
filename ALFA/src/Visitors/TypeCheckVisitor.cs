@@ -65,19 +65,19 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 break;
             
             case NumNode numNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@int:
-                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {numNode.Line}:{numNode.Col}");
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@int} on line {node.Arguments[i].Line}:{node.Arguments[i].Col}");
             
             case NumNode numNode when i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && numNode.Value <= 0:
-                throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {numNode.Line} column {numNode.Col}");
+                throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {node.Arguments[i].Line} column {node.Arguments[i].Col}");
             
             case BoolNode boolNode when nodeFormalParameters[i] != ALFATypes.TypeEnum.@bool:
-                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@bool} on line {boolNode.Line}:{boolNode.Col}");
+                throw new ArgumentTypeException($"Invalid type expected {nodeFormalParameters[i]} but got {ALFATypes.TypeEnum.@bool} on line {node.Arguments[i].Line}:{node.Arguments[i].Col}");
             
             case ExprNode exprNode:
                 Visit(exprNode);
                 if (i == FormalParameters.FormalParams[node.Type.ToString()!].Count() - 1 && exprNode.Value is NumNode exprNumNode && exprNumNode.Value <= 0)
                 {
-                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {exprNumNode.Line} column {exprNumNode.Col}");
+                    throw new NonPositiveAnimationDurationException($"The duration of an animation must be greater than 0 on line {node.Arguments[i].Line} column {node.Arguments[i].Col}");
                 }
                 break;
         }
@@ -86,7 +86,13 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override Node Visit(VarDclNode node)
     {
+        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) //Enter variable in symbol table if it is shadowing outer variable
+        {
+            _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, node.Type,
+                node.AssignStmt.Line, node.AssignStmt.Col));
+        }
         Visit(node.AssignStmt);
+
 
         if (node.AssignStmt.Value is IdNode idNode)
         {
@@ -140,7 +146,11 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     public override AssignStmtNode Visit(AssignStmtNode assNode)
     {
-        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
+        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier); 
+        if(idSymbol != null && idSymbol.Depth < _symbolTable._depth) //Enter variable in symbol table if it is shadowing outer variable
+            _symbolTable.EnterSymbol(new Symbol(assNode.Identifier, assNode.Value, assNode.VarDclParentType, assNode.Line, assNode.Col));
+
+
         bool visitedChild = false;
         
         if (assNode.Value is ExprNode exprValue)
@@ -154,10 +164,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             switch (exprValue.Value)
             {
                 case NumNode:
-                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@int && idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (idSymbol.Type != ALFATypes.TypeEnum.@int) throw new ArgumentTypeException($"Invalid type, exception evaluates to an integer on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
                 case BoolNode:
-                    if (assNode.VarDclParentType != ALFATypes.TypeEnum.@bool && idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
+                    if (idSymbol.Type != ALFATypes.TypeEnum.@bool) throw new ArgumentTypeException($"Invalid type, exception should evaluate to a boolean, but evaluates to a {idSymbol.Type} on line {exprValue.Value.Line}:{exprValue.Value.Col}");
                     break;
             }
         }
@@ -177,22 +187,31 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
     private void HandleUnvisitedChild(AssignStmtNode assNode)
     {
+        Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
         Visit(assNode.Value); //This is the unvisited child
         switch (assNode.Value)
         {
+            //idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool
+            //Checks if it is incorrect in the symboltable.  
             case BoolNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@bool)
-                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool)
+                    throw new TypeException($"Invalid type bool on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case NumNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.@int)
-                    throw new TypeException($"Invalid type boolean on line: " + assNode.Line + ": " + "column: " + assNode.Col);
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int)
+                    throw new TypeException($"Invalid type int on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
             case BuiltInCreateShapeCallNode:
-                if(assNode.VarDclParentType != ALFATypes.TypeEnum.rect)
+                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect)
                     throw new TypeException($"Invalid type rect on line: " + assNode.Line + ": " + "column: " + assNode.Col);
                 break;
         }
+
+        if(idSymbol != null)
+        {
+            idSymbol.Value = assNode.Value;
+        }
+
     }
 
     public override IfStmtNode Visit(IfStmtNode ifNode)
@@ -202,32 +221,42 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             Visit((dynamic)expr);
         }
 
-        var typeIncorrect = false;
-        switch (ifNode.Expressions[0])
+        foreach (var block in ifNode.Blocks)
         {
-            case ExprNode exprNode:
-            {
-                if (exprNode.Value is not BoolNode)
-                {
-                    typeIncorrect = true;
-                }
-                break;
-            }
-            
-            case NumNode:
-                typeIncorrect = true;
-                break;
-            case IdNode idNode:
-                var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
-                if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
-                    typeIncorrect = true;
-                else if (symbol == null)
-                    throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
-                break;
-                
+            _symbolTable.OpenScope();
+            Visit(block);
+            _symbolTable.CloseScope();
         }
-        if (typeIncorrect) throw new TypeException("Condition in if-statement did not evaluate to a boolean on line " + ifNode.Expressions[0].Line + " column: " + ifNode.Expressions[0].Col);
 
+        
+        var typeIncorrect = false;
+        foreach (var expression in ifNode.Expressions)
+        {
+            switch (expression)
+            {
+                case ExprNode exprNode:
+                {
+                    if (exprNode.Value is not BoolNode)
+                    {
+                        typeIncorrect = true;
+                    }
+                    break;
+                }
+                
+                case NumNode:
+                    typeIncorrect = true;
+                    break;
+                case IdNode idNode:
+                    var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+                    if (symbol != null && symbol.Type != ALFATypes.TypeEnum.@bool)
+                        typeIncorrect = true;
+                    else if (symbol == null)
+                        throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
+                    break;
+                    
+            }
+            if (typeIncorrect) throw new TypeException("Condition in if-statement did not evaluate to a boolean on line " + ifNode.Expressions[0].Line + " column: " + ifNode.Expressions[0].Col);
+        }
         return ifNode;
     }
 
@@ -235,11 +264,10 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         _symbolTable.OpenScope();
         Visit(node.AssignStmt);
-        Symbol loopVar = new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, 25, 25 );
-        if (_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null)
-        {
-            _symbolTable.EnterSymbol(loopVar);
-        }
+
+        if(_symbolTable.RetrieveSymbol(node.AssignStmt.Identifier) == null) //If the variable is shadowed
+            _symbolTable.EnterSymbol(new Symbol(node.AssignStmt.Identifier, node.AssignStmt.Value, ALFATypes.TypeEnum.@int, node.AssignStmt.Line, node.AssignStmt.Col));
+
         Visit(node.To);
 
         if (node.To is ExprNode exprTo)
@@ -348,6 +376,8 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 EvaluateEqualityExpression(leftValue, rightValue, node.Operator, node);
                 break;
             case "and":
+            case  "&&":
+            case "||":
             case "or":
             case "!":
                 EvaluateBooleanExpression(leftValue, rightValue, node.Operator, node);
@@ -435,12 +465,12 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         switch (op)
         {
             case "and":
-                parent.Operator = "&&";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value && expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
+                parent.Operator = "&&";
                 break;
             case "or":
-                parent.Operator = "||";
                 parent.Value = new BoolNode(expectedNodes.Item1.Value || expectedNodes.Item2.Value, expectedNodes.Item2.Line, expectedNodes.Item2.Col);
+                parent.Operator = "||";
                 break;
             case "!":
                 parent.Value = new BoolNode(!expectedNodes.Item1.Value, expectedNodes.Item1.Line, expectedNodes.Item1.Col);
@@ -454,7 +484,17 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         if (left is IdNode idNode) left = VisitSymbol<NumNode>(idNode);
         if (right is IdNode idNode1) left = VisitSymbol<NumNode>(idNode1);
-
+        if (left is ExprNode leftExpr)
+        {
+            EvaluateExpression(leftExpr);
+            left = leftExpr.Value;
+        }        
+        if (right is ExprNode rightExpr)
+        {
+            EvaluateExpression(rightExpr);
+            right = rightExpr.Value;
+        }
+        
         if (left.GetType() != right.GetType()) throw new ArgumentTypeException($"Incompatible type {left.GetType()} in '{op}' expression on line {left.Line} column {left.Col}");
         return new Tuple<Node, Node>(left, right);
     }
@@ -496,33 +536,33 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         return new Tuple<T, T>(leftTNode, rightTNode);
     }
 
+    
     //VisitSymbol is called from an arithmetic or boolean expression when it must be determined
     //whether the identifier's value is a boolean or an integer
     public T VisitSymbol<T>(IdNode idNode) where T : Node
     {
         var symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
+        if(symbol == null)
+            throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
+
         var nodeToCast = symbol.Value;
 
         if (nodeToCast is ExprNode exprNode && exprNode.Value != null)
         {
             nodeToCast = exprNode.Value;
         }
-        else if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
-        {
-            EvaluateExpression(locValExpr);
-            nodeToCast = locValExpr.Value;
-        }
-        else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
-        {
-            nodeToCast = VisitSymbol<T>(exprIdNode);
-        }
-        else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
+        else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null) //If this is not here visitsymbol can cause stack overflow
         {
             nodeToCast = idNode.LocalValue!;
         }
         else if (nodeToCast is IdNode idNoLocalVal)
         {
             nodeToCast = VisitSymbol<T>(idNoLocalVal);
+        }
+        else if (nodeToCast is ExprNode exprNodeNoVal)
+        {
+            EvaluateExpression(exprNodeNoVal);
+            nodeToCast = exprNodeNoVal.Value;
         }
         else if (nodeToCast.GetType().ToString() != typeof(T).ToString())
         {
@@ -537,7 +577,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                     break;
             }
 
-            throw new ArgumentTypeException($"Expected type {type} on line {nodeToCast.Line} column {nodeToCast.Col}");
+            throw new ArgumentTypeException($"Expected type {type} on line {idNode.Line} column {idNode.Col}");
         }
         
         return (T)nodeToCast;

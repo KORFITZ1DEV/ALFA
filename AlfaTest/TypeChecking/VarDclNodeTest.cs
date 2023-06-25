@@ -13,13 +13,13 @@ public class VarDclNodeTest
     
     [Theory]
     [ClassData(typeof(VarDclNodeTestData))]
-    public void FunCallNodeThrowsException(Node funcCallNode, Exception expectedException, SymbolTable symbolTable)
+    public void VarDclNodeThrowsTypeExceptionWhenAssignedWrongType(Node varDclNode, Exception expectedException, SymbolTable symbolTable)
     {
         _sut = new TypeCheckVisitor(symbolTable);
 
         try
         {
-            _sut.Visit(funcCallNode);
+            _sut.Visit(varDclNode);
         }
         catch (Exception actualException)
         {
@@ -46,6 +46,7 @@ public class VarDclNodeTestData : IEnumerable<object[]>
         var varDclValueNode2 = new NumNode(25, 20, 10);
         AssignStmtNode assStmt2 = new AssignStmtNode("test2", varDclValueNode2, 25, 25);
         var varDclNode2 = new VarDclNode(ALFATypes.TypeEnum.rect, assStmt2, 25, 30);
+        
         yield return new object[]{varDclNode1, new TypeException($"Invalid type {varDclNode1.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {varDclNode1.Line}:{varDclNode1.Col}"), symbolTable1};
         yield return new object[]{varDclNode2, new TypeException($"Invalid type {varDclNode2.Type.ToString()}, expected type {ALFATypes.TypeEnum.@int} on line {varDclNode2.Line}:{varDclNode2.Col}"), symbolTable2};
     }
