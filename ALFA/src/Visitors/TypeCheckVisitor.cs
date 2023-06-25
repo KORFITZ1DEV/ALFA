@@ -247,10 +247,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
 
         Visit(node.To);
 
-        if (node.To is ExprNode exprTo)
-        {
-            node.To = Visit(exprTo);
-        }
         if (node.To is IdNode idNode) {
             Symbol symbol = _symbolTable.RetrieveSymbol(idNode.Identifier);
 
@@ -258,7 +254,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
             {
                 throw new UndeclaredVariableException( $"An undeclared variable {idNode.Identifier} is attempted to be assigned on line: {idNode.Line} column: {idNode.Col}");
             }
-            Visit((dynamic)symbol.Value);
 
             if (symbol.Value is BoolNode || (symbol.Value is ExprNode exprNode && exprNode.Value is BoolNode))
                 throw new TypeException(
