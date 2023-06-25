@@ -22,7 +22,6 @@ public abstract class ASTVisitor<T>
     public abstract T Visit(IdNode node);
     public abstract T Visit(NumNode node);
 
-
     public T Visit(Node node)
     {
         return node switch

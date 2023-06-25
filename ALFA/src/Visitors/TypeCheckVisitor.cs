@@ -92,12 +92,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
                 node.AssignStmt.Line, node.AssignStmt.Col));
         }
         Visit(node.AssignStmt);
-
-
-        if (node.AssignStmt.Value is IdNode idNode)
-        {
-            TypeCheckIdNodeVarDcl(idNode, node.Type);
-        }
         
         return node;
     }
@@ -189,23 +183,6 @@ public class TypeCheckVisitor : ASTVisitor<Node>
     {
         Symbol? idSymbol = _symbolTable.RetrieveSymbol(assNode.Identifier);
         Visit(assNode.Value); //This is the unvisited child
-        switch (assNode.Value)
-        {
-            //idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool
-            //Checks if it is incorrect in the symboltable.  
-            case BoolNode:
-                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@bool)
-                    throw new TypeException($"Invalid type bool on line: " + assNode.Line + ": " + "column: " + assNode.Col);
-                break;
-            case NumNode:
-                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.@int)
-                    throw new TypeException($"Invalid type int on line: " + assNode.Line + ": " + "column: " + assNode.Col);
-                break;
-            case BuiltInCreateShapeCallNode:
-                if(idSymbol != null && idSymbol.Type != ALFATypes.TypeEnum.rect)
-                    throw new TypeException($"Invalid type rect on line: " + assNode.Line + ": " + "column: " + assNode.Col);
-                break;
-        }
 
         if(idSymbol != null)
         {
