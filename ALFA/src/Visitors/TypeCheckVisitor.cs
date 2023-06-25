@@ -551,16 +551,7 @@ public class TypeCheckVisitor : ASTVisitor<Node>
         {
             nodeToCast = exprNode.Value;
         }
-        else if (nodeToCast is ExprNode && idNode.LocalValue is ExprNode locValExpr)
-        {
-            EvaluateExpression(locValExpr);
-            nodeToCast = locValExpr.Value;
-        }
-        else if (nodeToCast is ExprNode exprNodeWId && idNode.LocalValue is IdNode exprIdNode)
-        {
-            nodeToCast = VisitSymbol<T>(exprIdNode);
-        }
-        else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null)
+        else if (idNode.LocalValue is not ExprNode && idNode.LocalValue != null) //If this is not here visitsymbol can cause stack overflow
         {
             nodeToCast = idNode.LocalValue!;
         }
